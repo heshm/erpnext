@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- Scan ERPNext defined web utility classes -->
+	<context:component-scan base-package="com.erpnext.framework.web.controller" />
+
+	<mvc:annotation-driven />
+	
+	<bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="khWebTemplateEngine"/>
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>
+
+	<bean id="khWebTemplateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+		<property name="templateResolvers">
+			<set>
+				<ref bean="khWebClasspathTemplateResolver" />
+			</set>
+		</property>
+		<!-- <property name="additionalDialects">
+			<set>
+				<bean class="nz.net.ultraq.thymeleaf.LayoutDialect" />
+				<bean class="com.erpnext.thymeleaf.dialect.BaseDialect" />
+				<bean class="com.erpnext.core.dialect.data.DataDialect" />
+			</set>
+		</property> -->
+		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
+			up -->
+		<!-- execution in most scenarios, but might be incompatible with specific -->
+		<!-- cases when expressions in one template are reused across different 
+			data -->
+		<!-- types, so this flag is "false" by default for safer backwards -->
+		<!-- compatibility. -->
+		<property name="enableSpringELCompiler" value="false" />
+	</bean>
+
+	<!-- Thymeleaf Template Resolver -->
+
+	<bean id="khWebClasspathTemplateResolver"
+		class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+		<property name="prefix" value="classpath:templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML" />
+		<property name="cacheable" value="true" />
+		<property name="characterEncoding" value="UTF-8" />
+	</bean>
+
+	<mvc:default-servlet-handler />
+
+</beans>
