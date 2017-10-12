@@ -12,5 +12,11 @@ public class LoginController extends BaseController {
 	public String login(){
 		return loginView;
 	}
+	
+	@GetMapping("/loginSuccess")
+	public String loginSuccess(){
+		//loger.info("{} login success","admin");
+		return "redirect:/index";
+	}
 
 }

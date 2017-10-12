@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+   <!-- <bean id="blDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		&lt;!&ndash; 指定连接数据库的驱动 &ndash;&gt;
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		&lt;!&ndash; 指定连接数据库的URL &ndash;&gt;
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		&lt;!&ndash; 指定连接数据库的用户名 &ndash;&gt;
+		<property name="user" value="${jdbc.user}" />
+		&lt;!&ndash; 指定连接数据库的密码 &ndash;&gt;
+		<property name="password" value="${jdbc.password}" />
+		&lt;!&ndash; 指定连接数据库连接池的最大连接数 &ndash;&gt;
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}" />
+		&lt;!&ndash; 指定连接数据库连接池的最小连接数 &ndash;&gt;
+		<property name="minPoolSize" value="${jdbc.minPoolSize}" />
+		&lt;!&ndash; 指定连接数据库连接池的初始化连接数 &ndash;&gt;
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}" />
+		&lt;!&ndash; 指定连接数据库连接池的连接的最大空闲时间 &ndash;&gt;
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
+	</bean>-->
+	<bean id="khDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!-- 数据源驱动类  -->
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${jdbc.initialPoolSize}" />
+        <property name="minIdle" value="${jdbc.minPoolSize}" />
+        <property name="maxActive" value="${jdbc.maxPoolSize}" />
+
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+         <!-- 配置监控统计拦截的filters-->
+        <property name="filters" value="stat" />
+    </bean>
+
+</beans>
