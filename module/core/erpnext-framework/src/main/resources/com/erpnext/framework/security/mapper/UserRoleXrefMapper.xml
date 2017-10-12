@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.UserRoleXrefMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.framework.security.domain.UserRoleXref">
+		<id column="user_id" jdbcType="CHAR" property="userId" />
+		<id column="role_id" jdbcType="CHAR" property="roleId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	user_id, role_id
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from sys_user_role_xref
+		where user_id = #{userId,jdbcType=CHAR}
+		and role_id = #{roleId,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByUser" parameterType="map">
+		delete from sys_user_role_xref
+		where user_id = #{userId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.security.domain.UserRoleXref">
+		insert into sys_user_role_xref (<include refid="Base_Column_List" />)
+		values (#{userId,jdbcType=CHAR}, #{roleId,jdbcType=CHAR})
+	</insert>
+	<insert id="insertList" parameterType="java.util.List">
+		insert into sys_user_role_xref (<include refid="Base_Column_List" />)
+		values 
+		<foreach item="item" index="index" collection="list" separator=",">
+	       (#{item.userId,jdbcType=CHAR},#{item.roleId,jdbcType=CHAR})
+	    </foreach>
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_user_role_xref
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_user_role_xref
+		<where>
+		    <if test = "userId != null and userId != ''">
+		        user_id = #{userId,jdbcType=CHAR}
+		    </if>
+		    <if test = "roleId != null and roleId != ''">
+		        and role_id = #{roleId,jdbcType=CHAR}
+		    </if>
+		</where> 
+	</select>
+</mapper>

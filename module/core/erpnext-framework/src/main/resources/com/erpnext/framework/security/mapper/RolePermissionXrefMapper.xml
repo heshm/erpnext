@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.RolePermissionXrefMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.framework.security.domain.RolePermissionXref">
+		<id column="role_id" jdbcType="CHAR" property="roleId" />
+		<id column="permission_id" jdbcType="CHAR" property="permissionId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	role_id, permission_id
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_role_permission_xref
+		where role_id = #{roleId,jdbcType=CHAR}
+		and permission_id = #{permissionId,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByRoleId" parameterType="java.lang.String">
+		delete from sys_role_permission_xref
+		where role_id = #{roleId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.security.domain.RolePermissionXref">
+		insert into sys_role_permission_xref (<include refid="Base_Column_List" />)
+		values (#{roleId,jdbcType=CHAR}, #{permissionId,jdbcType=CHAR})
+	</insert>
+	<insert id="insertList" parameterType="java.util.List">
+		insert into sys_role_permission_xref(<include refid="Base_Column_List" />)
+		values
+		<foreach item="item" index="index" collection="list" separator=",">
+	       (#{item.roleId,jdbcType=CHAR},#{item.permissionId,jdbcType=CHAR})
+	    </foreach>
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_role_permission_xref
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+	    select <include refid="Base_Column_List" />
+		from sys_role_permission_xref
+		<where>
+		    <if test = "roleId != null and roleId != ''">
+		        role_id = #{roleId,jdbcType=CHAR}
+		    </if>
+		    <if test = "permissionId != null and permissionId != ''">
+		        and permission_id = #{permission_id,jdbcType=CHAR}
+		    </if>
+		</where>
+	</select>
+</mapper>

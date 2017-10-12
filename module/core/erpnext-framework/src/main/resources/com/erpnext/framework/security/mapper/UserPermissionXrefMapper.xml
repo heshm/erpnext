@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.UserPermissionXrefMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.framework.security.domain.UserPermissionXref">
+		<id column="user_id" jdbcType="CHAR" property="userId" />
+		<id column="PERMISSION_ID" jdbcType="CHAR" property="permissionId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	user_id, permission_id
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from sys_user_permission_xref
+		where user_id = #{userId,jdbcType=CHAR}
+		and PERMISSION_ID = #{permissionId,jdbcType=CHAR}
+	</delete>
+	<delete id="deleteByUserId" parameterType="map">
+		delete from sys_user_permission_xref
+		where user_id = #{userId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.erpnext.framework.security.domain.UserPermissionXref">
+		insert into sys_user_permission_xref (<include refid="Base_Column_List" />)
+		values (#{userId,jdbcType=CHAR}, #{permissionId,jdbcType=CHAR})
+	</insert>
+	<insert id="insertList">
+		insert into sys_user_permission_xref (<include refid="Base_Column_List" />)
+		values
+		<foreach item="item" index="index" collection="list" separator=",">
+	       (#{item.userId,jdbcType=CHAR},#{item.permissionId,jdbcType=CHAR})
+	    </foreach>
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_user_permission_xref
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_user_permission_xref
+		<where>
+		    <if test = "userId != null and userId != ''">
+		        user_id = #{userId,jdbcType=CHAR}
+		    </if>
+		    <if test = "permissionId != null and permissionId != ''">
+		        and permission_id = #{permissionId,jdbcType=CHAR}
+		    </if>
+		</where>
+	</select>
+</mapper>

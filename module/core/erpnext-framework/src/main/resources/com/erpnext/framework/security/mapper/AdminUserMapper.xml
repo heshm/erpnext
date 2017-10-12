@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.AdminUserMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.framework.security.domain.AdminUser">
+		<id column="user_id" jdbcType="CHAR" property="userId" />
+		<result column="active_status_flag" jdbcType="TINYINT"
+			property="activeStatusFlag" />
+		<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="password" jdbcType="CHAR" property="password" />
+		<result column="phone_number" jdbcType="CHAR" property="phoneNumber" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="role_name" jdbcType="VARCHAR" property="roleName" />
+		<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	user_id, active_status_flag, login_name, user_name, password, phone_number, email ,role_name ,create_date
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_admin_user
+		where user_id = #{userId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.security.domain.AdminUser">
+		insert into sys_admin_user (<include refid="Base_Column_List" />)
+		values (
+			#{userId,jdbcType=CHAR}, 
+			#{activeStatusFlag,jdbcType=TINYINT},
+			#{loginName,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR}, 
+			#{password,jdbcType=CHAR}, 
+			#{phoneNumber,jdbcType=CHAR},
+			#{email,jdbcType=VARCHAR},
+			#{roleName,jdbcType=VARCHAR}, 
+			#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.security.domain.AdminUser">
+		update sys_admin_user
+		set active_status_flag = #{activeStatusFlag,jdbcType=TINYINT},
+		login_name = #{loginName,jdbcType=VARCHAR},
+		user_name = #{userName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=CHAR},
+		phone_number = #{phoneNumber,jdbcType=CHAR},
+		email = #{email,jdbcType=VARCHAR},
+		role_name = #{roleName,jdbcType=VARCHAR},
+		create_date = #{createDate,jdbcType=TIMESTAMP}
+		where user_id = #{userId,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_admin_user
+		where user_id = #{userId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_admin_user
+	</select>
+	<select id="selectByLoginName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_admin_user
+		where login_name = #{loginName,jdbcType=CHAR}
+	</select>
+</mapper>

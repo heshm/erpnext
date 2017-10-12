@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.framework.security.domain.Permission">
+		<id column="PERMISSION_ID" jdbcType="CHAR" property="permissionId" />
+		<result column="permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+		<result column="permission_NAME" jdbcType="VARCHAR" property="permissionName" />
+		<result column="status" jdbcType="CHAR" property="status" />
+		<result column="PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
+		<result column="is_friendly" jdbcType="BIT" property="isFriendly" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_permission
+		where PERMISSION_ID = #{permissionId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.security.domain.Permission">
+		insert into sys_permission (PERMISSION_ID, permission_desc, permission_NAME,
+		status, PERMISSION_TYPE, is_friendly
+		)
+		values (#{permissionId,jdbcType=CHAR}, #{permissionDesc,jdbcType=VARCHAR},
+		#{permissionName,jdbcType=VARCHAR},
+		#{status,jdbcType=CHAR}, #{permissionType,jdbcType=VARCHAR}, #{isFriendly,jdbcType=BIT}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.security.domain.Permission">
+		update sys_permission
+		set permission_desc = #{permissionDesc,jdbcType=VARCHAR},
+		permission_NAME = #{permissionName,jdbcType=VARCHAR},
+		status = #{status,jdbcType=CHAR},
+		PERMISSION_TYPE = #{permissionType,jdbcType=VARCHAR},
+		is_friendly = #{isFriendly,jdbcType=BIT}
+		where PERMISSION_ID = #{permissionId,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select PERMISSION_ID, permission_desc, permission_NAME, status,
+		PERMISSION_TYPE,
+		is_friendly
+		from sys_permission
+		where PERMISSION_ID = #{permissionId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select PERMISSION_ID, permission_desc, permission_NAME, status,
+		PERMISSION_TYPE,
+		is_friendly
+		from sys_permission
+	</select>
+	
+	<select id="selectList" resultMap="BaseResultMap">
+		select PERMISSION_ID, permission_desc, permission_NAME, status,
+		PERMISSION_TYPE,
+		is_friendly
+		from sys_permission
+		<where>
+		    <if test = "status != null and status != ''">
+		        status = #{status,jdbcType=CHAR}
+		    </if>
+		    <if test = "isFriendly != null">
+		        and is_friendly = #{isFriendly,jdbcType=BIT}
+		    </if>
+		</where> 
+	</select>
+	
+	<resultMap id="PermissionResultMap" type="com.erpnext.framework.security.domain.Permission">
+		<id column="parent_permission_id" jdbcType="CHAR" property="permissionId" />
+		<result column="parent_permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+		<result column="parent_permission_NAME" jdbcType="VARCHAR" property="permissionName" />
+		<result column="parent_status" jdbcType="CHAR" property="status" />
+		<result column="parent_PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
+		<result column="parent_is_friendly" jdbcType="BIT" property="isFriendly" />
+		<collection property="childPermission" ofType="com.erpnext.framework.security.domain.Permission">
+		    <id column="child_permission_id" jdbcType="CHAR" property="permissionId" />
+		    <result column="child_permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
+		    <result column="child_permission_NAME" jdbcType="VARCHAR" property="permissionName" />
+		    <result column="child_status" jdbcType="CHAR" property="status" />
+		    <result column="child_PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
+		    <result column="child_is_friendly" jdbcType="BIT" property="isFriendly" />
+		</collection>
+	</resultMap>
+	
+	<select id="selectByPermissionId" resultMap="PermissionResultMap">
+	    select
+            a.permission_id as parent_permission_id,
+            a.permission_desc as parent_permission_desc,
+            a.permission_name as parent_permission_name,
+            a.status as parent_status,
+            a.permission_type as parent_permission_type,
+            a.is_friendly as parent_is_friendly,
+            c.permission_id as child_permission_id,
+            c.permission_desc as child_permission_desc,
+            c.permission_name as child_permission_name,
+            c.status as child_status,
+            c.permission_type as child_permission_type,
+            c.is_friendly as child_is_friendly
+        from
+            sys_permission a
+        left join
+            sys_permission_xref b
+        on
+            a.permission_id = b.permission_id
+        left join
+            sys_permission c
+        on
+            b.child_permission_id = c.permission_id
+        where
+            a.permission_id = #{permissionId,jdbcType=CHAR}
+	</select>
+	
+</mapper>

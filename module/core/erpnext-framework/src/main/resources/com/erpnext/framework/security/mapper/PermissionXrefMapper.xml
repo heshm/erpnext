@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.security.mapper.PermissionXrefMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.framework.security.domain.PermissionXref">
+		<id column="permission_id" jdbcType="CHAR" property="permissionId" />
+		<id column="child_permission_id" jdbcType="CHAR" property="childPermissionId" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from sys_permission_xref
+		where permission_id = #{permissionId,jdbcType=CHAR}
+		and child_permission_id = #{childPermissionId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.security.domain.PermissionXref">
+		insert into sys_permission_xref (permission_id, child_permission_id)
+		values (#{permissionId,jdbcType=CHAR}, #{childPermissionId,jdbcType=CHAR})
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select permission_id, child_permission_id
+		from sys_permission_xref
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+	    select permission_id, child_permission_id
+		from sys_permission_xref
+		<where>
+		    <if test = "permissionId != null and permissionId != ''">
+		        permission_id = #{permissionId,jdbcType=CHAR}
+		    </if>
+		    <if test = "childPermissionId != null and childPermissionId != ''">
+		        and child_permission_id = #{childPermissionId,jdbcType=CHAR}
+		    </if>
+		</where> 
+	</select>
+</mapper>
