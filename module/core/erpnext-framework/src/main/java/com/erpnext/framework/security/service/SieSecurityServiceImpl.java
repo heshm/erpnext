@@ -77,6 +77,13 @@ public class SieSecurityServiceImpl implements SiteSecurityService{
 		return adminUser;
 	}
 	
+	@Override
+	public List<AdminUser> getAllUser() {
+		// TODO Auto-generated method stub
+		return adminUserMapper.selectAll();
+	}
+
+	
 	private void readOtherUserInfo(AdminUser adminUser){
 		if (null != adminUser) {
 			String userId = adminUser.getUserId();
