@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.erpnext.framework.web.service.UserDetailsServiceImpl;
 
 /**
  * Created by Lenovo on 2017/10/12.
@@ -18,12 +22,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SiteSecurityConfig extends WebSecurityConfigurerAdapter{
-
 	
 	@Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("USER").and().withUser("paul")
-                .password("emu").roles("OTHER");
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		
+        auth.userDetailsService(userDetailsService)
+        	.passwordEncoder(new BCryptPasswordEncoder());
+        
+ 
+        
     }
 
     @Override
@@ -65,4 +75,12 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter{
                 .loginPage("/login");
         // @formatter:on
     }
+    
+    @Override
+    @Bean
+    public UserDetailsService userDetailsService(){
+    	return new UserDetailsServiceImpl();
+    }
+    
+    
 }

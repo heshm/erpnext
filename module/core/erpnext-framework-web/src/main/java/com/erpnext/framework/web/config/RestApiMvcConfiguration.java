@@ -26,8 +26,8 @@ public class RestApiMvcConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(getXmlConverter());
 		converters.add(getJsonConverter());
+		converters.add(getXmlConverter());
     }
 	
 	/**
@@ -37,7 +37,6 @@ public class RestApiMvcConfiguration extends WebMvcConfigurerAdapter{
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.defaultContentType(MediaType.APPLICATION_JSON);
     }
-
     
     private HttpMessageConverter<?> getJsonConverter() { 
         return new MappingJackson2HttpMessageConverter(getObjectMapper(false));
