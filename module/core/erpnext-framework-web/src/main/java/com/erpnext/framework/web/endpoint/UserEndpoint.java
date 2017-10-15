@@ -3,6 +3,7 @@ package com.erpnext.framework.web.endpoint;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,10 @@ public class UserEndpoint {
 	private SiteSecurityService siteSecurityService;
 	
 	@GetMapping("/getAllUser")
+	//@PreAuthorize("hasAuthority('PERM_SYS_IMPORT')")
+	@PreAuthorize("#oauth2.clientHasRole('ROLE_ADMIN')")
 	public List<AdminUser> getAllUser() {
+		System.out.println("Rest is called");
 		return siteSecurityService.getAllUser();
 	}
 

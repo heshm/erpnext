@@ -3,6 +3,7 @@ package com.erpnext.framework.security.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,6 +79,7 @@ public class SieSecurityServiceImpl implements SiteSecurityService{
 	}
 	
 	@Override
+	@PreAuthorize("hasAuthority('PERM_SYS_IMPORT')")
 	public List<AdminUser> getAllUser() {
 		// TODO Auto-generated method stub
 		return adminUserMapper.selectAll();

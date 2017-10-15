@@ -12,45 +12,49 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 import com.erpnext.framework.web.service.UserDetailsServiceImpl;
 
 /**
- * Created by Lenovo on 2017/10/12.
- * 访问安全配置类
+ * Created by Lenovo on 2017/10/12. 访问安全配置类
  */
 
 @Configuration
 @EnableWebSecurity
-public class SiteSecurityConfig extends WebSecurityConfigurerAdapter{
-	
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		
-        auth.userDetailsService(userDetailsService)
-        	.passwordEncoder(new BCryptPasswordEncoder());
-        
- 
-        
-    }
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		/*auth.userDetailsService(userDetailsService)
+			.passwordEncoder(new BCryptPasswordEncoder());*/
+		 auth.inMemoryAuthentication().
+		 	withUser("marissa").password("koala").roles("USER").
+		 and().
+		 	withUser("paul").password("emu").roles("USER");
+	}
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
-    }
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/static/**");
+	}
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
                  http
+           /* .antMatcher("/api/**")
+            	.authorizeRequests()
+            	.antMatchers("/**").authenticated()
+                .and()*/
             .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/**").authenticated()
@@ -74,13 +78,33 @@ public class SiteSecurityConfig extends WebSecurityConfigurerAdapter{
                 .defaultSuccessUrl("/loginSuccess")
                 .loginPage("/login");
         // @formatter:on
-    }
-    
-    @Override
-    @Bean
-    public UserDetailsService userDetailsService(){
-    	return new UserDetailsServiceImpl();
-    }
-    
-    
+	}
+
+	/*
+	 * 自定义salt使用,BCryptPasswordEncoder无需salt
+	 * 
+	 * @Bean public DaoAuthenticationProvider authenticationProvider() {
+	 * DaoAuthenticationProvider authenticationProvider = new
+	 * DaoAuthenticationProvider();
+	 * authenticationProvider.setUserDetailsService(userDetailsService);
+	 * authenticationProvider.setPasswordEncoder(passwordEncoder());
+	 * authenticationProvider.setSaltSource(saltSource()); return
+	 * authenticationProvider; }
+	 * 
+	 * @Bean public PasswordEncoder passwordEncoder() { return new
+	 * BCryptPasswordEncoder(); }
+	 */
+
+	@Override
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return new UserDetailsServiceImpl();
+	}
+
+	/*
+	 * public SaltSource saltSource() { ReflectionSaltSource saltSource = new
+	 * ReflectionSaltSource(); saltSource.setUserPropertyToUse("username"); return
+	 * saltSource; }
+	 */
+
 }

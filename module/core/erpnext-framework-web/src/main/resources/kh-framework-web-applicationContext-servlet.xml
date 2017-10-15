@@ -16,13 +16,14 @@
 	<!-- Scan ERPNext defined web utility classes -->
 	<context:component-scan base-package="com.erpnext.**.controller" />
 
-	<mvc:annotation-driven />
-	
+	<mvc:annotation-driven
+		content-negotiation-manager="contentNegotiationManager" />
+
 	<bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
-        <property name="templateEngine" ref="khWebTemplateEngine"/>
-        <property name="order" value="1"/>
-        <property name="characterEncoding" value="UTF-8"/>
-    </bean>
+		<property name="templateEngine" ref="khWebTemplateEngine" />
+		<property name="order" value="1" />
+		<property name="characterEncoding" value="UTF-8" />
+	</bean>
 
 	<bean id="khWebTemplateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
 		<property name="templateResolvers">
@@ -30,13 +31,9 @@
 				<ref bean="khWebClasspathTemplateResolver" />
 			</set>
 		</property>
-		<!-- <property name="additionalDialects">
-			<set>
-				<bean class="nz.net.ultraq.thymeleaf.LayoutDialect" />
-				<bean class="com.erpnext.thymeleaf.dialect.BaseDialect" />
-				<bean class="com.erpnext.core.dialect.data.DataDialect" />
-			</set>
-		</property> -->
+		<!-- <property name="additionalDialects"> <set> <bean class="nz.net.ultraq.thymeleaf.LayoutDialect" 
+			/> <bean class="com.erpnext.thymeleaf.dialect.BaseDialect" /> <bean class="com.erpnext.core.dialect.data.DataDialect" 
+			/> </set> </property> -->
 		<!-- Enabling the SpringEL compiler with Spring 4.2.4 or newer can speed 
 			up -->
 		<!-- execution in most scenarios, but might be incompatible with specific -->
@@ -56,6 +53,11 @@
 		<property name="templateMode" value="HTML" />
 		<property name="cacheable" value="true" />
 		<property name="characterEncoding" value="UTF-8" />
+	</bean>
+
+	<bean id="contentNegotiationManager"
+		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="defaultContentType" value="application/json" />
 	</bean>
 
 	<mvc:default-servlet-handler />
