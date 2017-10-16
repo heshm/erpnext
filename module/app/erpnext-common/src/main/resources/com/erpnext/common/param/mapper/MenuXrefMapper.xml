@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.common.param.mapper.MenuXrefMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.common.param.domain.MenuXref">
+		<id column="menu_id" jdbcType="CHAR" property="menuId" />
+		<id column="child_menu_id" jdbcType="CHAR" property="childMenuId" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from sys_menu_xref
+		where menu_id = #{menuId,jdbcType=CHAR}
+		and child_menu_id = #{childMenuId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.common.param.domain.MenuXref">
+		insert into sys_menu_xref (menu_id, child_menu_id)
+		values (#{menuId,jdbcType=CHAR}, #{childMenuId,jdbcType=CHAR})
+	</insert>
+	<select id="selectList" resultMap="BaseResultMap" parameterType="map">
+		select menu_id, child_menu_id
+		from sys_menu_xref
+		<where>
+		    <if test = "menuId != null and menuId != ''">
+		        menu_id = #{menuId,jdbcType=CHAR}
+		    </if>
+		    <if test = "childMenuId != null and childMenuId != ''">
+		        and child_menu_id = #{childMenuId,jdbcType=CHAR}
+		    </if>
+		</where>
+	</select>
+	<select id="selectListByCmenu" resultMap="BaseResultMap">
+		select menu_id, child_menu_id
+		from sys_menu_xref
+		<where>
+			child_menu_id in
+			<foreach collection="menuIdArray" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+	<select id="selectOne" resultMap="BaseResultMap">
+		select menu_id, child_menu_id
+		from sys_menu_xref
+		where child_menu_id = #{childMenuId,jdbcType=CHAR}
+	</select>
+	<delete id="deleteByMenuId" parameterType="map">
+	    delete from sys_menu_xref
+		<where>
+		    <if test = "menuId != null and menuId != ''">
+		        menu_id = #{menuId,jdbcType=CHAR}
+		    </if>
+		    <if test = "childMenuId != null and childMenuId != ''">
+		        and child_menu_id = #{childMenuId,jdbcType=CHAR}
+		    </if>
+		</where>
+	</delete>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.common.param.mapper.MenuMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.common.param.domain.Menu">
+		<id column="menu_id" jdbcType="CHAR" property="menuId" />
+		<result column="menu_name" jdbcType="CHAR" property="menuName" />
+		<result column="action_url" jdbcType="VARCHAR" property="actionUrl" />
+		<result column="sequence" jdbcType="BIGINT" property="sequence" />
+		<result column="iconCls" jdbcType="VARCHAR" property="iconCls" />
+		<result column="is_leaf" jdbcType="BIT" property="isLeaf" />
+		<result column="perm" jdbcType="VARCHAR" property="perm" />
+	</resultMap>
+	<sql id="Base_Column_List">
+        menu_id, menu_name, action_url, sequence, iconCls, is_leaf, perm
+    </sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_menu
+		where menu_id = #{menuId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.common.param.domain.Menu">
+		insert into sys_menu (<include refid="Base_Column_List" />)
+		values (#{menuId,jdbcType=CHAR}, #{menuName,jdbcType=CHAR},
+		#{actionUrl,jdbcType=VARCHAR},
+		#{sequence,jdbcType=BIGINT}, #{iconCls,jdbcType=VARCHAR}, #{isLeaf,jdbcType=BIT},
+		#{perm,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.param.domain.Menu">
+		update sys_menu
+		set menu_name = #{menuName,jdbcType=CHAR},
+		action_url = #{actionUrl,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=BIGINT},
+		iconCls = #{iconCls,jdbcType=VARCHAR},
+		is_leaf = #{isLeaf,jdbcType=BIT},
+		perm = #{perm,jdbcType=VARCHAR}
+		where menu_id = #{menuId,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_menu
+		where menu_id = #{menuId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_menu
+	</select>
+	
+	<resultMap id="MenuResultMap" type="com.erpnext.common.param.domain.Menu">
+		<id column="p_menu_id" jdbcType="CHAR" property="menuId" />
+		<result column="p_menu_name" jdbcType="CHAR" property="menuName" />
+		<result column="p_action_url" jdbcType="VARCHAR" property="actionUrl" />
+		<result column="p_sequence" jdbcType="BIGINT" property="sequence" />
+		<result column="p_icon" jdbcType="VARCHAR" property="iconCls" />
+		<result column="p_is_leaf" jdbcType="BIT" property="isLeaf" />
+		<result column="p_perm" jdbcType="VARCHAR" property="perm" />
+		<collection property="children" ofType="com.erpnext.common.param.domain.Menu">
+		    <id column="c_menu_id" jdbcType="CHAR" property="menuId" />
+		    <result column="c_menu_name" jdbcType="CHAR" property="menuName" />
+		    <result column="c_action_url" jdbcType="VARCHAR" property="actionUrl" />
+		    <result column="c_sequence" jdbcType="BIGINT" property="sequence" />
+		    <result column="c_icon" jdbcType="VARCHAR" property="iconCls" />
+		    <result column="c_is_leaf" jdbcType="BIT" property="isLeaf" />
+		    <result column="c_perm" jdbcType="VARCHAR" property="perm" />
+		</collection>
+	</resultMap>
+	
+	<select id="selectByMenuId" resultMap="MenuResultMap">
+	    SELECT
+            a.menu_id    AS p_menu_id,
+            a.menu_name  AS p_menu_name,
+            a.action_url AS p_action_url,
+            a.sequence   AS p_sequence,
+            a.iconCls    AS p_icon,
+            a.is_leaf    AS p_is_leaf,
+            a.perm       AS p_perm,
+            c.menu_id    AS c_menu_id,
+            c.menu_name  AS c_menu_name,
+            c.action_url AS c_action_url,
+            c.sequence   AS c_sequence,
+            c.iconCls    AS c_icon,
+            c.is_leaf    AS c_is_leaf,
+            c.perm       AS c_perm
+        FROM
+            sys_menu a
+        LEFT JOIN
+            sys_menu_xref b
+        ON
+            a.menu_id = b.menu_id
+        LEFT JOIN
+            sys_menu c
+        ON
+            b.child_menu_id = c.menu_id
+        WHERE
+            a.menu_id = #{menuId,jdbcType=CHAR}
+        ORDER BY
+            a.sequence,
+            c.sequence
+	</select>
+</mapper>

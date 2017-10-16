@@ -28,12 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		/*auth.userDetailsService(userDetailsService)
-			.passwordEncoder(new BCryptPasswordEncoder());*/
-		 auth.inMemoryAuthentication().
-		 	withUser("marissa").password("koala").roles("USER").
-		 and().
-		 	withUser("paul").password("emu").roles("USER");
+		auth.userDetailsService(userDetailsService)
+			.passwordEncoder(new BCryptPasswordEncoder());
+		
 	}
 
 	@Override
@@ -57,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()*/
             .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/authDemo").access("hasAuthority('PERM_SYS_IMPORT')")
                 .antMatchers("/**").authenticated()
                 .and()
             .exceptionHandling()

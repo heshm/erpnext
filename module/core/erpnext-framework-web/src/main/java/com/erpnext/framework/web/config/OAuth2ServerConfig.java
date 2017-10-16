@@ -76,6 +76,7 @@ public class OAuth2ServerConfig {
 				.withClient("erpnext-front")
 					.resourceIds(SITE_RESOURCE_ID)
 					.authorizedGrantTypes("password", "authorization_code", "refresh_token")
+					.authorities("ROLE_CLIENT")
 					.scopes("read", "write", "trust")
 			        .secret("erpnext-secret");
 			// @formatter:on
