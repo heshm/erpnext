@@ -1,13 +1,14 @@
 package com.erpnext.common.param.domain;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class Unit {
-	@NotBlank
+	@NotBlank(message = "{unit.id.notBlank}")
     private String id;
-	@NotBlank
+	@NotBlank(message = "{unit.name.notBlank}")
     private String name;
-
+	@Size(min=0,max=4,message="{unit.sign.size}")
     private String sign;
 
     public String getId() {

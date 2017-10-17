@@ -32,7 +32,12 @@
 	<mybatis:scan base-package="com.erpnext.**.mapper" />
 	<context:component-scan base-package="com.erpnext.**.service" /> 
 	
-	<bean id="khMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+            <set>
+                <value>messages/common-validator-messages</value>
+            </set>
+        </property>
 	</bean>
 
 		

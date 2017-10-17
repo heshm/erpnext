@@ -2,6 +2,8 @@ package com.erpnext.framework.web.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -28,6 +30,9 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 @EnableWebMvc
 @ComponentScan("com.erpnext.**.endpoint")
 public class RestApiMvcConfiguration extends WebMvcConfigurerAdapter{
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	@Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -56,6 +61,7 @@ public class RestApiMvcConfiguration extends WebMvcConfigurerAdapter{
 	@Override
 	public Validator getValidator() {
 		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+		validator.setValidationMessageSource(messageSource);
 		return validator;
 	}
     

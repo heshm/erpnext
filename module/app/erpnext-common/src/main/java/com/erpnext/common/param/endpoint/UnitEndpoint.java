@@ -54,8 +54,7 @@ public class UnitEndpoint extends BaseEndpoint{
 	}
 	
 	@GetMapping("/getPageUnit")
-	public Page<Unit> getPageUnit(
-			@PageableDefault(size=10, page=0)Pageable pageable){
+	public Page<Unit> getPageUnit(@PageableDefault(size=10, page=0)Pageable pageable){
 		//Pageable pageable = new PageRequest(page_no,10);
 		Page<Unit> page = unitService.readPageUnit(pageable);
 		return page;
