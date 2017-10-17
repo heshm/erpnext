@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erpnext.framework.security.domain.AdminUser;
-import com.erpnext.framework.security.service.SiteSecurityService;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.service.SiteSecurityService;
 
 @RestController
 public class UserEndpoint extends BaseEndpoint{

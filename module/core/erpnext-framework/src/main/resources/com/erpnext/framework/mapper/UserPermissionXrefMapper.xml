@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.erpnext.framework.security.mapper.UserPermissionXrefMapper">
+<mapper namespace="com.erpnext.framework.mapper.UserPermissionXrefMapper">
 	<resultMap id="BaseResultMap"
-		type="com.erpnext.framework.security.domain.UserPermissionXref">
+		type="com.erpnext.framework.domain.UserPermissionXref">
 		<id column="user_id" jdbcType="CHAR" property="userId" />
 		<id column="PERMISSION_ID" jdbcType="CHAR" property="permissionId" />
 	</resultMap>
@@ -19,7 +19,7 @@
 		where user_id = #{userId,jdbcType=CHAR}
 	</delete>
 	<insert id="insert"
-		parameterType="com.erpnext.framework.security.domain.UserPermissionXref">
+		parameterType="com.erpnext.framework.domain.UserPermissionXref">
 		insert into sys_user_permission_xref (<include refid="Base_Column_List" />)
 		values (#{userId,jdbcType=CHAR}, #{permissionId,jdbcType=CHAR})
 	</insert>

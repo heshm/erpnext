@@ -1,4 +1,4 @@
-package com.erpnext.framework.security.service;
+package com.erpnext.framework.service;
 
 import java.util.List;
 
@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.erpnext.framework.security.domain.AdminRole;
-import com.erpnext.framework.security.domain.AdminUser;
-import com.erpnext.framework.security.domain.Permission;
-import com.erpnext.framework.security.domain.RolePermissionXref;
-import com.erpnext.framework.security.domain.UserPermissionXref;
-import com.erpnext.framework.security.domain.UserRoleXref;
-import com.erpnext.framework.security.mapper.AdminRoleMapper;
-import com.erpnext.framework.security.mapper.AdminUserMapper;
-import com.erpnext.framework.security.mapper.PermissionMapper;
-import com.erpnext.framework.security.mapper.RolePermissionXrefMapper;
-import com.erpnext.framework.security.mapper.UserPermissionXrefMapper;
-import com.erpnext.framework.security.mapper.UserRoleXrefMapper;
+import com.erpnext.framework.domain.AdminRole;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.domain.Permission;
+import com.erpnext.framework.domain.RolePermissionXref;
+import com.erpnext.framework.domain.UserPermissionXref;
+import com.erpnext.framework.domain.UserRoleXref;
+import com.erpnext.framework.mapper.AdminRoleMapper;
+import com.erpnext.framework.mapper.AdminUserMapper;
+import com.erpnext.framework.mapper.PermissionMapper;
+import com.erpnext.framework.mapper.RolePermissionXrefMapper;
+import com.erpnext.framework.mapper.UserPermissionXrefMapper;
+import com.erpnext.framework.mapper.UserRoleXrefMapper;
 
 @Service
 @Transactional(readOnly=true)

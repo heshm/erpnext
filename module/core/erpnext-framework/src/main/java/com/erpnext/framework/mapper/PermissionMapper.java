@@ -1,10 +1,10 @@
-package com.erpnext.framework.security.mapper;
+package com.erpnext.framework.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.erpnext.framework.security.domain.Permission;
+import com.erpnext.framework.domain.Permission;
 
 public interface PermissionMapper {
     int deleteByPrimaryKey(String permissionId);

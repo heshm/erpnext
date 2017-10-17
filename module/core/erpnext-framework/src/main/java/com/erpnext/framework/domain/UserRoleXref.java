@@ -1,4 +1,4 @@
-package com.erpnext.framework.security.domain;
+package com.erpnext.framework.domain;
 
 public class UserRoleXref {
     private String userId;

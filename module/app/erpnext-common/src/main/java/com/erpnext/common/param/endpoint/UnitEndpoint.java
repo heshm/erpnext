@@ -17,17 +17,17 @@ package com.erpnext.common.param.endpoint;
 
 import java.util.List;
 
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,8 +54,9 @@ public class UnitEndpoint extends BaseEndpoint{
 	}
 	
 	@GetMapping("/getPageUnit")
-	public Page<Unit> getPageUnit(@RequestParam(value="page_no",defaultValue="0")int page_no){
-		Pageable pageable = new PageRequest(page_no,10);
+	public Page<Unit> getPageUnit(
+			@PageableDefault(size=10, page=0)Pageable pageable){
+		//Pageable pageable = new PageRequest(page_no,10);
 		Page<Unit> page = unitService.readPageUnit(pageable);
 		return page;
 	}
@@ -68,9 +69,10 @@ public class UnitEndpoint extends BaseEndpoint{
 	}
 	
 	@PostMapping("/create")
-	public void create(@RequestBody Unit unit){
+	@ResponseStatus(HttpStatus.CREATED)
+	public void create(@Valid @RequestBody Unit unit){
 		
-		
+		System.out.println(unit);
 	}
 
 }

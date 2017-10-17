@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.erpnext.framework.security.mapper.PermissionMapper">
-	<resultMap id="BaseResultMap" type="com.erpnext.framework.security.domain.Permission">
+<mapper namespace="com.erpnext.framework.mapper.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.framework.domain.Permission">
 		<id column="PERMISSION_ID" jdbcType="CHAR" property="permissionId" />
 		<result column="permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
 		<result column="permission_NAME" jdbcType="VARCHAR" property="permissionName" />
@@ -13,7 +13,7 @@
 		delete from sys_permission
 		where PERMISSION_ID = #{permissionId,jdbcType=CHAR}
 	</delete>
-	<insert id="insert" parameterType="com.erpnext.framework.security.domain.Permission">
+	<insert id="insert" parameterType="com.erpnext.framework.domain.Permission">
 		insert into sys_permission (PERMISSION_ID, permission_desc, permission_NAME,
 		status, PERMISSION_TYPE, is_friendly
 		)
@@ -22,7 +22,7 @@
 		#{status,jdbcType=CHAR}, #{permissionType,jdbcType=VARCHAR}, #{isFriendly,jdbcType=BIT}
 		)
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.security.domain.Permission">
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.domain.Permission">
 		update sys_permission
 		set permission_desc = #{permissionDesc,jdbcType=VARCHAR},
 		permission_NAME = #{permissionName,jdbcType=VARCHAR},
@@ -61,14 +61,14 @@
 		</where> 
 	</select>
 	
-	<resultMap id="PermissionResultMap" type="com.erpnext.framework.security.domain.Permission">
+	<resultMap id="PermissionResultMap" type="com.erpnext.framework.domain.Permission">
 		<id column="parent_permission_id" jdbcType="CHAR" property="permissionId" />
 		<result column="parent_permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
 		<result column="parent_permission_NAME" jdbcType="VARCHAR" property="permissionName" />
 		<result column="parent_status" jdbcType="CHAR" property="status" />
 		<result column="parent_PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
 		<result column="parent_is_friendly" jdbcType="BIT" property="isFriendly" />
-		<collection property="childPermission" ofType="com.erpnext.framework.security.domain.Permission">
+		<collection property="childPermission" ofType="com.erpnext.framework.domain.Permission">
 		    <id column="child_permission_id" jdbcType="CHAR" property="permissionId" />
 		    <result column="child_permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
 		    <result column="child_permission_NAME" jdbcType="VARCHAR" property="permissionName" />

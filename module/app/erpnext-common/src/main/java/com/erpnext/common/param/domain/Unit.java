@@ -1,9 +1,11 @@
 package com.erpnext.common.param.domain;
 
-public class Unit {
-	
-    private String id;
+import javax.validation.constraints.NotBlank;
 
+public class Unit {
+	@NotBlank
+    private String id;
+	@NotBlank
     private String name;
 
     private String sign;
@@ -31,4 +33,11 @@ public class Unit {
     public void setSign(String sign) {
         this.sign = sign;
     }
+
+	@Override
+	public String toString() {
+		return "Unit [id=" + id + ", name=" + name + ", sign=" + sign + "]";
+	}
+    
+    
 }

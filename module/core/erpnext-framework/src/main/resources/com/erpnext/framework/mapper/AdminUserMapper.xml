@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.erpnext.framework.security.mapper.AdminUserMapper">
-	<resultMap id="BaseResultMap" type="com.erpnext.framework.security.domain.AdminUser">
+<mapper namespace="com.erpnext.framework.mapper.AdminUserMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.framework.domain.AdminUser">
 		<id column="user_id" jdbcType="CHAR" property="userId" />
 		<result column="active_status_flag" jdbcType="TINYINT"
 			property="activeStatusFlag" />
@@ -20,7 +20,7 @@
 		delete from sys_admin_user
 		where user_id = #{userId,jdbcType=CHAR}
 	</delete>
-	<insert id="insert" parameterType="com.erpnext.framework.security.domain.AdminUser">
+	<insert id="insert" parameterType="com.erpnext.framework.domain.AdminUser">
 		insert into sys_admin_user (<include refid="Base_Column_List" />)
 		values (
 			#{userId,jdbcType=CHAR}, 
@@ -34,7 +34,7 @@
 			#{createDate,jdbcType=TIMESTAMP}
 		)
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.security.domain.AdminUser">
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.domain.AdminUser">
 		update sys_admin_user
 		set active_status_flag = #{activeStatusFlag,jdbcType=TINYINT},
 		login_name = #{loginName,jdbcType=VARCHAR},

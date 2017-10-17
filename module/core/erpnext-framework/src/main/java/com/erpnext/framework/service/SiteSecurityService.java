@@ -1,12 +1,12 @@
-package com.erpnext.framework.security.service;
+package com.erpnext.framework.service;
 
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.erpnext.framework.security.domain.AdminRole;
-import com.erpnext.framework.security.domain.AdminUser;
-import com.erpnext.framework.security.domain.Permission;
+import com.erpnext.framework.domain.AdminRole;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.domain.Permission;
 
 public interface SiteSecurityService {
 	

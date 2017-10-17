@@ -31,6 +31,9 @@
 
 	<mybatis:scan base-package="com.erpnext.**.mapper" />
 	<context:component-scan base-package="com.erpnext.**.service" /> 
+	
+	<bean id="khMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	</bean>
 
 		
 </beans>

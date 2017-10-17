@@ -1,4 +1,4 @@
-package com.erpnext.framework.security.domain;
+package com.erpnext.framework.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;

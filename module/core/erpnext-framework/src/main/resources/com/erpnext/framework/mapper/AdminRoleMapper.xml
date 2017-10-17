@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.erpnext.framework.security.mapper.AdminRoleMapper">
+<mapper namespace="com.erpnext.framework.mapper.AdminRoleMapper">
     <resultMap id="BaseResultMap"
-               type="com.erpnext.framework.security.domain.AdminRole">
+               type="com.erpnext.framework.domain.AdminRole">
         <id column="role_id" jdbcType="CHAR" property="roleId"/>
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
         <result column="role_desc" jdbcType="VARCHAR" property="roleDesc"/>
@@ -15,13 +15,13 @@
 		delete from sys_admin_role
 		where role_id = #{roleId,jdbcType=CHAR}
 	</delete>
-    <insert id="insert" parameterType="com.erpnext.framework.security.domain.AdminRole">
+    <insert id="insert" parameterType="com.erpnext.framework.domain.AdminRole">
         insert into sys_admin_role (<include refid="Base_Column_List"/>)
         values (#{roleId,jdbcType=CHAR}, #{roleName,jdbcType=VARCHAR},
         #{roleDesc,jdbcType=VARCHAR}, #{roleType,jdbcType=CHAR}
         )
     </insert>
-    <update id="updateByPrimaryKey" parameterType="com.erpnext.framework.security.domain.AdminRole">
+    <update id="updateByPrimaryKey" parameterType="com.erpnext.framework.domain.AdminRole">
 		update sys_admin_role
 		set role_name = #{roleName,jdbcType=VARCHAR},
 		role_desc = #{roleDesc,jdbcType=VARCHAR},

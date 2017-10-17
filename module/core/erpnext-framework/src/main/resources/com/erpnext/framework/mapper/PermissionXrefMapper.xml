@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.erpnext.framework.security.mapper.PermissionXrefMapper">
+<mapper namespace="com.erpnext.framework.mapper.PermissionXrefMapper">
 	<resultMap id="BaseResultMap"
-		type="com.erpnext.framework.security.domain.PermissionXref">
+		type="com.erpnext.framework.domain.PermissionXref">
 		<id column="permission_id" jdbcType="CHAR" property="permissionId" />
 		<id column="child_permission_id" jdbcType="CHAR" property="childPermissionId" />
 	</resultMap>
@@ -11,7 +11,7 @@
 		where permission_id = #{permissionId,jdbcType=CHAR}
 		and child_permission_id = #{childPermissionId,jdbcType=CHAR}
 	</delete>
-	<insert id="insert" parameterType="com.erpnext.framework.security.domain.PermissionXref">
+	<insert id="insert" parameterType="com.erpnext.framework.domain.PermissionXref">
 		insert into sys_permission_xref (permission_id, child_permission_id)
 		values (#{permissionId,jdbcType=CHAR}, #{childPermissionId,jdbcType=CHAR})
 	</insert>

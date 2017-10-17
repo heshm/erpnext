@@ -1,4 +1,4 @@
-package com.erpnext.framework.security.domain;
+package com.erpnext.framework.domain;
 
 public class PermissionXref {
     private String permissionId;

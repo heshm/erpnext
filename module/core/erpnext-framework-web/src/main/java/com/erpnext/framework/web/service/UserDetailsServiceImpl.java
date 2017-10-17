@@ -14,10 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.erpnext.framework.security.domain.AdminRole;
-import com.erpnext.framework.security.domain.AdminUser;
-import com.erpnext.framework.security.domain.Permission;
-import com.erpnext.framework.security.service.SiteSecurityService;
+import com.erpnext.framework.domain.AdminRole;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.domain.Permission;
+import com.erpnext.framework.service.SiteSecurityService;
 
 public class UserDetailsServiceImpl implements UserDetailsService {
 	

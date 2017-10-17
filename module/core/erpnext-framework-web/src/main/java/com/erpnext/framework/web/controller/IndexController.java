@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.erpnext.framework.security.domain.AdminUser;
-import com.erpnext.framework.security.service.SiteSecurityService;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.service.SiteSecurityService;
 
 @Controller
 public class IndexController extends BaseController {
