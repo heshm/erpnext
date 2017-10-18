@@ -32,8 +32,6 @@ public class Menu implements Serializable{
     @JsonIgnore
     private String perm;
     
-    private Boolean isActive;
-    
     @JsonIgnore
     private Menu parent;
     
@@ -95,14 +93,6 @@ public class Menu implements Serializable{
     public void setPerm(String perm) {
         this.perm = perm;
     }
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
 
 	public Menu getParent() {
 		return parent;

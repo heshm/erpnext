@@ -7,6 +7,10 @@ public class ValidationErrorInfo extends ErrorInfo {
 	
 	private List<Error> errors = new ArrayList<>(6);
 	
+	public ValidationErrorInfo(){
+		super();
+	}
+	
 	public ValidationErrorInfo(ErrorInfo orig) {
         super(orig);
     }

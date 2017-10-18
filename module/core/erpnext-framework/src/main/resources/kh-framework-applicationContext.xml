@@ -36,6 +36,7 @@
 		<property name="basenames">
             <set>
                 <value>messages/common-validator-messages</value>
+                <value>messages/rest-exception-messages</value>
             </set>
         </property>
 	</bean>

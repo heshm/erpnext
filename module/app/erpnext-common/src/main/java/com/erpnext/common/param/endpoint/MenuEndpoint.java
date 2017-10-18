@@ -26,7 +26,7 @@ public class MenuEndpoint extends BaseEndpoint {
 		return menuService.readAllMenuById(menuId);
 	}
 	
-	@GetMapping("/getAuthApp")
+	@GetMapping("/list_app")
 	public List<Menu> getAuthApp(){
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().
 				getPrincipal();	

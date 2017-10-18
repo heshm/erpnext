@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -70,6 +71,11 @@ public class OAuth2ServerConfig {
 		private AuthenticationManager authenticationManager;
 		
 		@Override
+		public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+			//security.accessDeniedHandler(accessDeniedHandler)
+		}
+		
+		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 			// @formatter:off
 			clients.inMemory()
@@ -78,13 +84,9 @@ public class OAuth2ServerConfig {
 					.authorizedGrantTypes("password", "authorization_code", "refresh_token")
 					.authorities("ROLE_CLIENT")
 					.scopes("read", "write", "trust")
-			        .secret("erpnext-secret");
+			        .secret("erpnext-secret")
+			        .accessTokenValiditySeconds(600);
 			// @formatter:on
-		}
-		
-		@Bean
-		public TokenStore tokenStore() {
-			return new InMemoryTokenStore();
 		}
 		
 		@Override
@@ -92,6 +94,12 @@ public class OAuth2ServerConfig {
 			endpoints.tokenStore(tokenStore)
 				.authenticationManager(authenticationManager);
 		}
+		
+		@Bean
+		public TokenStore tokenStore() {
+			return new InMemoryTokenStore();
+		}
+		
 	}
 
 }

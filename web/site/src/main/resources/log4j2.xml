@@ -10,7 +10,7 @@
         <Logger name="org.apache.ibatis" level="INFO"/>
         <Logger name="org.mybatis.spring" level="INFO"/>
         <Logger name="com.erpnext" level="DEBUG"/>
-        <Logger name="org.springframework" level="DEBUG"/>
+        <Logger name="org.springframework" level="TRACE"/>
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>

@@ -70,8 +70,7 @@ public class UnitEndpoint extends BaseEndpoint{
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@Valid @RequestBody Unit unit){
-		
-		System.out.println(unit);
+		unitService.saveUnit(unit);
 	}
 
 }
