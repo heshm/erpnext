@@ -44,7 +44,7 @@ public class OAuth2ServerConfig {
 				.requestMatchers().antMatchers("/api/**", "/oauth/users/**", "/oauth/clients/**","/me")
 			.and()
 				.authorizeRequests()
-					.antMatchers("/api/**").access("#oauth2.hasScope('read')")					
+					.antMatchers("/api/**").authenticated()				
 					.antMatchers("/photos").access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))")                                        
 					.antMatchers("/photos/trusted/**").access("#oauth2.hasScope('trust')")
 					.antMatchers("/photos/user/**").access("#oauth2.hasScope('trust')")					
@@ -91,7 +91,8 @@ public class OAuth2ServerConfig {
 		
 		@Override
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-			endpoints.tokenStore(tokenStore)
+			endpoints
+				.tokenStore(tokenStore)
 				.authenticationManager(authenticationManager);
 		}
 		
