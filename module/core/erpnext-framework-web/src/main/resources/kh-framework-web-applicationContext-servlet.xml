@@ -59,6 +59,13 @@
 		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="defaultContentType" value="application/json" />
 	</bean>
+	
+<!-- 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.erpnext.framework.web.interceptor.LogInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors> -->
 
 	<mvc:default-servlet-handler />
 

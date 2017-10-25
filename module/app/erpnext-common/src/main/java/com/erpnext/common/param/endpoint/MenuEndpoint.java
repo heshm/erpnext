@@ -22,8 +22,8 @@ public class MenuEndpoint extends BaseEndpoint {
 	private MenuService menuService;
 	
 	@GetMapping("/tree/{menuId}")
-	public Menu tree(@PathVariable("menuId") String menuId){
-		return menuService.readAllMenuById(menuId);
+	public List<Menu> tree(@PathVariable("menuId") String menuId){
+		return menuService.readAllMenuById(menuId).getChildren();
 	}
 	
 	@GetMapping("/list_app")

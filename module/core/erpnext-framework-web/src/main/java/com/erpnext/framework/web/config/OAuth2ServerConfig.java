@@ -85,7 +85,7 @@ public class OAuth2ServerConfig {
 					.authorities("ROLE_CLIENT")
 					.scopes("read", "write", "trust")
 			        .secret("erpnext-secret")
-			        .accessTokenValiditySeconds(600);
+			        .accessTokenValiditySeconds(6000);
 			// @formatter:on
 		}
 		
