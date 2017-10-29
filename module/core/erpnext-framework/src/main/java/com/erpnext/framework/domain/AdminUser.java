@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class AdminUser implements Serializable{
 	
 	/**
@@ -30,6 +32,7 @@ public class AdminUser implements Serializable{
     /**
      * 密码
      */
+    @JsonIgnore
     private transient String password;
     /**
      * 电话号码 

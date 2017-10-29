@@ -23,8 +23,8 @@ public class UserEndpoint extends BaseEndpoint{
 		return siteSecurityService.getAllUser();
 	}
 	
-	@GetMapping("/getLoginUserInfo")
-	public AdminUser getLoginUserInfo() {
+	@GetMapping("/readLoginUserInfo")
+	public AdminUser readLoginUserInfo() {
 		UserDetails userDetails = AuthenticationUtils.getPrincipal();
 		return siteSecurityService.readAdminUserByLoginName(userDetails.getUsername());
 	}

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.erpnext.**.endpoint")
+@ComponentScan("com.erpnext.**.endpoint,com.erpnext.framework.web.rest.advice")
 public class RestApiMvcConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Autowired

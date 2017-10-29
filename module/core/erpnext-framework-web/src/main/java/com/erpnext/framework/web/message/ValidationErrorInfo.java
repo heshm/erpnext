@@ -1,4 +1,4 @@
-package com.erpnext.framework.web.exhandler.message;
+package com.erpnext.framework.web.message;
 
 import java.util.ArrayList;
 import java.util.List;

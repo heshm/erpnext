@@ -1,4 +1,4 @@
-package com.erpnext.framework.web.exhandler.message;
+package com.erpnext.framework.web.message;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,4 +1,4 @@
-package com.erpnext.framework.web.endpoint;
+package com.erpnext.framework.web.rest.advice;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,16 +23,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.erpnext.framework.web.exhandler.message.ErrorInfo;
-import com.erpnext.framework.web.exhandler.message.ValidationErrorInfo;
 import com.erpnext.framework.web.interpolator.MessageInterpolator;
 import com.erpnext.framework.web.interpolator.SpelMessageInterpolator;
+import com.erpnext.framework.web.message.ErrorInfo;
+import com.erpnext.framework.web.message.ValidationErrorInfo;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 
 @RestControllerAdvice(annotations = RestController.class)
-public class RestExceptionHandlerEndpoint extends ResponseEntityExceptionHandler {
+public class RestExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandlerEndpoint.class);
+	private static final Logger logger = LoggerFactory.getLogger(RestExceptionHandlerAdvice.class);
 	
 	private static final String 
 		ERROR_KEY = "error",

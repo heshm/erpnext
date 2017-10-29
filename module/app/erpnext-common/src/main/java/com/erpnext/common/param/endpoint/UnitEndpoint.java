@@ -48,7 +48,7 @@ public class UnitEndpoint extends BaseEndpoint{
 	private UnitService unitService;
 	
 	@GetMapping("/getAllUnit")
-	public List<Unit> getAllUnit(){
+	public List<Unit> getAllUnit() throws InterruptedException{
 		List<Unit>  unitList = unitService.readAllUnit();
 		return unitList;
 	}
@@ -71,6 +71,13 @@ public class UnitEndpoint extends BaseEndpoint{
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@Valid @RequestBody Unit unit){
 		unitService.saveUnit(unit);
+	}
+	
+	@GetMapping("/deleteOneUnit/{unitId}")
+	@ResponseStatus(HttpStatus.OK)
+	public String deleteOneUnit(@PathVariable("unitId") String unitId) {
+		unitService.deleteUnit(unitId);
+		return DELETED;
 	}
 
 }
