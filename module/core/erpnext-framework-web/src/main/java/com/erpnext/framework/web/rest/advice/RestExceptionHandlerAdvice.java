@@ -12,6 +12,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -47,6 +48,12 @@ public class RestExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		ValidationErrorInfo errInfo = createBody(ex,status,request,ex.getBindingResult());
+		return handleExceptionInternal(ex, errInfo, headers, status, request);
+	}
+	@Override
+	public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ErrorInfo errInfo = createBody(ex,status,request);
 		return handleExceptionInternal(ex, errInfo, headers, status, request);
 	}
 	

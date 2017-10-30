@@ -33,7 +33,7 @@ public class Menu implements Serializable{
     private String perm;
     
     @JsonIgnore
-    private Menu parent;
+    private String parentId;
     
     @JsonInclude(Include.NON_EMPTY)
     private List<Menu> children;
@@ -94,12 +94,12 @@ public class Menu implements Serializable{
         this.perm = perm;
     }
 
-	public Menu getParent() {
-		return parent;
+	public String getParentId() {
+		return parentId;
 	}
 
-	public void setParent(Menu parent) {
-		this.parent = parent;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 	public List<Menu> getChildren() {

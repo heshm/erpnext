@@ -91,7 +91,7 @@ public class MenuServiceImpl implements MenuService {
 			menu.setMenuId(IDUtils.uuid());
 			menuMapper.insert(menu);
 			MenuXref menuXref = new MenuXref();
-			menuXref.setMenuId(menu.getParent().getMenuId());
+			menuXref.setMenuId(menu.getParentId());
 			menuXref.setChildMenuId(menu.getMenuId());
 			menuXrefMapper.insert(menuXref);
 		}else{
@@ -130,9 +130,7 @@ public class MenuServiceImpl implements MenuService {
 		Menu menu = menuMapper.selectByPrimaryKey(menuId);
 		if(!WebConst.ROOT.equals(menuId)){
 			MenuXref menuXref = menuXrefMapper.selectOne(menuId);
-			Menu pMenu = new Menu();
-			pMenu.setMenuId(menuXref.getMenuId());
-			menu.setParent(pMenu);
+			menu.setParentId(menuXref.getMenuId());
 		}
 		menuList.add(menu);
 		List<MenuXref> listMenuXref = menuXrefMapper.selectList(menuId, null);

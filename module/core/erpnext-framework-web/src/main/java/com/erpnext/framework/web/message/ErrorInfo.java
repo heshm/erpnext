@@ -58,6 +58,11 @@ public class ErrorInfo {
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorInfo [error=" + error + ", status=" + status + ", detail=" + detail + "]";
+	}
     
     
 

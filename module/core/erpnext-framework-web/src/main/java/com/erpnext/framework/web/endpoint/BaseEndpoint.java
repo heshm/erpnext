@@ -12,5 +12,6 @@ public abstract class BaseEndpoint {
 	protected final static String CREATED = "created";
 	
 	protected final static String UPDATED = "updated";
+	
 
 }

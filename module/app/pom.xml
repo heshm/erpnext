@@ -12,5 +12,6 @@
 	<description>The app of erpnext</description>
   <modules>
     <module>erpnext-common</module>
+    <module>erpnext-developer</module>
   </modules>
 </project>
