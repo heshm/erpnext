@@ -37,6 +37,7 @@ public class UnitServiceImpl implements UnitService{
 	}
 
 	@Override
+	@Transactional
 	public void updateUnit(Unit unit) {
 		unitMapper.updateByPrimaryKey(unit);
 	}

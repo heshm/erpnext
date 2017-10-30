@@ -79,6 +79,7 @@ public class UnitEndpoint extends BaseEndpoint{
 	@PutMapping("/updateOneUnit")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public String updateOneUnit(@Valid @RequestBody Unit unit){
+		unitService.updateUnit(unit);
 		return UPDATED;
 	}
 	
