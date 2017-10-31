@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.EntryMapper">
+    <resultMap id="BaseResultMap" type="com.erpnext.stock.param.domain.Entry">
+        <id column="warehouse_id" jdbcType="CHAR" property="warehouseId" />
+        <id column="id" jdbcType="CHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="phone_no" jdbcType="CHAR" property="phoneNo" />
+        <result column="mobile_no" jdbcType="CHAR" property="mobileNo" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="account_title" jdbcType="CHAR" property="accountTitle" />
+        <result column="status" jdbcType="BIT" property="status" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        warehouse_id, id, name, phone_no, mobile_no, address, account_title, status
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+        delete from stock_entry
+        where warehouse_id = #{warehouseId,jdbcType=CHAR}
+        and id = #{id,jdbcType=CHAR}
+    </delete>
+    <insert id="insert" parameterType="com.erpnext.stock.param.domain.Entry">
+        insert into stock_entry (<include refid="Base_Column_List" />)
+        values (#{warehouseId,jdbcType=CHAR}, #{id,jdbcType=CHAR},
+        #{name,jdbcType=VARCHAR},
+        #{phoneNo,jdbcType=CHAR}, #{mobileNo,jdbcType=CHAR}, #{address,jdbcType=VARCHAR},
+        #{accountTitle,jdbcType=CHAR}, #{status,jdbcType=BIT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.Entry">
+        update stock_entry
+        set name = #{name,jdbcType=VARCHAR},
+        phone_no = #{phoneNo,jdbcType=CHAR},
+        mobile_no = #{mobileNo,jdbcType=CHAR},
+        address = #{address,jdbcType=VARCHAR},
+        account_title = #{accountTitle,jdbcType=CHAR},
+        status = #{status,jdbcType=BIT}
+        where warehouse_id = #{warehouseId,jdbcType=CHAR}
+        and id = #{id,jdbcType=CHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from stock_entry
+        where warehouse_id = #{warehouseId,jdbcType=CHAR}
+        and id = #{id,jdbcType=CHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from stock_entry
+    </select>
+    <select id="selectByParent" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from stock_entry
+        where warehouse_id = #{warehouseId,jdbcType=CHAR}
+    </select>
+</mapper>

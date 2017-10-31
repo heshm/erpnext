@@ -51,6 +51,8 @@
 
 		<commons.version>1.2</commons.version>
 		<junit.version>3.8.1</junit.version>
+		
+		<guava.version>23.0</guava.version>
 
 
 	</properties>
@@ -438,6 +440,12 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 
+			<!--  Google Guava -->
+			<dependency>
+    			<groupId>com.google.guava</groupId>
+    			<artifactId>guava</artifactId>
+    			<version>${guava.version}</version>
+			</dependency>
 
 			<!-- Servlet API -->
 			<dependency>

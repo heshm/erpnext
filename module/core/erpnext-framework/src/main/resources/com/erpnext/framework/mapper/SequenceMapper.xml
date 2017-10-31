@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.framework.mapper.SequenceMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.framework.domain.Sequence">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="reset_cycle" jdbcType="SMALLINT" property="resetCycle" />
+		<result column="reset_cycle_unit" jdbcType="CHAR" property="resetCycleUnit" />
+		<result column="length" jdbcType="SMALLINT" property="length" />
+		<result column="current_sequence_no" jdbcType="INTEGER"
+			property="currentSequenceNo" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, reset_cycle, reset_cycle_unit,
+		length, current_sequence_no
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from sys_sequence
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.framework.domain.Sequence">
+		insert into sys_sequence (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{resetCycle,jdbcType=SMALLINT},
+		#{resetCycleUnit,jdbcType=CHAR},
+		#{length,jdbcType=SMALLINT}, #{currentSequenceNo,jdbcType=INTEGER})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.framework.domain.Sequence">
+		update sys_sequence
+		set reset_cycle = #{resetCycle,jdbcType=SMALLINT},
+		reset_cycle_unit = #{resetCycleUnit,jdbcType=CHAR},
+		length = #{length,jdbcType=SMALLINT},
+		current_sequence_no = #{currentSequenceNo,jdbcType=INTEGER}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_sequence
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from sys_sequence
+	</select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.ItemPriceMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.stock.param.domain.ItemPrice">
+		<id column="item_id" jdbcType="CHAR" property="itemId" />
+		<id column="price_id" jdbcType="CHAR" property="priceId" />
+		<id column="currency_id" jdbcType="CHAR" property="currencyId" />
+		<result column="stand_price_rate" jdbcType="DECIMAL" property="standPriceRate" />
+		<result column="max_price_rate" jdbcType="DECIMAL" property="maxPriceRate" />
+		<result column="min_price_rate" jdbcType="DECIMAL" property="minPriceRate" />
+		<result column="enabled" jdbcType="TINYINT" property="enabled" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		item_id, price_id, currency_id,
+		stand_price_rate, max_price_rate, min_price_rate,
+		enabled
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from stock_item_price
+		where item_id = #{itemId,jdbcType=CHAR}
+		and price_id = #{priceId,jdbcType=CHAR}
+		and currency_id = #{currencyId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.stock.param.domain.ItemPrice">
+		insert into stock_item_price (<include refid="Base_Column_List" />)
+		values (#{itemId,jdbcType=CHAR}, #{priceId,jdbcType=CHAR},
+		#{currencyId,jdbcType=CHAR},
+		#{standPriceRate,jdbcType=DECIMAL}, #{maxPriceRate,jdbcType=DECIMAL}, #{minPriceRate,jdbcType=DECIMAL},
+		#{enabled,jdbcType=TINYINT})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.ItemPrice">
+		update stock_item_price
+		set stand_price_rate = #{standPriceRate,jdbcType=DECIMAL},
+		max_price_rate = #{maxPriceRate,jdbcType=DECIMAL},
+		min_price_rate = #{minPriceRate,jdbcType=DECIMAL},
+		enabled = #{enabled,jdbcType=TINYINT}
+		where item_id = #{itemId,jdbcType=CHAR}
+		and price_id = #{priceId,jdbcType=CHAR}
+		and currency_id = #{currencyId,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item_price
+		where item_id = #{itemId,jdbcType=CHAR}
+		and price_id = #{priceId,jdbcType=CHAR}
+		and currency_id = #{currencyId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item_price
+	</select>
+</mapper>

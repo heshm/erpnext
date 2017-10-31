@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.PriceMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.stock.param.domain.Price">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="enabled" jdbcType="TINYINT" property="enabled" />
+		<result column="currency" jdbcType="CHAR" property="currency" />
+		<result column="buying" jdbcType="TINYINT" property="buying" />
+		<result column="selling" jdbcType="TINYINT" property="selling" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	id, name, enabled, currency, buying, selling
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from stock_price
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.stock.param.domain.Price">
+		insert into stock_price (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
+		#{enabled,jdbcType=TINYINT},
+		#{currency,jdbcType=CHAR}, #{buying,jdbcType=TINYINT}, #{selling,jdbcType=TINYINT}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.Price">
+		update stock_price
+		set name = #{name,jdbcType=VARCHAR},
+		enabled = #{enabled,jdbcType=TINYINT},
+		currency = #{currency,jdbcType=CHAR},
+		buying = #{buying,jdbcType=TINYINT},
+		selling = #{selling,jdbcType=TINYINT}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_price
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_price
+	</select>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.ItemGroupMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.stock.param.domain.ItemGroup">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="is_group" jdbcType="BIT" property="isGroup" />
+		<result column="parent_id" jdbcType="CHAR" property="parentId" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="rmrk" jdbcType="CHAR" property="rmrk" />
+		<result column="icon_Skin" jdbcType="VARCHAR" property="iconSkin" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, is_group, parent_id, status, rmrk, icon_skin
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from stock_item_group
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.stock.param.domain.ItemGroup">
+		insert into stock_item_group (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
+		#{isGroup,jdbcType=BIT}, #{parentId,jdbcType=CHAR},
+		#{status,jdbcType=TINYINT}, #{rmrk,jdbcType=CHAR},
+		#{iconSkin,jdbcType=CHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.ItemGroup">
+		update stock_item_group
+		set name = #{name,jdbcType=VARCHAR},
+		is_group = #{isGroup,jdbcType=BIT},
+		parent_id = #{parentId,jdbcType=CHAR},
+		status = #{status,jdbcType=TINYINT},
+		rmrk = #{rmrk,jdbcType=CHAR},
+        icon_Skin = #{iconSkin,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item_group
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item_group
+	</select>
+	<select id="selectChildren" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item_group 
+		where parent_id = #{pId,jdbcType=CHAR}
+	</select>
+	<update id="updateBySelective" parameterType="com.erpnext.stock.param.domain.ItemGroup">
+		update stock_item_group
+		<set>
+			<if test="name != null">
+			name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="isGroup != null">
+			is_group = #{isGroup,jdbcType=BIT},
+			</if>
+			<if test="parentId != null">
+			parent_id = #{parentId,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+			status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="rmrk != null">
+			rmrk = #{rmrk,jdbcType=CHAR},
+			</if>
+			<if test="iconSkin != null">
+        	icon_Skin = #{iconSkin,jdbcType=VARCHAR},
+        	</if>
+		</set>
+		where id = #{id,jdbcType=CHAR}
+	</update>
+</mapper>

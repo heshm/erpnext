@@ -30,7 +30,7 @@
 	</bean>
 
 	<mybatis:scan base-package="com.erpnext.**.mapper" />
-	<context:component-scan base-package="com.erpnext.**.service" /> 
+	<context:component-scan base-package="com.erpnext.**.service,com.erpnext.**.manager" /> 
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">

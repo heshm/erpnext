@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.WarehouseMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.stock.param.domain.Warehouse">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="phone_no" jdbcType="CHAR" property="phoneNo" />
+		<result column="mobile_no" jdbcType="CHAR" property="mobileNo" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="status" jdbcType="CHAR" property="status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    id, name, phone_no, mobile_no, address, status
+    </sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from stock_warehouse
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.stock.param.domain.Warehouse">
+		insert into stock_warehouse (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
+		#{phoneNo,jdbcType=CHAR},
+		#{mobileNo,jdbcType=CHAR}, #{address,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.Warehouse">
+		update stock_warehouse
+		set name = #{name,jdbcType=VARCHAR},
+		phone_no = #{phoneNo,jdbcType=CHAR},
+		mobile_no = #{mobileNo,jdbcType=CHAR},
+		address = #{address,jdbcType=VARCHAR},
+		status = #{status,jdbcType=CHAR}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_warehouse
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_warehouse
+	</select>
+</mapper>

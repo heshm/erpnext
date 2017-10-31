@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.stock.param.mapper.ItemMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.stock.param.domain.Item">
+		<id column="item_id" jdbcType="CHAR" property="itemId" />
+		<result column="item_group_id" jdbcType="CHAR" property="itemGroupId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="unit" jdbcType="CHAR" property="unit" />
+		<result column="norm" jdbcType="CHAR" property="norm" />
+		<result column="rmrk" jdbcType="CHAR" property="rmrk" />
+		<result column="dec_no" jdbcType="SMALLINT" property="decNo" />
+		<result column="image" jdbcType="VARCHAR" property="image" />
+		<result column="create_by" jdbcType="CHAR" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="modify_by" jdbcType="CHAR" property="modifyBy" />
+		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+    	item_id, item_group_id, name, unit, norm, rmrk, dec_no, image,
+    	create_by, create_time, modify_by, modify_time, status
+  	</sql>
+  	<sql id="Example_Where_Clause">
+  		<where>
+  			<if test="itemGroupId != null and itemGroupId != ''">
+  				item_group_id = #{itemGroupId,jdbcType=CHAR}
+  			</if>
+  			<if test="status != null and status != ''">
+  				status = #{status,jdbcType=TINYINT}
+  			</if>
+  		</where>
+  	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from stock_item
+		where item_id = #{itemId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.stock.param.domain.Item">
+		insert into stock_item (<include refid="Base_Column_List" />)
+		values (#{itemId,jdbcType=CHAR}, #{itemGroupId,jdbcType=CHAR},
+		#{name,jdbcType=VARCHAR},
+		#{unit,jdbcType=CHAR}, #{norm,jdbcType=CHAR}, #{rmrk,jdbcType=CHAR},
+		#{decNo,jdbcType=SMALLINT},
+		#{image,jdbcType=VARCHAR}, #{createBy,jdbcType=CHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=CHAR},
+		#{modifyTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=TINYINT})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.stock.param.domain.Item">
+		update stock_item
+		set item_group_id = #{itemGroupId,jdbcType=CHAR},
+		name = #{name,jdbcType=VARCHAR},
+		unit = #{unit,jdbcType=CHAR},
+		norm = #{norm,jdbcType=CHAR},
+		rmrk = #{rmrk,jdbcType=CHAR},
+		dec_no = #{decNo,jdbcType=SMALLINT},
+		image = #{image,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=CHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=CHAR},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=TINYINT}
+		where item_id = #{itemId,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.erpnext.stock.param.domain.Item">
+    	update stock_item
+        <set>
+            <if test="itemGroupId != null">
+                item_group_id = #{itemGroupId,jdbcType=CHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null">
+                unit = #{unit,jdbcType=CHAR},
+            </if>
+            <if test="norm != null">
+                norm = #{norm,jdbcType=CHAR},
+            </if>
+            <if test="rmrk != null">
+                rmrk = #{rmrk,jdbcType=CHAR},
+            </if>
+            <if test="decNo != null">
+                dec_no = #{decNo,jdbcType=SMALLINT},
+            </if>
+            <if test="image != null">
+                image = #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyBy != null">
+                modify_by = #{modifyBy,jdbcType=CHAR},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where item_id = #{itemId,jdbcType=CHAR}
+    </update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item
+		where item_id = #{itemId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from stock_item
+		<include refid="Example_Where_Clause" />
+		<if test="pageable != null" >
+			limit #{pageable.offset},#{pageable.pageSize}
+		</if>
+	</select>
+	<select id="countByExample" resultType="java.lang.Integer">
+    	select count(*) from stock_item
+        <include refid="Example_Where_Clause" />
+  	</select>
+</mapper>

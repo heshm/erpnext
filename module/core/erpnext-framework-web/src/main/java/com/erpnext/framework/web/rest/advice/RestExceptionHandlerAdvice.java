@@ -64,6 +64,13 @@ public class RestExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, m, null, status, request);
 	}
 	
+	@ExceptionHandler({IllegalArgumentException.class})
+	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request){
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		ErrorInfo m = createBody(ex,status,request);
+		return handleExceptionInternal(ex, m, null, status, request);
+	}
+	
 	private ValidationErrorInfo createBody(Exception ex,HttpStatus status,WebRequest request,BindingResult result){
 		ErrorInfo m = createBody(ex,status,request);
 		ValidationErrorInfo msg = new ValidationErrorInfo(m);
@@ -83,6 +90,8 @@ public class RestExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 		if(ex instanceof AccessDeniedException){
 			String username = AuthenticationUtils.getPrincipal().getUsername();
 			m.setDetail(getMessage(DETAIL_KEY,ex,locale,username));
+		}else if(ex instanceof IllegalArgumentException){
+			m.setDetail(ex.getMessage());
 		}else{
 			m.setDetail(resolveMessage(DETAIL_KEY,ex,locale));
 		}
