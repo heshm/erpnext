@@ -9,5 +9,6 @@ public interface ApplicationService {
 	ApplicationDTO readOneApplication(String id);
 	
 	List<ApplicationDTO> readAllApplication();
+	
 
 }

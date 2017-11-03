@@ -41,9 +41,6 @@ public class MenuServiceImpl implements MenuService {
 	//@Cacheable(cacheNames="sysCache",key="'menuAll_' + #menuId")
 	public Menu readAllMenuById(String menuId) {
 		Menu menu = menuMapper.selectByMenuId(menuId);
-		if(!WebConst.ROOT.equals(menuId)){
-			menu.setParentId(menuXrefMapper.selectOne(menuId).getMenuId());
-		}
 		if (null != menu && !menu.getIsLeaf()){
 			List<Menu> menuList = new ArrayList<Menu>();
 			for(Menu childMenu : menu.getChildren()){

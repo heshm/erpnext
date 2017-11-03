@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.common.param.domain.Menu;
+import com.erpnext.common.param.dto.MenuDTO;
 import com.erpnext.common.param.service.MenuService;
+import com.erpnext.developer.service.DevMenuService;
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
 
 @RestController
@@ -19,10 +21,12 @@ public class DevMenuEndpoint extends BaseEndpoint{
 	
 	@Autowired
 	private MenuService menuService;
+	@Autowired
+	private DevMenuService devMenuService;
 	
 	@GetMapping("/getChildMenuList/{id}")
-	public List<Menu> getChildMenuList(@PathVariable("id")String id){
-		return menuService.readAllMenuById(id).getChildren();
+	public List<MenuDTO> getChildMenuList(@PathVariable("id")String id){
+		return devMenuService.readApplicationMenu(id);
 	}
 	
 	@PutMapping("/updateOneMenu")

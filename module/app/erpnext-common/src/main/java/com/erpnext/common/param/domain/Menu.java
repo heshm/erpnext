@@ -32,6 +32,7 @@ public class Menu implements Serializable{
     @JsonIgnore
     private String perm;
     
+    @JsonIgnore
     private String parentId;
     
     @JsonInclude(Include.NON_EMPTY)
