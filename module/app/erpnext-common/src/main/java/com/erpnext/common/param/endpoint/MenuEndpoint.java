@@ -32,5 +32,10 @@ public class MenuEndpoint extends BaseEndpoint {
 				getPrincipal();	
 		return menuService.readAuthApp(user);
 	}
+	
+	@GetMapping("/getOneMenu/{id}")
+	public Menu getOneMenu(@PathVariable("id")String id) {
+		return menuService.readByPrimaryKey(id);
+	}
 
 }
