@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.User;
 
 import com.erpnext.common.param.domain.Menu;
+import com.erpnext.common.param.dto.MenuDTO;
 
 public interface MenuService {
 	
@@ -48,5 +49,9 @@ public interface MenuService {
 	 * 读取授权app
 	 */
 	List<Menu> readAuthApp(User user);
+	/**
+	 * 根据id读取菜单及父菜单
+	 */
+	MenuDTO readOneMenuWithParent(String id);
 
 }

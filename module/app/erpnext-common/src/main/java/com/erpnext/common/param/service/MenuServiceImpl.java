@@ -21,6 +21,7 @@ import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.util.WebConst;
 import com.erpnext.common.param.domain.Menu;
 import com.erpnext.common.param.domain.MenuXref;
+import com.erpnext.common.param.dto.MenuDTO;
 import com.erpnext.common.param.mapper.MenuMapper;
 import com.erpnext.common.param.mapper.MenuXrefMapper;
 
@@ -95,6 +96,7 @@ public class MenuServiceImpl implements MenuService {
 			menuXref.setChildMenuId(menu.getMenuId());
 			menuXrefMapper.insert(menuXref);
 		}else{
+			menu.setIsLeaf(false);
 			menuMapper.updateByPrimaryKey(menu);
 		}
 		
@@ -164,6 +166,17 @@ public class MenuServiceImpl implements MenuService {
 		}
 		Collections.sort(authApp, new Menu.SeqOrder());
 		return authApp;
+	}
+
+	@Override
+	public MenuDTO readOneMenuWithParent(String id) {
+		Menu menu = menuMapper.selectByMenuId(id);
+		Menu pMenu = null;
+		if(!WebConst.ROOT.equals(id)){
+			MenuXref menuXref = menuXrefMapper.selectOne(id);
+			pMenu = menuMapper.selectByPrimaryKey(menuXref.getMenuId());
+		}
+		return new MenuDTO(menu,pMenu);
 	}
 
 }

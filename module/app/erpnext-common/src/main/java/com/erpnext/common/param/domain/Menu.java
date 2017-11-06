@@ -32,7 +32,7 @@ public class Menu implements Serializable{
     @JsonIgnore
     private String perm;
     
-    @JsonIgnore
+    @JsonInclude(Include.NON_EMPTY)
     private String parentId;
     
     @JsonInclude(Include.NON_EMPTY)
@@ -116,6 +116,15 @@ public class Menu implements Serializable{
 			return o1.sequence.compareTo(o2.sequence);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Menu [menuId=" + menuId + ", menuName=" + menuName + ", actionUrl=" + actionUrl + ", sequence="
+				+ sequence + ", iconCls=" + iconCls + ", isLeaf=" + isLeaf + ", perm=" + perm + ", parentId=" + parentId
+				+ ", children=" + children + "]";
+	}
+	
+	
 
 
 }

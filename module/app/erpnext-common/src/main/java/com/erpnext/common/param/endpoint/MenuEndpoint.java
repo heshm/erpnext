@@ -7,10 +7,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.common.param.domain.Menu;
+import com.erpnext.common.param.dto.MenuDTO;
 import com.erpnext.common.param.service.MenuService;
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
 
@@ -36,6 +40,23 @@ public class MenuEndpoint extends BaseEndpoint {
 	@GetMapping("/getOneMenu/{id}")
 	public Menu getOneMenu(@PathVariable("id")String id) {
 		return menuService.readByPrimaryKey(id);
+	}
+	
+	@GetMapping("/getOneMenuWithParent/{id}")
+	public MenuDTO getOneMenuWithParent(@PathVariable("id")String id){
+		return menuService.readOneMenuWithParent(id);
+	}
+	
+	@PutMapping("/updateOneMenu")
+	public String updateOneMenu(@RequestBody Menu menu){
+		menuService.savaMenu(menu);
+		return UPDATED;
+	}
+	
+	@PostMapping("/createOneMenu")
+	public String createOneMenu(@RequestBody Menu menu){
+		System.out.println(menu);
+		return CREATED;
 	}
 
 }
