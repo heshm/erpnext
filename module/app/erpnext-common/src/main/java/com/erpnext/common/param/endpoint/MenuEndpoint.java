@@ -55,7 +55,7 @@ public class MenuEndpoint extends BaseEndpoint {
 	
 	@PostMapping("/createOneMenu")
 	public String createOneMenu(@RequestBody Menu menu){
-		System.out.println(menu);
+		menuService.savaMenu(menu);
 		return CREATED;
 	}
 

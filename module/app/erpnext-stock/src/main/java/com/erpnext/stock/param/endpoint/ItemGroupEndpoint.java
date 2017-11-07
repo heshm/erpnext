@@ -3,6 +3,7 @@ package com.erpnext.stock.param.endpoint;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -48,6 +49,12 @@ public class ItemGroupEndpoint extends BaseEndpoint{
 	public String createOneItemGroup(@Valid @RequestBody ItemGroup itemGroup){
 		itemGroupService.addItemGroup(itemGroup);
 		return CREATED;
+	}
+	
+	@PutMapping("/update")
+	public String updateItemGroup(@RequestBody ItemGroup itemGroup){
+		itemGroupService.updateItemGroup(itemGroup);
+		return UPDATED;
 	}
 	
 	@GetMapping("/delete/{id}")

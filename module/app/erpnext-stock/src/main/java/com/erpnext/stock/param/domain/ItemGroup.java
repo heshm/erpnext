@@ -14,6 +14,8 @@ public class ItemGroup{
     private Boolean isGroup;
 
     private String parentId;
+    
+    private String parentName;
 
     private Byte status;
 
@@ -56,7 +58,15 @@ public class ItemGroup{
         this.parentId = parentId;
     }
 
-    public Byte getStatus() {
+    public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public Byte getStatus() {
         return status;
     }
 

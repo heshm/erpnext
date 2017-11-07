@@ -97,6 +97,7 @@ public class MenuServiceImpl implements MenuService {
 			menuXrefMapper.insert(menuXref);
 		}else{
 			menu.setIsLeaf(false);
+			menu.setPerm("");
 			menuMapper.updateByPrimaryKey(menu);
 		}
 		

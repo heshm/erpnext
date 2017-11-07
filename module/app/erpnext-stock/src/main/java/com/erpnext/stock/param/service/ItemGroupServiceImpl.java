@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import com.erpnext.framework.manager.SequenceManager;
 import com.erpnext.framework.util.Const;
+import com.erpnext.framework.web.util.WebConst;
 import com.erpnext.stock.param.domain.Item;
 import com.erpnext.stock.param.domain.ItemGroup;
 import com.erpnext.stock.param.mapper.ItemGroupMapper;
@@ -35,6 +36,9 @@ public class ItemGroupServiceImpl implements ItemGroupService {
 	public ItemGroup readAllItemGroup(String id) {
 		ItemGroup itemGroup = itemGroupMapper.selectByPrimaryKey(id);
 		if(null != itemGroup ){
+			if(!WebConst.ROOT.equals(id)){
+				itemGroup.setParentName(readOneItemGroup(itemGroup.getParentId()).getName());
+			}
 			List<ItemGroup> childList = new ArrayList<ItemGroup>();
 			List<ItemGroup> itemList = itemGroupMapper.selectChildren(id);
 			if(null != itemList){
