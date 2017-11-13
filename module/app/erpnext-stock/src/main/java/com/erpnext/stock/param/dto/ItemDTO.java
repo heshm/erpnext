@@ -7,7 +7,10 @@ import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 
 import com.erpnext.stock.param.domain.Item;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class ItemDTO {
 	
 	private String itemId;
@@ -15,7 +18,6 @@ public class ItemDTO {
     private String itemGroupId;
 
 	private String itemGroupName;
-
 
     private String name;
 

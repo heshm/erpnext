@@ -10,6 +10,8 @@ public interface ItemGroupService {
 	
 	List<ItemGroup> readItemGroupList(String id);
 	
+	List<ItemGroup> readChildItemGroup(String id);
+	
 	ItemGroup readOneItemGroup(String id);
 	
 	void updateItemGroup(ItemGroup record);

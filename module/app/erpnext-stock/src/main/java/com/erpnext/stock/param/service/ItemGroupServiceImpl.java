@@ -67,6 +67,18 @@ public class ItemGroupServiceImpl implements ItemGroupService {
 		}
 		return resultList;
 	}
+	
+	@Override
+	public List<ItemGroup> readChildItemGroup(String id){
+		List<ItemGroup> itemGroupList = itemGroupMapper.selectChildren(id);
+		if(null != itemGroupList){
+			for(ItemGroup itemGroup : itemGroupList){
+				itemGroup.setChildren(readChildItemGroup(itemGroup.getId()));
+			}
+		}
+		return itemGroupList;
+	}
+	
 
 	@Override
 	public ItemGroup readOneItemGroup(String id) {

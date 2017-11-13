@@ -45,6 +45,11 @@ public class ItemGroupEndpoint extends BaseEndpoint{
 		return itemGroup;
 	}
 	
+	@GetMapping("/getChildItemGroup/{id}")
+	public List<ItemGroup> getChildItemGroup(@PathVariable("id") String id){
+		return itemGroupService.readChildItemGroup(id);
+	}
+	
 	@PostMapping("/create")
 	public String createOneItemGroup(@Valid @RequestBody ItemGroup itemGroup){
 		itemGroupService.addItemGroup(itemGroup);
