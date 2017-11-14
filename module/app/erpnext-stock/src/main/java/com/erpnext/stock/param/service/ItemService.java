@@ -10,5 +10,9 @@ public interface ItemService {
 	List<ItemDTO> readItemList(Map<String,Object> map);
 	
 	ItemDTO readItemById(String id);
+	
+	void createItem(ItemDTO itemDto);
+	
+	void updateItem(ItemDTO itemDto);
 
 }

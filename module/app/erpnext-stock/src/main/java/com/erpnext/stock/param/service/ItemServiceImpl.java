@@ -1,6 +1,7 @@
 package com.erpnext.stock.param.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.erpnext.framework.manager.SequenceManager;
+import com.erpnext.framework.util.Const;
+import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.stock.param.domain.Item;
 import com.erpnext.stock.param.dto.ItemDTO;
 import com.erpnext.stock.param.mapper.ItemGroupMapper;
@@ -50,6 +53,27 @@ public class ItemServiceImpl implements ItemService {
 		BeanUtils.copyProperties(item, dto);
 		dto.setItemGroupName(itemGroupMapper.selectByPrimaryKey(dto.getItemGroupId()).getName());
 		return dto;
+	}
+
+	@Override
+	@Transactional
+	public void createItem(ItemDTO itemDto) {
+		Item record = new Item();
+		BeanUtils.copyProperties(itemDto, record);
+		record.setItemId(ID_PREFIX + sequenceManager.nextStringSequence(Const.ITEM_SEQ));
+		record.setCreateBy(AuthenticationUtils.getPrincipal().getUsername());
+		record.setCreateTime(new Date());
+		itemMapper.insert(record);
+	}
+
+	@Override
+	@Transactional
+	public void updateItem(ItemDTO itemDto) {
+		Item record = new Item();
+		BeanUtils.copyProperties(itemDto, record);
+		record.setModifyBy(AuthenticationUtils.getPrincipal().getUsername());
+		record.setModifyTime(new Date());
+		itemMapper.updateByPrimaryKeySelective(record);
 	}
 
 }

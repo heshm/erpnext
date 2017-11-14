@@ -7,6 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +29,22 @@ public class ItemEndpoint extends BaseEndpoint{
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("itemGroupId", itemGroupId);
 		return itemService.readItemList(map);
+	}
+	
+	@GetMapping("/listOne/{itemId}")
+	public ItemDTO listOne(@PathVariable("itemId") String itemId){
+		return itemService.readItemById(itemId);
+	}
+	
+	@PostMapping("/create")
+	public String create(@RequestBody ItemDTO itemDto){
+		itemService.createItem(itemDto);
+		return CREATED;
+	}
+	
+	@PutMapping("/update")
+	public String update(@RequestBody ItemDTO itemDto){
+		itemService.updateItem(itemDto);
+		return UPDATED;
 	}
 }
