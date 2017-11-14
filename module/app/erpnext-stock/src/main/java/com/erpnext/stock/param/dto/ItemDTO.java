@@ -1,7 +1,6 @@
 package com.erpnext.stock.param.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.BeanUtils;
@@ -14,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class ItemDTO {
 	
 	private String itemId;
-
+	@NotEmpty(message = "{item.itemGroupId.notEmpty}")
     private String itemGroupId;
 
 	private String itemGroupName;
@@ -27,8 +26,7 @@ public class ItemDTO {
 
     @Size(max=15, message = "{item.rmrk.size}" )
     private String rmrk;
-    @Min(value=0,message="{item.decNo.min}")
-    @Max(value=5,message="{item.decNo.max}")
+
     private Short decNo;
 
     private String image;

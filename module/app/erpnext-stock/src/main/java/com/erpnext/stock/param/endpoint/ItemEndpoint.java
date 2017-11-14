@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +39,7 @@ public class ItemEndpoint extends BaseEndpoint{
 	}
 	
 	@PostMapping("/create")
-	public String create(@RequestBody ItemDTO itemDto){
+	public String create(@Valid @RequestBody ItemDTO itemDto){
 		itemService.createItem(itemDto);
 		return CREATED;
 	}
