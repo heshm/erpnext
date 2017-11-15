@@ -14,5 +14,6 @@
     <module>erpnext-common</module>
     <module>erpnext-developer</module>
     <module>erpnext-stock</module>
+    <module>erpnext-ledger</module>
   </modules>
 </project>

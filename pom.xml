@@ -121,6 +121,14 @@
 			
 			<dependency>
 				<groupId>com.erpnext</groupId>
+				<artifactId>erpnext-ledger</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-developer</artifactId>
 				<version>${project.version}</version>
 				<type>jar</type>

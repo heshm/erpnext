@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.ledger.account.mapper.AccountTitleMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.ledger.account.domain.AccountTitle">
+		<id column="account_no" jdbcType="CHAR" property="accountNo" />
+		<result column="name" jdbcType="CHAR" property="name" />
+		<result column="short_name" jdbcType="CHAR" property="shortName" />
+		<result column="account_character" jdbcType="TINYINT" property="accountCharacter" />
+		<result column="amount_direction" jdbcType="TINYINT" property="amountDirection" />
+		<result column="balance_direction" jdbcType="TINYINT" property="balanceDirection" />
+		<result column="level" jdbcType="TINYINT" property="level" />
+		<result column="table_flag" jdbcType="TINYINT" property="tableFlag" />
+		<result column="parent" jdbcType="CHAR" property="parent" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		account_no, name, short_name,
+		account_character, amount_direction, balance_direction,
+		level, table_flag, parent,
+		status
+	</sql>
+	<sql id="Example_Where_Clause">
+		<where>
+			<if test="accountNo != null and accountNo != ''">
+				account_no like concat(#{accountNo,jdbcType=CHAR}, '%')
+			</if>
+			<if test="accountCharacter != null and accountCharacter != ''">
+				and account_character = #{accountCharacter,jdbcType=TINYINT}
+			</if>
+			<if test="name != null and name != ''">
+				name like concat('%', #{name,jdbcType=CHAR}, '%')
+			</if>
+		</where>
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from ledger_account_title
+		where account_no = #{accountNo,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.ledger.account.domain.AccountTitle">
+		insert into ledger_account_title (<include refid="Base_Column_List" />)
+		values (#{accountNo,jdbcType=CHAR}, #{name,jdbcType=CHAR},
+		#{shortName,jdbcType=CHAR},
+		#{accountCharacter,jdbcType=TINYINT}, #{amountDirection,jdbcType=TINYINT},
+		#{balanceDirection,jdbcType=TINYINT},
+		#{level,jdbcType=TINYINT}, #{tableFlag,jdbcType=TINYINT}, #{parent,jdbcType=CHAR},
+		#{status,jdbcType=TINYINT})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.ledger.account.domain.AccountTitle">
+		update ledger_account_title
+		set name = #{name,jdbcType=CHAR},
+		short_name = #{shortName,jdbcType=CHAR},
+		account_character = #{accountCharacter,jdbcType=TINYINT},
+		amount_direction = #{amountDirection,jdbcType=TINYINT},
+		balance_direction = #{balanceDirection,jdbcType=TINYINT},
+		level = #{level,jdbcType=TINYINT},
+		table_flag = #{tableFlag,jdbcType=TINYINT},
+		parent = #{parent,jdbcType=CHAR},
+		status = #{status,jdbcType=TINYINT}
+		where account_no = #{accountNo,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from ledger_account_title
+		where account_no = #{accountNo,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from ledger_account_title
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from ledger_account_title
+		<include refid="Example_Where_Clause" />
+		<if test="pageable != null" >
+			limit #{pageable.offset},#{pageable.pageSize}
+		</if>
+	</select>
+	<select id="countByExample" resultType="java.lang.Integer">
+		select count(*) from ledger_account_title
+		<include refid="Example_Where_Clause" />
+	</select>
+</mapper>

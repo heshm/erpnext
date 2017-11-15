@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.ledger.tax.mapper.TaxRateMapper">
+    <resultMap id="BaseResultMap" type="com.erpnext.ledger.tax.domain.TaxRate">
+        <id column="id" jdbcType="CHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="account_title" jdbcType="CHAR" property="accountTitle" />
+        <result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+        <result column="tax_method" jdbcType="CHAR" property="taxMethod" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, account_title,
+        tax_rate, tax_method
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete from ledger_tax_rate
+        where id = #{id,jdbcType=CHAR}
+    </delete>
+    <insert id="insert" parameterType="com.erpnext.ledger.tax.domain.TaxRate">
+        insert into ledger_tax_rate (<include refid="Base_Column_List" />)
+        values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR},
+        #{accountTitle,jdbcType=CHAR},
+        #{taxRate,jdbcType=DECIMAL}, #{taxMethod,jdbcType=CHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.erpnext.ledger.tax.domain.TaxRate">
+        update ledger_tax_rate
+        set name = #{name,jdbcType=VARCHAR},
+        account_title = #{accountTitle,jdbcType=CHAR},
+        tax_rate = #{taxRate,jdbcType=DECIMAL},
+        tax_method = #{taxMethod,jdbcType=CHAR}
+        where id = #{id,jdbcType=CHAR}
+    </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from ledger_tax_rate
+        where id = #{id,jdbcType=CHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from ledger_tax_rate
+    </select>
+</mapper>
