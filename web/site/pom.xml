@@ -26,6 +26,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.erpnext</groupId>
+			<artifactId>erpnext-crm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.erpnext</groupId>
 			<artifactId>erpnext-stock</artifactId>
 		</dependency>
 		<dependency>

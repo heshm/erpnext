@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.crm.customer.mapper.CustomerGroupMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.crm.customer.domain.CustomerGroup">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="parent_id" jdbcType="CHAR" property="parentId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="is_group" jdbcType="BIT" property="isGroup" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+		<result column="modify_by" jdbcType="CHAR" property="modifyBy" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, parent_id, name,
+		is_group, create_time, modify_time,
+		modify_by, status
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from crm_customer_group
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.crm.customer.domain.CustomerGroup">
+		insert into crm_customer_group (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{parentId,jdbcType=CHAR},
+		#{name,jdbcType=VARCHAR},
+		#{isGroup,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
+		#{modifyBy,jdbcType=CHAR}, #{status,jdbcType=TINYINT})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.crm.customer.domain.CustomerGroup">
+		update crm_customer_group
+		set parent_id = #{parentId,jdbcType=CHAR},
+		name = #{name,jdbcType=VARCHAR},
+		is_group = #{isGroup,jdbcType=BIT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=CHAR},
+		status = #{status,jdbcType=TINYINT}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from crm_customer_group
+		where id = #{id,jdbcType=CHAR}
+		and status != 0
+	</select>
+	<select id="selectCustomerGroupName" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select name
+		from crm_customer_group
+		where id = #{id,jdbcType=CHAR}
+		and status != 0
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from crm_customer_group
+		and status != 0
+	</select>
+	<select id="selectChildren" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from crm_customer_group
+		where parent_id = #{parentId,jdbcType=CHAR}
+		and status != 0
+	</select>
+</mapper>
