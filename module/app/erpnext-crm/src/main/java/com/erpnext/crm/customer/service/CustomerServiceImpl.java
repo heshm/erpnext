@@ -1,8 +1,10 @@
 package com.erpnext.crm.customer.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +13,8 @@ import com.erpnext.crm.customer.domain.CustomerGroup;
 import com.erpnext.crm.customer.dto.CustomerGroupDTO;
 import com.erpnext.crm.customer.mapper.CustomerGroupMapper;
 import com.erpnext.crm.customer.mapper.CustomerMapper;
+import com.erpnext.framework.util.IDUtils;
+import com.erpnext.framework.web.util.AuthenticationUtils;
 
 @Service
 @Transactional(readOnly=true)
@@ -18,6 +22,8 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
 	private CustomerGroupMapper customerGroupMapper;
+	@Autowired
+	private CustomerMapper customerMapper;
 
 	@Override
 	public CustomerGroupDTO getCustomerGroupTree(String id) {
@@ -52,5 +58,32 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return resultList;
 	}
+
+	@Override
+	@Transactional
+	public void updateCustomerGroup(CustomerGroupDTO dto) {
+		CustomerGroup record = customerGroupMapper.selectByPrimaryKey(dto.getId());
+		record.setName(dto.getName());
+		record.setIsGroup(dto.getIsGroup());
+		record.setModifyBy(AuthenticationUtils.getPrincipal().getUsername());
+		record.setModifyTime(new Date());
+		record.setStatus(dto.getStatus());
+		customerGroupMapper.updateByPrimaryKey(record);
+		
+	}
+
+	@Override
+	@Transactional
+	public void createCustomerGroup(CustomerGroupDTO dto) {
+		CustomerGroup customerGroup = new CustomerGroup();
+		BeanUtils.copyProperties(dto, customerGroup);
+		customerGroup.setId(IDUtils.uuid());
+		customerGroup.setCreateTime(new Date());
+		customerGroup.setModifyBy(AuthenticationUtils.getPrincipal().getUsername());
+		customerGroup.setModifyTime(new Date());
+		customerGroupMapper.insert(customerGroup);
+		
+	}
+
 
 }

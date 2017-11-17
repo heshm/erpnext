@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
-				 http.headers().frameOptions().disable();
+				 //http.headers().frameOptions().disable();
                  http
            /* .antMatcher("/api/**")
             	.authorizeRequests()

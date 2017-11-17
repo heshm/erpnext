@@ -43,24 +43,20 @@
 		select <include refid="Base_Column_List" />
 		from crm_customer_group
 		where id = #{id,jdbcType=CHAR}
-		and status != 0
 	</select>
 	<select id="selectCustomerGroupName" parameterType="java.lang.String"
 		resultType="java.lang.String">
 		select name
 		from crm_customer_group
 		where id = #{id,jdbcType=CHAR}
-		and status != 0
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />
 		from crm_customer_group
-		and status != 0
 	</select>
 	<select id="selectChildren" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />
 		from crm_customer_group
 		where parent_id = #{parentId,jdbcType=CHAR}
-		and status != 0
 	</select>
 </mapper>
