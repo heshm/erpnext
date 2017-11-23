@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.common.param.mapper.DictMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.common.param.domain.Dict">
+		<id column="dict_type" jdbcType="CHAR" property="dictType" />
+		<id column="dict_value" jdbcType="CHAR" property="dictValue" />
+		<result column="dict_label" jdbcType="VARCHAR" property="dictLabel" />
+		<result column="value_length" jdbcType="INTEGER" property="valueLength" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from common_dict
+		where dict_type = #{dictType,jdbcType=CHAR}
+		and dict_value = #{dictValue,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.common.param.domain.Dict">
+		insert into common_dict (dict_type, dict_value, dict_label,
+		value_length, remark)
+		values (#{dictType,jdbcType=CHAR}, #{dictValue,jdbcType=CHAR},
+		#{dictLabel,jdbcType=VARCHAR},
+		#{valueLength,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.param.domain.Dict">
+		update common_dict
+		set dict_label = #{dictLabel,jdbcType=VARCHAR},
+		value_length = #{valueLength,jdbcType=INTEGER},
+		remark = #{remark,jdbcType=VARCHAR}
+		where dict_type = #{dictType,jdbcType=CHAR}
+		and dict_value = #{dictValue,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select dict_type, dict_value, dict_label, value_length, remark
+		from common_dict
+		where dict_type = #{dictType,jdbcType=CHAR}
+		and dict_value = #{dictValue,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select dict_type, dict_value, dict_label, value_length, remark
+		from common_dict
+	</select>
+</mapper>

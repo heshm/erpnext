@@ -1,29 +1,22 @@
 package com.erpnext.common.param.domain;
 
-import javax.validation.constraints.Size;
-
 public class Dict {
-    private String id;
+    private String dictType;
 
     private String dictValue;
 
     private String dictLabel;
-    
+
     private Integer valueLength;
 
-    private String type;
-
-    private String description;
-
-    @Size(max=256,message="{dict.remark.size}")
     private String remark;
 
-    public String getId() {
-        return id;
+    public String getDictType() {
+        return dictType;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDictType(String dictType) {
+        this.dictType = dictType;
     }
 
     public String getDictValue() {
@@ -43,27 +36,11 @@ public class Dict {
     }
 
     public Integer getValueLength() {
-		return valueLength;
-	}
-
-	public void setValueLength(Integer valueLength) {
-		this.valueLength = valueLength;
-	}
-
-	public String getType() {
-        return type;
+        return valueLength;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setValueLength(Integer valueLength) {
+        this.valueLength = valueLength;
     }
 
     public String getRemark() {
