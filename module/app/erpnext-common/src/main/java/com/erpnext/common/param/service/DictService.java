@@ -15,5 +15,9 @@ public interface DictService {
 	Page<Dict> listPageDict(String dictType,Pageable pageable);
 	
 	List<DictType> listAllDictType();
+	
+	void createDictType(DictType dictType);
+	
+	void updateDictType(DictType dictType);
 
 }

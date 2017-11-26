@@ -41,4 +41,17 @@ public class DictServiceImpl implements DictService {
 		return dictTypeMapper.selectAll();
 	}
 
+	@Override
+	@Transactional
+	public void createDictType(DictType dictType) {
+		dictTypeMapper.insert(dictType);
+	}
+
+	@Override
+	@Transactional
+	public void updateDictType(DictType dictType) {
+		
+		dictTypeMapper.updateByPrimaryKey(dictType);
+	}
+
 }
