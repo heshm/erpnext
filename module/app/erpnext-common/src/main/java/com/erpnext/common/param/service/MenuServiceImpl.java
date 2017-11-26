@@ -90,6 +90,7 @@ public class MenuServiceImpl implements MenuService {
 	public void savaMenu(Menu menu) {
 		if(StringUtils.isEmpty(menu.getMenuId())){
 			menu.setMenuId(IDUtils.uuid());
+			menu.setIsLeaf(false);
 			menuMapper.insert(menu);
 			MenuXref menuXref = new MenuXref();
 			menuXref.setMenuId(menu.getParentId());

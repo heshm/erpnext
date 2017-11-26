@@ -3,8 +3,13 @@ package com.erpnext.common.param.endpoint;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.common.param.domain.Dict;
@@ -18,9 +23,10 @@ public class DictEndpoint extends BaseEndpoint {
 	@Autowired
 	private DictService dictService;
 	
-	@GetMapping("/list")
-	public List<Dict> list(){
-		return dictService.listAllDict();
+	@GetMapping("/pageList")
+	public Page<Dict> listPage(@RequestParam("dictType") String dictType,
+			@PageableDefault(size=10, page=0)Pageable pageable){
+		return dictService.listPageDict(dictType, pageable);
 	}
 
 }

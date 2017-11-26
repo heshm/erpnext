@@ -8,14 +8,23 @@
 		<result column="value_length" jdbcType="INTEGER" property="valueLength" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
 	</resultMap>
+	<sql id="Base_Column_List">
+        dict_type, dict_value, dict_label, value_length, remark
+    </sql>
+    <sql id="Example_Where_Clause">
+		<where>
+			<if test="dictType != null and dictType != ''">
+				dict_type = #{dictType,jdbcType=CHAR}
+			</if>
+		</where>
+	</sql>
 	<delete id="deleteByPrimaryKey" parameterType="map">
 		delete from common_dict
 		where dict_type = #{dictType,jdbcType=CHAR}
 		and dict_value = #{dictValue,jdbcType=CHAR}
 	</delete>
 	<insert id="insert" parameterType="com.erpnext.common.param.domain.Dict">
-		insert into common_dict (dict_type, dict_value, dict_label,
-		value_length, remark)
+		insert into common_dict (<include refid="Base_Column_List" />)
 		values (#{dictType,jdbcType=CHAR}, #{dictValue,jdbcType=CHAR},
 		#{dictLabel,jdbcType=VARCHAR},
 		#{valueLength,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
@@ -29,13 +38,25 @@
 		and dict_value = #{dictValue,jdbcType=CHAR}
 	</update>
 	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-		select dict_type, dict_value, dict_label, value_length, remark
+		select <include refid="Base_Column_List" />
 		from common_dict
 		where dict_type = #{dictType,jdbcType=CHAR}
 		and dict_value = #{dictValue,jdbcType=CHAR}
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
-		select dict_type, dict_value, dict_label, value_length, remark
+		select <include refid="Base_Column_List" />
 		from common_dict
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_dict
+		<include refid="Example_Where_Clause" />
+		<if test="pageable != null" >
+			limit #{pageable.offset},#{pageable.pageSize}
+		</if>
+	</select>
+	<select id="countByExample" resultType="java.lang.Integer">
+		select count(*) from common_dict
+		<include refid="Example_Where_Clause" />
 	</select>
 </mapper>
