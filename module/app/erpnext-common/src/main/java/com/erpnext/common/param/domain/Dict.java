@@ -1,15 +1,23 @@
 package com.erpnext.common.param.domain;
 
-public class Dict {
-    private String dictType;
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(value = {"handler"})
+public class Dict implements Serializable{
+	
+	private static final long serialVersionUID = 4427621780613480355L;
+
+	private String dictType;
 
     private String dictValue;
 
     private String dictLabel;
 
-    private Integer valueLength;
-
     private String remark;
+    
+    private DictType type;
 
     public String getDictType() {
         return dictType;
@@ -35,14 +43,6 @@ public class Dict {
         this.dictLabel = dictLabel;
     }
 
-    public Integer getValueLength() {
-        return valueLength;
-    }
-
-    public void setValueLength(Integer valueLength) {
-        this.valueLength = valueLength;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -50,4 +50,12 @@ public class Dict {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+	public DictType getType() {
+		return type;
+	}
+
+	public void setType(DictType type) {
+		this.type = type;
+	}
 }

@@ -7,6 +7,7 @@ public final class CommonConst {
 	 */
 	public final static String DICT_AREA = "001";  // 区域类型
 	
+	
 	/**
 	 * 区域类型
 	 */

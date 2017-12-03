@@ -11,7 +11,9 @@ import org.springframework.util.StringUtils;
 import com.erpnext.common.param.domain.Area;
 import com.erpnext.common.param.dto.AreaDTO;
 import com.erpnext.common.param.manager.AreaManager;
+import com.erpnext.common.param.manager.DictManager;
 import com.erpnext.common.param.mapper.AreaMapper;
+import com.erpnext.common.util.CommonConst;
 import com.erpnext.framework.web.util.WebConst;
 
 @Service
@@ -23,13 +25,15 @@ public class AreaServiceImpl implements AreaService {
 	
 	@Autowired
 	private AreaMapper areaMapper;
+	@Autowired
+	private DictManager dictManager;
 	
 	@Override
 	public AreaDTO getOneArea(String id){
 		Area area = areaManager.getOneArea(id);
 		if(area == null){ return null; }
 		AreaDTO result = new AreaDTO(area);
-		//result.setTypeName(dictManager.readOneDict(CommonConst.SYS_AREA_TYPE, area.getType()).getDictLabel());
+		result.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
 		return result;
 	}
 
@@ -41,7 +45,7 @@ public class AreaServiceImpl implements AreaService {
 		Area area = areaManager.getOneArea(id);
 		if(area == null){ return null; }
 		AreaDTO result = new AreaDTO(area);
-		//result.setTypeName(dictManager.readOneDict(CommonConst.SYS_AREA_TYPE, area.getType()).getDictLabel());
+		result.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
 		List<Area> childList = areaMapper.selectChild(id);
 		if(childList != null){
 			for(Area child : childList){
@@ -57,7 +61,7 @@ public class AreaServiceImpl implements AreaService {
 		Area area = areaMapper.selectByPrimaryKey(id);
 		if(area != null){
 			AreaDTO areaDTO = new AreaDTO(area);
-			//areaDTO.setTypeName(dictManager.readOneDict("sys_area_type", area.getType()).getDictLabel());
+			areaDTO.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
 			list.add(areaDTO);
 			List<Area> children = areaMapper.selectChild(id);
 			if(children != null){

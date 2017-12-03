@@ -1,7 +1,14 @@
 package com.erpnext.common.param.domain;
 
-public class DictType {
-    private String id;
+import java.io.Serializable;
+
+public class DictType implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2995042440379880168L;
+
+	private String id;
 
     private String name;
     

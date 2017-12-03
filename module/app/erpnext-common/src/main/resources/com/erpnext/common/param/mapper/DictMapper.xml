@@ -5,11 +5,12 @@
 		<id column="dict_type" jdbcType="CHAR" property="dictType" />
 		<id column="dict_value" jdbcType="CHAR" property="dictValue" />
 		<result column="dict_label" jdbcType="VARCHAR" property="dictLabel" />
-		<result column="value_length" jdbcType="INTEGER" property="valueLength" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<association property="type" column="dict_type"  
+			select="com.erpnext.common.param.mapper.DictTypeMapper.selectByPrimaryKey"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-        dict_type, dict_value, dict_label, value_length, remark
+        dict_type, dict_value, dict_label, remark
     </sql>
     <sql id="Example_Where_Clause">
 		<where>
@@ -27,12 +28,11 @@
 		insert into common_dict (<include refid="Base_Column_List" />)
 		values (#{dictType,jdbcType=CHAR}, #{dictValue,jdbcType=CHAR},
 		#{dictLabel,jdbcType=VARCHAR},
-		#{valueLength,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+		#{remark,jdbcType=VARCHAR})
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.param.domain.Dict">
 		update common_dict
 		set dict_label = #{dictLabel,jdbcType=VARCHAR},
-		value_length = #{valueLength,jdbcType=INTEGER},
 		remark = #{remark,jdbcType=VARCHAR}
 		where dict_type = #{dictType,jdbcType=CHAR}
 		and dict_value = #{dictValue,jdbcType=CHAR}

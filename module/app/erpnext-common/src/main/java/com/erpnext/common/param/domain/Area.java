@@ -1,10 +1,9 @@
 package com.erpnext.common.param.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Area {
-	@JsonIgnore
+
     private String id;
 
     private String parentId;
@@ -13,7 +12,6 @@ public class Area {
 
     private Short sort;
 
-    @JsonProperty("id")
     private String postalCode;
 
     private String type;
