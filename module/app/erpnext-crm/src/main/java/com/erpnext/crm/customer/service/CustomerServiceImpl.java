@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.erpnext.crm.customer.domain.CustomerGroup;
 import com.erpnext.crm.customer.dto.CustomerGroupDTO;
 import com.erpnext.crm.customer.mapper.CustomerGroupMapper;
-import com.erpnext.crm.customer.mapper.CustomerMapper;
 import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 
@@ -22,8 +21,6 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
 	private CustomerGroupMapper customerGroupMapper;
-	@Autowired
-	private CustomerMapper customerMapper;
 
 	@Override
 	public CustomerGroupDTO getCustomerGroupTree(String id) {

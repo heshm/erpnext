@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -14,6 +15,7 @@ import com.erpnext.common.param.manager.AreaManager;
 import com.erpnext.common.param.manager.DictManager;
 import com.erpnext.common.param.mapper.AreaMapper;
 import com.erpnext.common.util.CommonConst;
+import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.util.WebConst;
 
 @Service
@@ -81,12 +83,41 @@ public class AreaServiceImpl implements AreaService {
 			List<Area> childList = areaMapper.selectChild(id);
 			if(childList != null){
 				for(Area childArea : childList){
-					childArea.setDelFlg(true);
-					areaMapper.updateByPrimaryKey(childArea);
+					delete(childArea.getId());
 				}
 			}
 			areaMapper.updateByPrimaryKey(area);
 		}
+	}
+	
+	@Override
+	@Transactional
+	public void create(AreaDTO areaDTO){
+		Area area = areaMapper.selectAreaByCode(areaDTO.getPostalCode());
+		if(area != null){
+			if(area.getDelFlg()){
+				areaDTO.setDelFlg(false);
+				areaDTO.setSort((short)0);
+				areaDTO.setId(area.getId());
+				areaMapper.updateByPrimaryKey(areaDTO);
+			}else{
+				throw new DuplicateKeyException("区域代码记录已经存在!");
+			}
+			
+		}else{
+			areaDTO.setId(IDUtils.uuid());
+			areaDTO.setDelFlg(false);
+			areaDTO.setSort((short)0);
+			areaMapper.insert(areaDTO);
+		}
+	}
+	
+	@Override
+	@Transactional
+	public void update(AreaDTO area){
+		area.setDelFlg(false);
+		area.setSort((short)0);
+		areaMapper.updateByPrimaryKey(area);
 	}
 
 }

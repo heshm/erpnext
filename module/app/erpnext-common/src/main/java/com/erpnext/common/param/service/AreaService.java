@@ -28,5 +28,9 @@ public interface AreaService {
 	 * @param id
 	 */
 	void delete(String id);
+	
+	void create(AreaDTO areaDTO);
+	
+	void update(AreaDTO areaDTO);
 
 }
