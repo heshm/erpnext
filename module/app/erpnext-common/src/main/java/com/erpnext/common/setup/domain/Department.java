@@ -9,7 +9,7 @@ public class Department {
 
     private String name;
 
-    private String areaId;
+    private String areaCode;
 
     private String type;
 
@@ -56,12 +56,12 @@ public class Department {
         this.name = name;
     }
 
-    public String getAreaId() {
-        return areaId;
+    public String getAreaCode() {
+        return areaCode;
     }
 
-    public void setAreaId(String areaId) {
-        this.areaId = areaId;
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 
     public String getType() {
@@ -144,11 +144,4 @@ public class Department {
         this.delFlg = delFlg;
     }
 
-	@Override
-	public String toString() {
-		return "Department [id=" + id + ", parentId=" + parentId + ", name=" + name + ", areaId=" + areaId + ", type="
-				+ type + ", code=" + code + ", grade=" + grade + ", primaryPerson=" + primaryPerson + ", addr=" + addr
-				+ ", telNo=" + telNo + ", faxNo=" + faxNo + ", email=" + email + ", remark=" + remark + ", delFlg="
-				+ delFlg + "]";
-	}
 }

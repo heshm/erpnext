@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.common.setup.mapper.DepartmentMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.common.setup.domain.Department">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="parent_id" jdbcType="CHAR" property="parentId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="area_code" jdbcType="CHAR" property="areaCode" />
+		<result column="type" jdbcType="CHAR" property="type" />
+		<result column="code" jdbcType="CHAR" property="code" />
+		<result column="grade" jdbcType="CHAR" property="grade" />
+		<result column="primary_person" jdbcType="CHAR" property="primaryPerson" />
+		<result column="addr" jdbcType="VARCHAR" property="addr" />
+		<result column="tel_no" jdbcType="CHAR" property="telNo" />
+		<result column="fax_no" jdbcType="CHAR" property="faxNo" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="del_flg" jdbcType="BIT" property="delFlg" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, parent_id, name,area_code, type, code, grade,
+		primary_person, addr, tel_no,fax_no, email, remark,
+		del_flg
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from common_department
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.common.setup.domain.Department">
+		insert into common_department (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=CHAR}, #{parentId,jdbcType=CHAR},
+		#{name,jdbcType=VARCHAR},
+		#{areaCode,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{code,jdbcType=CHAR}, #{grade,jdbcType=CHAR},
+		#{primaryPerson,jdbcType=CHAR}, #{addr,jdbcType=VARCHAR},
+		#{telNo,jdbcType=CHAR},
+		#{faxNo,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+		#{delFlg,jdbcType=BIT})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.setup.domain.Department">
+		update common_department
+		set parent_id = #{parentId,jdbcType=CHAR},
+		name = #{name,jdbcType=VARCHAR},
+		area_code = #{areaCode,jdbcType=CHAR},
+		type = #{type,jdbcType=CHAR},
+		code = #{code,jdbcType=CHAR},
+		grade = #{grade,jdbcType=CHAR},
+		primary_person = #{primaryPerson,jdbcType=CHAR},
+		addr = #{addr,jdbcType=VARCHAR},
+		tel_no = #{telNo,jdbcType=CHAR},
+		fax_no = #{faxNo,jdbcType=CHAR},
+		email = #{email,jdbcType=VARCHAR},
+		remark = #{remark,jdbcType=VARCHAR},
+		del_flg = #{delFlg,jdbcType=BIT}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectChild" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department
+		where parent_id = #{parentId,jdbcType=CHAR}
+		and del_flg is false
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department
+	</select>
+</mapper>

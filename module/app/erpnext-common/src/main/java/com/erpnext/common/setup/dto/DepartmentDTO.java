@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.erpnext.common.param.domain.Area;
 import com.erpnext.common.setup.domain.Department;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,7 +17,7 @@ public class DepartmentDTO extends Department{
 	
 	private String primaryPersonName;
 	
-	private Area area;
+	private String areaName;
 	
 	@JsonProperty("children")
 	private List<Department> childDepartment;
@@ -32,9 +31,9 @@ public class DepartmentDTO extends Department{
 		this.childDepartment = new ArrayList<>();
 	}
 	
-	public DepartmentDTO(Department depart,Area area){
+	public DepartmentDTO(Department depart,String areaName){
 		this(depart);
-		this.area = area;
+		this.areaName = areaName;
 	}
 
 	public String getTypeName() {
@@ -45,8 +44,8 @@ public class DepartmentDTO extends Department{
 		return primaryPersonName;
 	}
 
-	public Area getArea() {
-		return area;
+	public String getAreaName() {
+		return areaName;
 	}
 
 	public List<Department> getChildDepartment() {
@@ -61,8 +60,8 @@ public class DepartmentDTO extends Department{
 		this.primaryPersonName = primaryPersonName;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 
 	public void setChildDepartment(List<Department> childDepartment) {
