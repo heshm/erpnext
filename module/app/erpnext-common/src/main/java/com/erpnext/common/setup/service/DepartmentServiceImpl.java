@@ -48,6 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		DepartmentDTO departmentDTO = new DepartmentDTO(department, areaName);
 		departmentDTO.setTypeName(
 				dictManager.readOneDict(CommonConst.DICT_DEPARTMENT, departmentDTO.getType()).getDictLabel());
+		departmentDTO.setPrimaryPersonName(userManager.getOneUser(departmentDTO.getPrimaryPerson()).getUserName());
 		List<Department> departList = departmentMapper.selectChild(id);
 		if (departList != null) {
 			for (Department depart : departList) {
