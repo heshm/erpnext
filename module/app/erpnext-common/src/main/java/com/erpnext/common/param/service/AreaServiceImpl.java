@@ -1,6 +1,7 @@
 package com.erpnext.common.param.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import com.erpnext.common.param.domain.Area;
 import com.erpnext.common.param.dto.AreaDTO;
+import com.erpnext.common.param.dto.AreaSelectDTO;
 import com.erpnext.common.param.manager.AreaManager;
 import com.erpnext.common.param.manager.DictManager;
 import com.erpnext.common.param.mapper.AreaMapper;
@@ -118,6 +120,20 @@ public class AreaServiceImpl implements AreaService {
 		area.setDelFlg(false);
 		area.setSort((short)0);
 		areaMapper.updateByPrimaryKey(area);
+	}
+
+	@Override
+	public List<AreaSelectDTO> getSelectedArea(String id) {
+		List<Area> list = areaMapper.selectChild(id);
+		List<AreaSelectDTO> result = new LinkedList<>();
+		for(Area area: list) {
+			AreaSelectDTO dto = new AreaSelectDTO();
+			dto.setValue(area.getPostalCode());
+			dto.setLabel(area.getName());
+			dto.setChildren(getSelectedArea(area.getId()));
+			result.add(dto);
+		}
+		return result;
 	}
 
 }

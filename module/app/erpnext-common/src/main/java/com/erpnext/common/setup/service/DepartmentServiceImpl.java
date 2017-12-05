@@ -42,8 +42,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public DepartmentDTO getNestedDepartment(String id) {
 		Department department = departmentMapper.selectByPrimaryKey(id);
-		if (department == null)
-			return null;
+		if (department == null) return null;
+		
 		String areaName = areaManager.getFullAreaName(department.getAreaCode());
 		DepartmentDTO departmentDTO = new DepartmentDTO(department, areaName);
 		departmentDTO.setTypeName(
@@ -52,7 +52,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		List<Department> departList = departmentMapper.selectChild(id);
 		if (departList != null) {
 			for (Department depart : departList) {
-				departmentDTO.getChildDepartment().add(getNestedDepartment(depart.getId()));
+				departmentDTO.getChildren().add(getNestedDepartment(depart.getId()));
 			}
 		}
 		return departmentDTO;

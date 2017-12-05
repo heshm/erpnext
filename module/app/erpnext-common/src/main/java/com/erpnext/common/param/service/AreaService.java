@@ -3,6 +3,7 @@ package com.erpnext.common.param.service;
 import java.util.List;
 
 import com.erpnext.common.param.dto.AreaDTO;
+import com.erpnext.common.param.dto.AreaSelectDTO;
 
 public interface AreaService {
 	/**
@@ -32,5 +33,7 @@ public interface AreaService {
 	void create(AreaDTO areaDTO);
 	
 	void update(AreaDTO areaDTO);
+	
+	List<AreaSelectDTO> getSelectedArea(String id);
 
 }
