@@ -64,7 +64,6 @@
 		select <include refid="Base_Column_List" />
 		from common_department
 		where parent_id = #{parentId,jdbcType=CHAR}
-		and del_flg is false
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />

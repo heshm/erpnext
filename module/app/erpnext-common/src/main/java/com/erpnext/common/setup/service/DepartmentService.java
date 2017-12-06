@@ -8,4 +8,9 @@ public interface DepartmentService {
 	
 	DepartmentDTO getNestedDepartment(String id);
 	
+	String create(DepartmentDTO dept);
+	
+	void create(DepartmentDTO dept,String[] params);
+	
+	void update(DepartmentDTO dept);
 }

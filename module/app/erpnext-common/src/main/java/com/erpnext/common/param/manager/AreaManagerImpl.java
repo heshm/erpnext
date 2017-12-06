@@ -45,7 +45,15 @@ public class AreaManagerImpl implements AreaManager {
 		}
 		return sb.toString();
 	}
-
+	@Override
+	public String getFullAreaName(String[] codes){
+		StringBuilder sb = new StringBuilder();
+		for(String code: codes){
+			sb.append(aeraMapper.selectAreaNameByCode(code));
+		}
+		return sb.toString();
+	}
+	
 	@Override
 	public List<String> getChildCodeList(String code) {
 		Area area = aeraMapper.selectAreaByCode(code);

@@ -13,6 +13,8 @@ public interface AreaManager {
 	 */
 	String getFullAreaName(String code);
 	
+	String getFullAreaName(String[] codes);
+	
 	List<String> getChildCodeList(String code);
 
 }

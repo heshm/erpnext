@@ -1,6 +1,7 @@
 package com.erpnext.common.setup.dto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -19,7 +20,7 @@ public class DepartmentDTO{
 
     private String name;
 
-    private String areaCode;
+    private String[] areaCode;
 
     private String type;
 
@@ -38,6 +39,8 @@ public class DepartmentDTO{
     private String email;
 
     private String remark;
+    
+    private Boolean delFlg;
 	
 	private String typeName;
 	
@@ -54,6 +57,7 @@ public class DepartmentDTO{
 	
 	public DepartmentDTO(Department depart){
 		BeanUtils.copyProperties(depart, this);
+		areaCode = depart.getAreaCode().split(",");
 		this.children = new ArrayList<>();
 	}
 	
@@ -87,10 +91,10 @@ public class DepartmentDTO{
 	}
 
 	public String[] getAreaCode() {
-		return areaCode.split(",");
+		return areaCode;
 	}
 
-	public void setAreaCode(String areaCode) {
+	public void setAreaCode(String[] areaCode) {
 		this.areaCode = areaCode;
 	}
 
@@ -166,6 +170,14 @@ public class DepartmentDTO{
 		this.remark = remark;
 	}
 
+	public Boolean getDelFlg() {
+		return delFlg;
+	}
+
+	public void setDelFlg(Boolean delFlg) {
+		this.delFlg = delFlg;
+	}
+
 	public String getTypeName() {
 		return typeName;
 	}
@@ -196,6 +208,47 @@ public class DepartmentDTO{
 
 	public void setChildren(List<DepartmentDTO> children) {
 		this.children = children;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("DepartmentDTO [id=");
+		builder.append(id);
+		builder.append(", parentId=");
+		builder.append(parentId);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", areaCode=");
+		builder.append(Arrays.toString(areaCode));
+		builder.append(", type=");
+		builder.append(type);
+		builder.append(", code=");
+		builder.append(code);
+		builder.append(", grade=");
+		builder.append(grade);
+		builder.append(", primaryPerson=");
+		builder.append(primaryPerson);
+		builder.append(", addr=");
+		builder.append(addr);
+		builder.append(", telNo=");
+		builder.append(telNo);
+		builder.append(", faxNo=");
+		builder.append(faxNo);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", remark=");
+		builder.append(remark);
+		builder.append(", typeName=");
+		builder.append(typeName);
+		builder.append(", primaryPersonName=");
+		builder.append(primaryPersonName);
+		builder.append(", areaName=");
+		builder.append(areaName);
+		builder.append(", children=");
+		builder.append(children);
+		builder.append("]");
+		return builder.toString();
 	}
 
 
