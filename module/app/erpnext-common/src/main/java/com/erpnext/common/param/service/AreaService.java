@@ -35,5 +35,9 @@ public interface AreaService {
 	void update(AreaDTO areaDTO);
 	
 	List<AreaSelectDTO> getSelectedArea(String id);
+	
+	AreaDTO getOneNestedArea(String id);
+	
+	List<AreaSelectDTO> getSelectedAreaWithoutChildren(String id);
 
 }

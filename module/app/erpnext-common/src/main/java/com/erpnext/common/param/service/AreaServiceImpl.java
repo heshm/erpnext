@@ -136,4 +136,34 @@ public class AreaServiceImpl implements AreaService {
 		return result;
 	}
 
+	@Override
+	public AreaDTO getOneNestedArea(String id) {
+		Area area = areaManager.getOneArea(id);
+		if(area == null){ return null; }
+		AreaDTO result = new AreaDTO(area);
+		result.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
+		List<Area> childList = areaMapper.selectChild(id);
+		if(childList != null){
+			for(Area child : childList){
+				AreaDTO childDto = new AreaDTO(child);
+				childDto.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
+				result.getChildren().add(childDto);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<AreaSelectDTO> getSelectedAreaWithoutChildren(String id) {
+		List<Area> list = areaMapper.selectChild(id);
+		List<AreaSelectDTO> result = new LinkedList<>();
+		for(Area area: list) {
+			AreaSelectDTO dto = new AreaSelectDTO();
+			dto.setValue(area.getPostalCode());
+			dto.setLabel(area.getName());
+			result.add(dto);
+		}
+		return result;
+	}
+
 }

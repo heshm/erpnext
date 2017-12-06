@@ -84,6 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			department.setParentId(id);
 			department.setAreaCode(StringUtils.arrayToCommaDelimitedString(dept.getAreaCode()));
 			department.setType("2");
+			department.setDelFlg(false);
 			switch(param){
 			case "general" :
 				department.setName("综合部");

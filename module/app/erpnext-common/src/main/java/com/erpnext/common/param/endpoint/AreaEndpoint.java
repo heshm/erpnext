@@ -24,12 +24,17 @@ public class AreaEndpoint extends BaseEndpoint {
 	
 	@GetMapping("/tree/{id}")
 	public AreaDTO tree(@PathVariable("id") String id){
-		return areaService.getNestedArea(id);
+		return areaService.getOneNestedArea(id);
 	}
 	
 	@GetMapping("/treeSelect/{id}")
 	public List<AreaSelectDTO> treeSelect(@PathVariable("id") String id) {
 		return areaService.getSelectedArea(id);
+	}
+	
+	@GetMapping("/ajaxSelect/{id}")
+	public List<AreaSelectDTO> ajaxSelect(@PathVariable("id") String id) {
+		return areaService.getSelectedAreaWithoutChildren(id);
 	}
 	
 	@GetMapping("/delete/{id}")

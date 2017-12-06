@@ -19,10 +19,10 @@ public class LogInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if (logger.isDebugEnabled()) {
+		if (logger.isInfoEnabled()) {
 			long beginTime = System.currentTimeMillis();// 1、开始时间
 			startTimeThreadLocal.set(beginTime); // 线程绑定变量（该数据只有当前请求的线程可见）
-			logger.debug("开始计时: {}  URI: {}", new SimpleDateFormat("hh:mm:ss.SSS").format(beginTime),
+			logger.info("开始计时: {}  URI: {}", new SimpleDateFormat("hh:mm:ss.SSS").format(beginTime),
 					request.getRequestURI());
 		}
 		return true;
@@ -37,11 +37,11 @@ public class LogInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		if (logger.isDebugEnabled()) {
+		if (logger.isInfoEnabled()) {
 			long beginTime = startTimeThreadLocal.get();// 得到线程绑定的局部变量（开始时间）
 			long endTime = System.currentTimeMillis(); // 2、结束时间
 
-			logger.debug("计时结束：{}  耗时：{}  URI: {}  最大内存: {}MB  已分配内存: {}MB  已分配内存中的剩余空间: {}MB  最大可用内存: {}MB",
+			logger.info("计时结束：{}  耗时：{}  URI: {}  最大内存: {}MB  已分配内存: {}MB  已分配内存中的剩余空间: {}MB  最大可用内存: {}MB",
 					new SimpleDateFormat("hh:mm:ss.SSS").format(endTime), formatDateTime(endTime - beginTime),
 					request.getRequestURI(), Runtime.getRuntime().maxMemory() / 1024 / 1024,
 					Runtime.getRuntime().totalMemory() / 1024 / 1024, Runtime.getRuntime().freeMemory() / 1024 / 1024,

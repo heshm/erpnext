@@ -2,9 +2,9 @@ package com.erpnext.common.param.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Area {
+public class Area{
 
-    private String id;
+	private String id;
 
     private String parentId;
 

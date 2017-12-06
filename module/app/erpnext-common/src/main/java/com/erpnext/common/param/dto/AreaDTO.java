@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.erpnext.common.param.domain.Area;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+//import com.fasterxml.jackson.annotation.JsonInclude;
+//import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 public class AreaDTO extends Area{
 	
 	private String typeName;
-	@JsonInclude(Include.NON_EMPTY)
+	//@JsonInclude(Include.NON_EMPTY)
 	private List<AreaDTO> children;
 	
 	public AreaDTO(){
