@@ -53,7 +53,7 @@
 		<junit.version>3.8.1</junit.version>
 		
 		<guava.version>23.0</guava.version>
-		<ehcache.version>3.4.0</ehcache.version>
+		<ehcache.version>2.10.4</ehcache.version>
 
 
 	</properties>
@@ -459,10 +459,15 @@
 				<version>${commons.version}</version>
 			</dependency>
 			
-			<dependency>
+			<!-- <dependency>
             	<groupId>org.ehcache</groupId>
            		<artifactId>ehcache</artifactId>
             	<version>${ehcache.version}</version>
+			</dependency> -->
+			<dependency>
+    			<groupId>net.sf.ehcache</groupId>
+    			<artifactId>ehcache</artifactId>
+    			<version>${ehcache.version}</version>
 			</dependency>
 
 			<!-- Logging -->

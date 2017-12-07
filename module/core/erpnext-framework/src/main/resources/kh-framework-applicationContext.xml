@@ -32,13 +32,18 @@
 	<mybatis:scan base-package="com.erpnext.**.mapper" />
 	<context:component-scan base-package="com.erpnext.**.service,com.erpnext.**.manager" /> 
 	
-	<bean id="cacheManager"
+	<!-- <bean id="cacheManager"
 		class="org.springframework.cache.jcache.JCacheCacheManager"
         p:cache-manager-ref="jCacheManager"/>
         
     <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
   		<property name="cacheManagerUri" value="classpath:ehcache.xml"/>
-	</bean>
+	</bean> -->
+	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+		p:config-location="classpath:ehcache.xml" />
+
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+		p:cache-manager-ref="ehcache" />
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basenames">

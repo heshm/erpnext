@@ -11,8 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.erpnext.framework.web.service.UserDetailsServiceImpl;
 
@@ -30,7 +28,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService)
-			.passwordEncoder(new BCryptPasswordEncoder());
+		.passwordEncoder(new BCryptPasswordEncoder());
 		
 	}
 
@@ -80,35 +78,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // @formatter:on
 	}
 
-	/*
-	 * 自定义salt使用,BCryptPasswordEncoder无需salt
-	 * 
-	 * @Bean public DaoAuthenticationProvider authenticationProvider() {
-	 * DaoAuthenticationProvider authenticationProvider = new
-	 * DaoAuthenticationProvider();
-	 * authenticationProvider.setUserDetailsService(userDetailsService);
-	 * authenticationProvider.setPasswordEncoder(passwordEncoder());
-	 * authenticationProvider.setSaltSource(saltSource()); return
-	 * authenticationProvider; }
-	 * 
-	 * @Bean public PasswordEncoder passwordEncoder() { return new
-	 * BCryptPasswordEncoder(); }
-	 */
-	/*@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}*/
-
 	@Override
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return new UserDetailsServiceImpl();
 	}
-
-	/*
-	 * public SaltSource saltSource() { ReflectionSaltSource saltSource = new
-	 * ReflectionSaltSource(); saltSource.setUserPropertyToUse("username"); return
-	 * saltSource; }
-	 */
 
 }

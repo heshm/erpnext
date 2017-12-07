@@ -12,6 +12,7 @@ import com.erpnext.common.param.domain.Area;
 public class AreaDTO extends Area{
 	
 	private String typeName;
+	
 	//@JsonInclude(Include.NON_EMPTY)
 	private List<AreaDTO> children;
 	

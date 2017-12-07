@@ -12,14 +12,14 @@ public class Area{
 
     private Short sort;
 
-    private String postalCode;
-
     private String type;
 
     private String remark;
 
     @JsonIgnore
     private Boolean delFlg;
+    
+    private Boolean isLeaf;
 
 	public String getId() {
         return id;
@@ -53,14 +53,6 @@ public class Area{
         this.sort = sort;
     }
 
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
     public String getType() {
         return type;
     }
@@ -84,4 +76,12 @@ public class Area{
     public void setDelFlg(Boolean delFlg) {
         this.delFlg = delFlg;
     }
+
+	public Boolean getIsLeaf() {
+		return isLeaf;
+	}
+
+	public void setIsLeaf(Boolean isLeaf) {
+		this.isLeaf = isLeaf;
+	}
 }

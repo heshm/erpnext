@@ -16,7 +16,6 @@ public interface AreaMapper {
 
     int updateByPrimaryKey(Area record);
     
-    String selectAreaNameByCode(String postalCode);
-    
-    Area selectAreaByCode(String postalCode);
+    String selectAreaNameByCode(String id);
+   
 }

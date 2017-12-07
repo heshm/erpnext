@@ -6,13 +6,13 @@
 		<result column="parent_id" jdbcType="CHAR" property="parentId" />
 		<result column="name" jdbcType="VARCHAR" property="name" />
 		<result column="sort" jdbcType="SMALLINT" property="sort" />
-		<result column="postal_code" jdbcType="CHAR" property="postalCode" />
 		<result column="type" jdbcType="CHAR" property="type" />
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
 		<result column="del_flg" jdbcType="BIT" property="delFlg" />
+		<result column="is_leaf" jdbcType="BIT" property="isLeaf" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, parent_id, name, sort, postal_code, type, remark, del_flg
+		id, parent_id, name, sort, type, remark, del_flg, is_leaf
 	</sql>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from common_area
@@ -22,18 +22,18 @@
 		insert into common_area (<include refid="Base_Column_List" />)
 		values (#{id,jdbcType=CHAR}, #{parentId,jdbcType=CHAR},
 		#{name,jdbcType=VARCHAR},
-		#{sort,jdbcType=SMALLINT}, #{postalCode,jdbcType=CHAR}, #{type,jdbcType=CHAR},
-		#{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=BIT})
+		#{sort,jdbcType=SMALLINT}, #{type,jdbcType=CHAR},
+		#{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=BIT}, #{isLeaf,jdbcType=BIT})
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.param.domain.Area">
 		update common_area
 		set parent_id = #{parentId,jdbcType=CHAR},
 		name = #{name,jdbcType=VARCHAR},
 		sort = #{sort,jdbcType=SMALLINT},
-		postal_code = #{postalCode,jdbcType=CHAR},
 		type = #{type,jdbcType=CHAR},
 		remark = #{remark,jdbcType=VARCHAR},
-		del_flg = #{delFlg,jdbcType=BIT}
+		del_flg = #{delFlg,jdbcType=BIT},
+		is_leaf = #{isLeaf,jdbcType=BIT}
 		where id = #{id,jdbcType=CHAR}
 	</update>
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
@@ -43,18 +43,11 @@
 		where id = #{id,jdbcType=CHAR}
 		and del_flg is false
 	</select>
-	<select id="selectAreaByCode" parameterType="java.lang.String"
-		resultMap="BaseResultMap">
-		select <include refid="Base_Column_List" />
-		from common_area
-		where postal_code = #{postalCode,jdbcType=CHAR}
-		and del_flg is false
-	</select>
 	<select id="selectAreaNameByCode" parameterType="java.lang.String"
 		resultType="java.lang.String">
 		select name
 		from common_area
-		where postal_code = #{postalCode,jdbcType=CHAR}
+		where id = #{id,jdbcType=CHAR}
 		and del_flg is false
 	</select>
 	<select id="selectChild" parameterType="java.lang.String"

@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.cache.annotation.CacheResult;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -97,23 +95,22 @@ public class AreaServiceImpl implements AreaService {
 	@Override
 	@Transactional
 	public void create(AreaDTO areaDTO){
-		Area area = areaMapper.selectAreaByCode(areaDTO.getPostalCode());
-		if(area != null){
-			if(area.getDelFlg()){
-				areaDTO.setDelFlg(false);
-				areaDTO.setSort((short)0);
-				areaDTO.setId(area.getId());
-				areaMapper.updateByPrimaryKey(areaDTO);
-			}else{
-				throw new DuplicateKeyException("区域代码记录已经存在!");
+		Area area = areaMapper.selectByPrimaryKey(areaDTO.getId());
+		if(area != null) {
+			if(area.getDelFlg()) {
+				throw new IllegalArgumentException("该区域代码已经存在!");
 			}
-			
-		}else{
-			areaDTO.setId(IDUtils.uuid());
-			areaDTO.setDelFlg(false);
-			areaDTO.setSort((short)0);
-			areaMapper.insert(areaDTO);
 		}
+		area = areaMapper.selectByPrimaryKey(areaDTO.getParentId());
+		if(area.getIsLeaf()) {
+			area.setIsLeaf(false);
+			areaMapper.updateByPrimaryKey(area);
+		}
+		areaDTO.setDelFlg(false);
+		areaDTO.setSort((short)0);
+		areaDTO.setIsLeaf(true);
+		areaMapper.insert(areaDTO);
+		
 	}
 	
 	@Override
@@ -125,13 +122,13 @@ public class AreaServiceImpl implements AreaService {
 	}
 
 	@Override
-	@CacheResult(cacheName = "param")
+	@Cacheable(cacheNames="paramCache")
 	public List<AreaSelectDTO> getSelectedArea(String id) {
 		List<Area> list = areaMapper.selectChild(id);
 		List<AreaSelectDTO> result = new LinkedList<>();
 		for(Area area: list) {
 			AreaSelectDTO dto = new AreaSelectDTO();
-			dto.setValue(area.getPostalCode());
+			dto.setValue(area.getId());
 			dto.setLabel(area.getName());
 			dto.setChildren(getSelectedArea(area.getId()));
 			result.add(dto);
@@ -146,7 +143,7 @@ public class AreaServiceImpl implements AreaService {
 		AreaDTO result = new AreaDTO(area);
 		result.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
 		List<Area> childList = areaMapper.selectChild(id);
-		if(childList != null){
+		if(childList != null && childList.size() > 0){
 			for(Area child : childList){
 				AreaDTO childDto = new AreaDTO(child);
 				childDto.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
@@ -162,7 +159,7 @@ public class AreaServiceImpl implements AreaService {
 		List<AreaSelectDTO> result = new LinkedList<>();
 		for(Area area: list) {
 			AreaSelectDTO dto = new AreaSelectDTO();
-			dto.setValue(area.getPostalCode());
+			dto.setValue(area.getId());
 			dto.setLabel(area.getName());
 			result.add(dto);
 		}

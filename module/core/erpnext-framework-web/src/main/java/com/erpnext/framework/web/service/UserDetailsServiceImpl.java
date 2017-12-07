@@ -30,6 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
 		AdminUser adminUser = siteSecurityService.readAdminUserByLoginName(username);
 		if(adminUser == null || adminUser.getActiveStatusFlag() == STATUS_INVALID){
 			throw new UsernameNotFoundException("该用户不存在!");
@@ -48,7 +49,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			s = s + "]";
 			logger.debug("{}`s authorities is {} ", username, s);
 		}
-		
+		/*UserDetails userDetails = User.withDefaultPasswordEncoder()
+				.username(adminUser.getLoginName())
+				.password(adminUser.getPassword())
+				.authorities(authorities)
+				.build();*/
+		/*User.withUsername(adminUser.getLoginName())
+			.password(adminUser.getPassword())
+			.authorities(authorities)
+			.build();*/
+		//System.out.println(userDetails.getPassword());
 		return new User(adminUser.getLoginName(),adminUser.getPassword(),authorities);
 	}
 	

@@ -1,12 +1,19 @@
 package com.erpnext.common.param.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-public class AreaSelectDTO {
+public class AreaSelectDTO implements Serializable{
 	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4294640819582234343L;
+
 	private String value;
 	
 	private String label;
