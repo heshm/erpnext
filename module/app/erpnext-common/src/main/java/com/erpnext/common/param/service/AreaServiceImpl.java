@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.cache.annotation.CacheResult;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -123,6 +125,7 @@ public class AreaServiceImpl implements AreaService {
 	}
 
 	@Override
+	@CacheResult(cacheName = "param")
 	public List<AreaSelectDTO> getSelectedArea(String id) {
 		List<Area> list = areaMapper.selectChild(id);
 		List<AreaSelectDTO> result = new LinkedList<>();

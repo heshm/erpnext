@@ -27,7 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
 
-		<spring.version>4.3.12.RELEASE</spring.version>
+		<spring.version>5.0.0.RELEASE</spring.version>
 		<spring.security.version>4.2.3.RELEASE</spring.security.version>
 		<spring.oauth2.version>2.2.0.RELEASE</spring.oauth2.version>
 		<spring.data.version>1.13.8.RELEASE</spring.data.version>
@@ -53,6 +53,7 @@
 		<junit.version>3.8.1</junit.version>
 		
 		<guava.version>23.0</guava.version>
+		<ehcache.version>3.4.0</ehcache.version>
 
 
 	</properties>
@@ -162,6 +163,28 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-beans</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context</artifactId>
+					</exclusion>
+				</exclusions>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -435,6 +458,12 @@
 				<artifactId>commons-logging</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
+			
+			<dependency>
+            	<groupId>org.ehcache</groupId>
+           		<artifactId>ehcache</artifactId>
+            	<version>${ehcache.version}</version>
+			</dependency>
 
 			<!-- Logging -->
 
@@ -484,6 +513,12 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>3.1.0</version>
+			</dependency>
+			
+			<dependency>
+        		<groupId>javax.cache</groupId>
+        		<artifactId>cache-api</artifactId>
+    			<version>1.0.0</version>
 			</dependency>
 
 			<dependency>
