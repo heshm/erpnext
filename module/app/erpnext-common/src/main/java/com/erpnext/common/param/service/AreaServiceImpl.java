@@ -17,7 +17,6 @@ import com.erpnext.common.param.manager.AreaManager;
 import com.erpnext.common.param.manager.DictManager;
 import com.erpnext.common.param.mapper.AreaMapper;
 import com.erpnext.common.util.CommonConst;
-import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.util.WebConst;
 
 @Service
@@ -97,7 +96,7 @@ public class AreaServiceImpl implements AreaService {
 	public void create(AreaDTO areaDTO){
 		Area area = areaMapper.selectByPrimaryKey(areaDTO.getId());
 		if(area != null) {
-			if(area.getDelFlg()) {
+			if(!area.getDelFlg()) {
 				throw new IllegalArgumentException("该区域代码已经存在!");
 			}
 		}
