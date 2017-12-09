@@ -3,8 +3,10 @@ package com.erpnext.common.param.service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,6 +95,7 @@ public class AreaServiceImpl implements AreaService {
 	
 	@Override
 	@Transactional
+	@CacheEvict(cacheNames="paramCache", allEntries=true)
 	public void create(AreaDTO areaDTO){
 		Area area = areaMapper.selectByPrimaryKey(areaDTO.getId());
 		if(area != null) {
@@ -105,7 +108,6 @@ public class AreaServiceImpl implements AreaService {
 			area.setIsLeaf(false);
 			areaMapper.updateByPrimaryKey(area);
 		}
-		areaDTO.setDelFlg(false);
 		areaDTO.setSort((short)0);
 		areaDTO.setIsLeaf(true);
 		areaMapper.insert(areaDTO);
@@ -114,8 +116,8 @@ public class AreaServiceImpl implements AreaService {
 	
 	@Override
 	@Transactional
+	@CacheEvict(cacheNames="paramCache", allEntries=true)
 	public void update(AreaDTO area){
-		area.setDelFlg(false);
 		area.setSort((short)0);
 		areaMapper.updateByPrimaryKey(area);
 	}
@@ -123,7 +125,8 @@ public class AreaServiceImpl implements AreaService {
 	@Override
 	@Cacheable(cacheNames="paramCache")
 	public List<AreaSelectDTO> getSelectedArea(String id) {
-		List<Area> list = areaMapper.selectChild(id);
+		List<Area> list = areaMapper.selectChild(id).
+				stream().filter(area -> area.getDelFlg().booleanValue() == false).collect(Collectors.toList());
 		List<AreaSelectDTO> result = new LinkedList<>();
 		for(Area area: list) {
 			AreaSelectDTO dto = new AreaSelectDTO();
@@ -143,9 +146,13 @@ public class AreaServiceImpl implements AreaService {
 		result.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
 		List<Area> childList = areaMapper.selectChild(id);
 		if(childList != null && childList.size() > 0){
+			result.setChildren(new LinkedList<>());
 			for(Area child : childList){
 				AreaDTO childDto = new AreaDTO(child);
-				childDto.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, area.getType()).getDictLabel());
+				childDto.setTypeName(dictManager.readOneDict(CommonConst.DICT_AREA, child.getType()).getDictLabel());
+				if(!child.getIsLeaf()) {
+					childDto.setChildren(new LinkedList<>());
+				}
 				result.getChildren().add(childDto);
 			}
 		}

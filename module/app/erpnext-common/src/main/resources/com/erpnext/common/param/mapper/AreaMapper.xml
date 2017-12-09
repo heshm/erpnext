@@ -41,25 +41,21 @@
 		select <include refid="Base_Column_List" />
 		from common_area
 		where id = #{id,jdbcType=CHAR}
-		and del_flg is false
 	</select>
 	<select id="selectAreaNameByCode" parameterType="java.lang.String"
 		resultType="java.lang.String">
 		select name
 		from common_area
 		where id = #{id,jdbcType=CHAR}
-		and del_flg is false
 	</select>
 	<select id="selectChild" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />
 		from common_area
 		where parent_id = #{parentId,jdbcType=CHAR}
-		and del_flg is false
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List" />
 		from common_area
-		where del_flg is false
 	</select>
 </mapper>

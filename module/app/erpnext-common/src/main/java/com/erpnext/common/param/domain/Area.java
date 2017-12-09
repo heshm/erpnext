@@ -1,7 +1,5 @@
 package com.erpnext.common.param.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Area{
 
 	private String id;
@@ -16,7 +14,6 @@ public class Area{
 
     private String remark;
 
-    @JsonIgnore
     private Boolean delFlg;
     
     private Boolean isLeaf;
