@@ -3,6 +3,9 @@ package com.erpnext.framework.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class Permission implements Serializable{
 	
     /**
@@ -22,7 +25,8 @@ public class Permission implements Serializable{
     
     private Boolean isFriendly;
     
-    private List<Permission> childPermission;
+    @JsonInclude(Include.NON_EMPTY)
+    private List<Permission> children;
 
     public String getPermissionId() {
         return permissionId;
@@ -72,11 +76,11 @@ public class Permission implements Serializable{
         this.isFriendly = isFriendly;
     }
 
-	public List<Permission> getChildPermission() {
-		return childPermission;
+	public List<Permission> getChildren() {
+		return children;
 	}
 
-	public void setChildPermission(List<Permission> childPermission) {
-		this.childPermission = childPermission;
+	public void setChildren(List<Permission> children) {
+		this.children = children;
 	}
 }

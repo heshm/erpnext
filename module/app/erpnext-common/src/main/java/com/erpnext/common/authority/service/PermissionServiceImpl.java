@@ -19,6 +19,7 @@ import com.erpnext.framework.mapper.PermissionMapper;
 import com.erpnext.framework.mapper.PermissionXrefMapper;
 import com.erpnext.framework.mapper.RolePermissionXrefMapper;
 import com.erpnext.framework.mapper.UserPermissionXrefMapper;
+import com.erpnext.framework.web.util.WebConst;
 
 @Service
 @Transactional(readOnly=true) 
@@ -44,7 +45,7 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<PermissionDTO> getAllPermission() {
 		List<PermissionDTO> resultList = new ArrayList<>(200);
-		List<Permission> parent = permissionMapper.selectList("1", true);
+		List<Permission> parent = permissionMapper.selectList(WebConst.VALID, true);
 		for(Permission perm : parent){
 			resultList.add(new PermissionDTO(
 					perm.getPermissionId(),
@@ -55,7 +56,7 @@ public class PermissionServiceImpl implements PermissionService {
 					perm.getIsFriendly(),
 					null
 					));
-			List<Permission> child = permissionMapper.selectByPermissionId(perm.getPermissionId()).getChildPermission();
+			List<Permission> child = permissionMapper.selectByPermissionId(perm.getPermissionId()).getChildren();
 			if(child != null){
 				for(Permission childPerm : child){
 					resultList.add(new PermissionDTO(
@@ -120,7 +121,7 @@ public class PermissionServiceImpl implements PermissionService {
 		for(RolePermissionXref rolePerm : rolePermList){
 			Permission perm = permissionMapper.selectByPermissionId(rolePerm.getPermissionId());
 			if(perm.getIsFriendly()){
-				for(Permission childPerm : perm.getChildPermission()){
+				for(Permission childPerm : perm.getChildren()){
 					permList.add(childPerm.getPermissionId());
 				}
 			}else{
@@ -160,7 +161,7 @@ public class PermissionServiceImpl implements PermissionService {
 		for(UserPermissionXref userPerm : userPermList){
 			Permission perm = permissionMapper.selectByPermissionId(userPerm.getPermissionId());
 			if(perm.getIsFriendly()){
-				for(Permission childPerm : perm.getChildPermission()){
+				for(Permission childPerm : perm.getChildren()){
 					permList.add(childPerm.getPermissionId());
 				}
 			}else{

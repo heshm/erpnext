@@ -68,7 +68,7 @@
 		<result column="parent_status" jdbcType="CHAR" property="status" />
 		<result column="parent_PERMISSION_TYPE" jdbcType="VARCHAR" property="permissionType" />
 		<result column="parent_is_friendly" jdbcType="BIT" property="isFriendly" />
-		<collection property="childPermission" ofType="com.erpnext.framework.domain.Permission">
+		<collection property="children" ofType="com.erpnext.framework.domain.Permission">
 		    <id column="child_permission_id" jdbcType="CHAR" property="permissionId" />
 		    <result column="child_permission_desc" jdbcType="VARCHAR" property="permissionDesc" />
 		    <result column="child_permission_NAME" jdbcType="VARCHAR" property="permissionName" />

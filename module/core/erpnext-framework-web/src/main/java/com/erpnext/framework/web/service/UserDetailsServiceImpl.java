@@ -65,7 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private void addPermissions(List<GrantedAuthority> authorities,Set<Permission> permissions){
 		for(Permission permission : permissions){
 			if(permission.getIsFriendly()) {
-				for (Permission childPermission : permission.getChildPermission()) {
+				for (Permission childPermission : permission.getChildren()) {
 					authorities.add(new SimpleGrantedAuthority(childPermission.getPermissionName()));
 				}
 			} else {
