@@ -96,4 +96,27 @@ public class PermissionDTO implements Serializable{
 		this.parentPermissionId = parentPermissionId;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("PermissionDTO [permissionId=");
+		builder.append(permissionId);
+		builder.append(", permissionDesc=");
+		builder.append(permissionDesc);
+		builder.append(", permissionName=");
+		builder.append(permissionName);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", permissionType=");
+		builder.append(permissionType);
+		builder.append(", isFriendly=");
+		builder.append(isFriendly);
+		builder.append(", parentPermissionId=");
+		builder.append(parentPermissionId);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
+
 }
