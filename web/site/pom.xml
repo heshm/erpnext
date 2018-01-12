@@ -41,6 +41,10 @@
 			<artifactId>erpnext-developer</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.erpnext</groupId>
+			<artifactId>erpnext-oa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 		</dependency>

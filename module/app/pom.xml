@@ -16,5 +16,6 @@
     <module>erpnext-stock</module>
     <module>erpnext-ledger</module>
     <module>erpnext-crm</module>
+    <module>erpnext-oa</module>
   </modules>
 </project>
