@@ -53,7 +53,7 @@
 
 		<commons.version>1.2</commons.version>
 		<junit.version>3.8.1</junit.version>
-		
+
 		<guava.version>23.0</guava.version>
 		<ehcache.version>2.10.4</ehcache.version>
 
@@ -113,7 +113,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-crm</artifactId>
@@ -121,7 +121,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-stock</artifactId>
@@ -129,7 +129,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-ledger</artifactId>
@@ -137,7 +137,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-developer</artifactId>
@@ -145,7 +145,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.erpnext</groupId>
 				<artifactId>erpnext-oa</artifactId>
@@ -176,7 +176,7 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
@@ -363,12 +363,77 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- Activiti API -->
 			<dependency>
-    			<groupId>org.activiti</groupId>
-    			<artifactId>activiti-engine</artifactId>
-    			<version>${activiti.version}</version>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-engine</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-spring</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-rest</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-bpmn-model</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-bpmn-converter</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-json-converter</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-bpmn-layout</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-form-engine-configurator</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-form-engine</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-form-model</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-form-json-converter</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-dmn-engine-configurator</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-dmn-engine</artifactId>
+				<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.activiti</groupId>
+				<artifactId>activiti-dmn-model</artifactId>
+				<version>${activiti.version}</version>
 			</dependency>
 
 			<!-- Database API -->
@@ -475,16 +540,13 @@
 				<artifactId>commons-logging</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
-			
-			<!-- <dependency>
-            	<groupId>org.ehcache</groupId>
-           		<artifactId>ehcache</artifactId>
-            	<version>${ehcache.version}</version>
-			</dependency> -->
+
+			<!-- <dependency> <groupId>org.ehcache</groupId> <artifactId>ehcache</artifactId> 
+				<version>${ehcache.version}</version> </dependency> -->
 			<dependency>
-    			<groupId>net.sf.ehcache</groupId>
-    			<artifactId>ehcache</artifactId>
-    			<version>${ehcache.version}</version>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache</artifactId>
+				<version>${ehcache.version}</version>
 			</dependency>
 
 			<!-- Logging -->
@@ -523,11 +585,11 @@
 				<version>${slf4j.version}</version>
 			</dependency>
 
-			<!--  Google Guava -->
+			<!-- Google Guava -->
 			<dependency>
-    			<groupId>com.google.guava</groupId>
-    			<artifactId>guava</artifactId>
-    			<version>${guava.version}</version>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
 			</dependency>
 
 			<!-- Servlet API -->
@@ -536,11 +598,11 @@
 				<artifactId>javax.servlet-api</artifactId>
 				<version>3.1.0</version>
 			</dependency>
-			
+
 			<dependency>
-        		<groupId>javax.cache</groupId>
-        		<artifactId>cache-api</artifactId>
-    			<version>1.0.0</version>
+				<groupId>javax.cache</groupId>
+				<artifactId>cache-api</artifactId>
+				<version>1.0.0</version>
 			</dependency>
 
 			<dependency>
