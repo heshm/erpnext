@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.oa.act.mapper.ModelMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.oa.act.domain.Model">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="model_key" jdbcType="VARCHAR" property="modelKey" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="model_comment" jdbcType="VARCHAR" property="modelComment" />
+		<result column="created" jdbcType="TIMESTAMP" property="created" />
+		<result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+		<result column="last_updated" jdbcType="TIMESTAMP" property="lastUpdated" />
+		<result column="last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+		<result column="version" jdbcType="INTEGER" property="version" />
+		<result column="model_type" jdbcType="INTEGER" property="modelType" />
+		<result column="model_editor_json" jdbcType="LONGVARCHAR"
+			property="modelEditorJson" />
+		<result column="thumbnail" jdbcType="LONGVARBINARY" property="thumbnail" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from act_de_model
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.oa.act.domain.Model">
+		insert into act_de_model (id, name, model_key,
+		description, model_comment, created,
+		created_by, last_updated, last_updated_by,
+		version, model_type, model_editor_json,
+		thumbnail)
+		values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{modelKey,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{modelComment,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP},
+		#{createdBy,jdbcType=VARCHAR}, #{lastUpdated,jdbcType=TIMESTAMP},
+		#{lastUpdatedBy,jdbcType=VARCHAR},
+		#{version,jdbcType=INTEGER}, #{modelType,jdbcType=INTEGER},
+		#{modelEditorJson,jdbcType=LONGVARCHAR},
+		#{thumbnail,jdbcType=LONGVARBINARY})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.oa.act.domain.Model">
+		update act_de_model
+		set name = #{name,jdbcType=VARCHAR},
+		model_key = #{modelKey,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		model_comment = #{modelComment,jdbcType=VARCHAR},
+		created = #{created,jdbcType=TIMESTAMP},
+		created_by = #{createdBy,jdbcType=VARCHAR},
+		last_updated = #{lastUpdated,jdbcType=TIMESTAMP},
+		last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+		version = #{version,jdbcType=INTEGER},
+		model_type = #{modelType,jdbcType=INTEGER},
+		model_editor_json = #{modelEditorJson,jdbcType=LONGVARCHAR},
+		thumbnail = #{thumbnail,jdbcType=LONGVARBINARY}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select id, name, model_key, description, model_comment, created, created_by,
+		last_updated,
+		last_updated_by, version, model_type, model_editor_json, thumbnail
+		from act_de_model
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByModelKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select id, name, model_key, description, model_comment, created, created_by,
+		last_updated,
+		last_updated_by, version, model_type, model_editor_json, thumbnail
+		from act_de_model
+		where model_key = #{modelKey,jdbcType=VARCHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, name, model_key, description, model_comment, created, created_by,
+		last_updated,
+		last_updated_by, version, model_type, model_editor_json, thumbnail
+		from act_de_model
+	</select>
+</mapper>
