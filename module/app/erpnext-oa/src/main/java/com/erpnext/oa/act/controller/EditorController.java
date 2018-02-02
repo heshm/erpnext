@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.erpnext.framework.web.controller.BaseController;
 
 @Controller
-@RequestMapping(value = "/oa/act/editor")
+@RequestMapping(value = "/oa/act/app")
 public class EditorController extends BaseController {
 	
 	private static final String editorView = "oa/act/index";

@@ -21,8 +21,8 @@ public class ModelsEndpoint extends BaseEndpoint {
 
 	@Autowired
 	private ModelService modelService;
-
-	private ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@PostMapping
 	public ModelDTO createModel(@RequestBody ModelDTO modelDTO) throws Exception {

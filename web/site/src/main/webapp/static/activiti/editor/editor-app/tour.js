@@ -17,12 +17,12 @@ var ACTIVITI_EDITOR_TOUR = {
      * General 'getting started' tutorial for the Editor.
      */
     gettingStarted: function($scope, $translate, $q, useLocalStorage) {
-        var userName;
-        if ($scope.account.firstName) {
+        var userName = "";
+        /*if ($scope.account.firstName) {
             userName = $scope.account.firstName;
         } else {
             userName = $scope.account.fullname;
-        }
+        }*/
 
         $q.all([
             $translate('TOUR.WELCOME-TITLE', {userName: userName}), $translate('TOUR.WELCOME-CONTENT'),

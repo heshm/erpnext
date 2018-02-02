@@ -10,7 +10,7 @@ var ACTIVITI = ACTIVITI || {};
 
 ACTIVITI.CONFIG = {
 	'onPremise' : true,
-	'contextRoot' : '/activiti-app',
+	'contextRoot' : '/site/oa/act',
 	'webContextRoot' : '/site/static/activiti'
 };
 /*

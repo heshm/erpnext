@@ -54,6 +54,7 @@
             </set>
         </property>
 	</bean>
-
+	
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 		
 </beans>
