@@ -214,9 +214,11 @@ activitiModeler
             suffix: '.json'
         });
 
-        $translateProvider.registerAvailableLanguageKeys(['en'], {
+        $translateProvider.registerAvailableLanguageKeys(['en','zh'], {
             'en_*': 'en',
-            'en-*': 'en'
+            'en-*': 'en',
+            'zh_*': 'zh',
+            'zh-*': 'zh'
         });
         
   }])
@@ -394,9 +396,8 @@ activitiModeler
             if (proposedLanguage !== 'de' && proposedLanguage !== 'en' && proposedLanguage !== 'es' && proposedLanguage !== 'fr'
                 && proposedLanguage !== 'it' && proposedLanguage !== 'ja') {
               
-                $translate.use('en');
+                $translate.use('zh');
             }
-
             var fixedUrlPart = '/editor/';
 
             $rootScope.logout = function() {
