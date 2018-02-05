@@ -1,8 +1,10 @@
 package com.erpnext.oa.act.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +33,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class ModelServiceImpl implements ModelService {
 
 	private final Logger log = LoggerFactory.getLogger(ModelServiceImpl.class);
-	
+
 	private static final String SORT_NAME_ASC = "nameAsc";
 	private static final String SORT_NAME_DESC = "nameDesc";
 	private static final String SORT_MODIFIED_ASC = "modifiedAsc";
@@ -51,14 +54,35 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request) {
-		System.out.println(request.getQueryString());
-		System.out.println(request.getParameter("filterText"));
+		//System.out.println(request.getQueryString());
+		//System.out.println(request.getParameter("filterText"));
 		String filterText = request.getParameter("filterText");
-		
-		Sort sorts = getSort(sort, false);
+		List<ModelDTO> resultList = new ArrayList<ModelDTO>();
+	    List<Model> models = modelMapper.selectByModelCreate(AuthenticationUtils.getUserId(), modelType, filterText, getSort(sort, false));
+	    
+		/*Sort sorts = getSort(sort, false);
+
 		System.out.println(sorts);
 
-		return null;
+		Order order2 = new Order(Direction.DESC, "age");
+		Order order3 = new Order(Direction.ASC, "pgrade");
+		Order order33 = new Order(Direction.DESC, "dnum");
+		List<Order> list = new ArrayList<>();
+		list.add(order2);
+		list.add(order3);
+		list.add(order33);
+		Sort sorts2 = new Sort(list);
+		sorts2.forEach(order -> {
+			System.out.println(order.getDirection());
+			System.out.println(order.getProperty());
+		});*/
+	    if(models != null) {
+	    	models.forEach(model -> {
+	    		resultList.add(new ModelDTO(model));
+	    	});
+	    }
+
+		return new ResultListDataDTO(resultList);
 	}
 
 	@Override

@@ -22,6 +22,10 @@ public class AuthenticationUtils {
 		return null;
 	}
 	
+	public static String getUserId() {
+		return getPrincipal().getUsername();
+	}
+	
 	public static boolean isThePrincipal(String userId){
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		if(securityContext != null && !StringUtils.isEmpty(userId)){

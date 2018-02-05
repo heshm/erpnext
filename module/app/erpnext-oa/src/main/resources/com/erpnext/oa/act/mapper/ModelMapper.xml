@@ -68,6 +68,27 @@
 		from act_de_model
 		where model_key = #{modelKey,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByModelCreate" parameterType="map" resultMap="BaseResultMap">
+		select id, name, model_key, description, model_comment, created, created_by,
+		last_updated,
+		last_updated_by, version, model_type, model_editor_json, thumbnail
+		from act_de_model
+		where created_by = #{userId,jdbcType=VARCHAR}
+		  and model_type = #{modelType,jdbcType=INTEGER}
+		<if test="filterText != null" >
+			and 
+			(
+			   name like concat('%', #{filterText}, '%') or
+			   description like concat('%', #{filterText}, '%')
+			)
+		</if>
+		<if test="sort != null" >
+		    order by
+			<foreach item="sort" index="index" collection="sort" separator=",">
+	       		#{sort.property} #{sort.direction} 
+	    	</foreach>
+		</if>
+	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select id, name, model_key, description, model_comment, created, created_by,
 		last_updated,

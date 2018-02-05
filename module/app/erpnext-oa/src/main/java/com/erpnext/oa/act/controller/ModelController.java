@@ -107,6 +107,11 @@ public class ModelController extends BaseController {
 		}
 		return modelNode;
 	}
+    
+    @GetMapping("/rest/models/{modelId}/thumbnail")
+    public byte[] getModelThumbnail(@PathVariable String modelId) {
+    	return modelService.getModel(modelId).getThumbnail();
+    }
 
 	private ModelDTO updateModel(Model model, MultiValueMap<String, String> values,
 			boolean forceNewVersion) {
