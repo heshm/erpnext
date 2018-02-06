@@ -11,7 +11,7 @@
         <Logger name="org.mybatis.spring" level="INFO"/>
         <Logger name="com.erpnext" level="DEBUG"/>
         <Logger name="org.activiti.engine.impl.persistence" level="DEBUG"/>
-        <Logger name="org.springframework" level="INFO"/>
+        <Logger name="org.springframework" level="ERROR"/>
         <Root level="error">
             <AppenderRef ref="Console"/>
         </Root>

@@ -25,14 +25,14 @@
         "ACTION": {
             "LOGOUT": "Sign out",
             "RETURN-TO-LIST": "Show all definitions",
-            "CANCEL": "Cancel",
-            "CLOSE": "Close",
-            "EDIT": "Edit",
-            "SAVE": "Save",
-            "OPEN": "Open",
+            "CANCEL": "取消",
+            "CLOSE": "关闭",
+            "EDIT": "编辑",
+            "SAVE": "保存",
+            "OPEN": "打开",
             "OK": "Ok",
-            "CONFIRM": "Confirm",
-            "CONFIRM-AND-CLOSE": "Confirm and close",
+            "CONFIRM": "确认",
+            "CONFIRM-AND-CLOSE": "确认并关闭",
             "NEW-FORM": "New form",
             "CREATE-FORM": "Create form",
             "NEW-DECISION-TABLE": "New Decision Table",
@@ -100,13 +100,13 @@
         "FILTER" : {
             "MY-PROCESSES": "我的流程",
             "MY-PROCESSES-COUNT": "You have {{total}} business process models",
-            "MY-PROCESSES-ONE": "You have one business process model",
+            "MY-PROCESSES-ONE": "你有一个业务流程模型",
             "MY-PROCESSES-EMPTY": "It looks like you have not created any business process models yet. You can design process models, user forms and then bundle them up into a process app to share with any colleagues. The first step is to create a process model:",
             "MY-PROCESSES-BPMN-HINT": "Create a BPMN model using the BPMN Visual Editor.",
             "MY-PROCESSES-BPMN-IMPORT-HINT": "You can also import existing BPMN models.",
             "MY-PROCESSES-STEP-HINT": "If you are new to designing processes, you can use the Step Editor.",
-            "FILTER-TEXT": ", matching \"{{filterText}}\"",
-            "FILTER-TEXT-EMPTY": "You have no business process models, matching \"{{filterText}}\"",
+            "FILTER-TEXT": ", 匹配  \"{{filterText}}\"",
+            "FILTER-TEXT-EMPTY": "你没有业务流程模型, 匹配 \"{{filterText}}\"",
             "RECENT": "Recent",
             "RECENT-COUNT": "{{total}} recently used models",
             "RECENT-ONE": "One recently used models",
@@ -114,10 +114,10 @@
         },
 
         "SORT": {
-            "MODIFIED-ASC": "Oldest",
-            "MODIFIED-DESC": "Last modified",
-            "NAME-ASC": "Name, A-Z",
-            "NAME-DESC": "Name, Z-A"
+            "MODIFIED-ASC": "更改时间升序",
+            "MODIFIED-DESC": "更改时间降序",
+            "NAME-ASC": "名称升序",
+            "NAME-DESC": "名称降序"
         }
     },
 
@@ -1283,7 +1283,7 @@
                 "DESCRIPTION": "Definition of the form with a list of form properties."
             },
             "FORM-REFERENCE": {
-                "TITLE": "Referenced form",
+                "TITLE": "关联表单",
                 "DESCRIPTION": "Reference to a form."
             },
             "ID": {
@@ -1510,10 +1510,10 @@
     "PAGE.HEADER" : "Orchestration Details",
 
     "ACTION.OK" : "Ok",
-    "ACTION.SAVE" : "Save",
-    "ACTION.SAVE-AND-CLOSE" : "Save and close editor",
+    "ACTION.SAVE" : "保存",
+    "ACTION.SAVE-AND-CLOSE" : "保存并关闭",
     "ACTION.SEND" : "Send",
-    "ACTION.CANCEL" : "Cancel",
+    "ACTION.CANCEL" : "取消",
     "ACTION.SELECT" : "Select",
     "ACTION.ADD" : "Add",
     "ACTION.REMOVE" : "Remove",
@@ -1575,7 +1575,7 @@
     "ELEMENT.SELECTED_EMPTY_TITLE" : "(No name)",
 
     "PROPERTY.REMOVED" : "removed",
-    "PROPERTY.EMPTY" : "No value",
+    "PROPERTY.EMPTY" : "无",
     "PROPERTY.PROPERTY.EDIT.TITLE" : "Change value for ",
 
     "PROPERTY.FEEDBACK.TITLE" : "Please fill-in your feedback",
@@ -1619,7 +1619,7 @@
     "PROPERTY.EXECUTIONLISTENERS.EXPRESSION.PLACEHOLDER" : "Enter an expression",
     "PROPERTY.EXECUTIONLISTENERS.DELEGATEEXPRESSION" : "Delegate expression",
     "PROPERTY.EXECUTIONLISTENERS.DELEGATEEXPRESSION.PLACEHOLDER" : "Enter a delegate expression",
-    "PROPERTY.EXECUTIONLISTENERS.UNSELECTED" : "No execution listener selected",
+    "PROPERTY.EXECUTIONLISTENERS.UNSELECTED" : "未配置执行监听器",
     "PROPERTY.EXECUTIONLISTENERS.FIELDS.NAME" : "Name",
     "PROPERTY.EXECUTIONLISTENERS.FIELDS.NAME.PLACEHOLDER" : "Enter a name",
     "PROPERTY.EXECUTIONLISTENERS.FIELDS.EXPRESSION" : "Expression",
@@ -1775,10 +1775,10 @@
     "PROPERTY.DUEDATE.TASK-DUE-DATE-OPTIONS.STATIC" : "Fixed duration after task creation",
     "PROPERTY.DUEDATE.TASK-DUE-DATE-OPTIONS.FIELD" : "Based on field",
 
-    "MODEL.SAVE.TITLE" : "Save model",
-    "MODEL.NAME" : "Name",
-    "MODEL.KEY" : "Key",
-    "MODEL.DESCRIPTION" : "Description",
+    "MODEL.SAVE.TITLE" : "保存",
+    "MODEL.NAME" : "名称",
+    "MODEL.KEY" : "标识",
+    "MODEL.DESCRIPTION" : "描述",
     "MODEL.SAVE.NEWVERSION" : "Save this as a new version?  This means you can always go back to a previous version",
     "MODEL.SAVE.COMMENT" : "Comment",
     "MODEL.SAVE.SAVING" : "Saving model",

@@ -43,6 +43,11 @@ public class ModelController extends BaseController {
 		      HttpServletRequest request) {
 		return modelService.getModel(filter, sort, modelType, request);
 	}
+	
+	@GetMapping("/rest/models/{modelId}")
+	public ModelDTO getModel(@PathVariable String modelId) {
+		return new ModelDTO(modelService.getModel(modelId));
+	}
 
     @PostMapping("/rest/models/{modelId}/editor/json")
 	public ModelDTO saveModel(@PathVariable String modelId, @RequestBody MultiValueMap<String, String> values)

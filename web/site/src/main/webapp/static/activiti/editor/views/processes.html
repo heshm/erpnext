@@ -67,13 +67,14 @@
                 </div>
             </div>
 			<div class="item fadein" ng-repeat="process in model.processes.data track by $index">
-				<div class="item-box" ng-style="{'background-image': 'url(\'' + config.contextRoot + '/app/rest/models/' + process.id + '/thumbnail?version=' + imageVersion + '\')'}" ng-click="showProcessDetails(process);">
+				<div class="item-box" ng-style="{'background-image': 'url(\'' + config.contextRoot + '/app/rest/models/' + process.id + '/thumbnail?version=' + imageVersion + '\')'}" >
+				<!--<div class="item-box" ng-style="{'background-image': 'url(\'' + config.contextRoot + '/app/rest/models/' + process.id + '/thumbnail?version=' + imageVersion + '\')'}" ng-click="showProcessDetails(process);">  -->
 					<div class="actions">
 						<span class="badge">v{{process.version}}</span>
 						<div class="btn-group pull-right">
-							<button id="detailsButton" type="button" ng-click="showProcessDetails(process); $event.stopPropagation();" class="btn btn-default" title="{{'PROCESS.ACTION.DETAILS' | translate}}">
+							<!-- <button id="detailsButton" type="button" ng-click="showProcessDetails(process); $event.stopPropagation();" class="btn btn-default" title="{{'PROCESS.ACTION.DETAILS' | translate}}">
 								<i class="glyphicon glyphicon-search"></i>
-							</button>
+							</button> -->
 							<button id="editButton" type="button" ng-click="editProcessDetails(process); $event.stopPropagation();" class="btn btn-default" title="{{'PROCESS.ACTION.OPEN-IN-EDITOR' | translate}}">
 								<i class="glyphicon glyphicon-edit"></i>
 							</button>
