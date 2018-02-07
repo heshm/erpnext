@@ -17,16 +17,16 @@
 			property="modelEditorJson" />
 		<result column="thumbnail" jdbcType="LONGVARBINARY" property="thumbnail" />
 	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, model_key, description, model_comment, created, created_by, last_updated,
+		last_updated_by, version, model_type, model_editor_json, thumbnail
+	</sql>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from act_de_model
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.erpnext.oa.act.domain.Model">
-		insert into act_de_model (id, name, model_key,
-		description, model_comment, created,
-		created_by, last_updated, last_updated_by,
-		version, model_type, model_editor_json,
-		thumbnail)
+		insert into act_de_model (<include refid="Base_Column_List" />)
 		values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
 		#{modelKey,jdbcType=VARCHAR},
 		#{description,jdbcType=VARCHAR}, #{modelComment,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP},
@@ -54,24 +54,18 @@
 	</update>
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
-		select id, name, model_key, description, model_comment, created, created_by,
-		last_updated,
-		last_updated_by, version, model_type, model_editor_json, thumbnail
+		select <include refid="Base_Column_List" />
 		from act_de_model
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
 	<select id="selectByModelKey" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
-		select id, name, model_key, description, model_comment, created, created_by,
-		last_updated,
-		last_updated_by, version, model_type, model_editor_json, thumbnail
+		select <include refid="Base_Column_List" />
 		from act_de_model
 		where model_key = #{modelKey,jdbcType=VARCHAR}
 	</select>
 	<select id="selectByModelCreate" parameterType="map" resultMap="BaseResultMap">
-		select id, name, model_key, description, model_comment, created, created_by,
-		last_updated,
-		last_updated_by, version, model_type, model_editor_json, thumbnail
+		select <include refid="Base_Column_List" />
 		from act_de_model
 		where created_by = #{userId,jdbcType=VARCHAR}
 		  and model_type = #{modelType,jdbcType=INTEGER}
@@ -88,11 +82,5 @@
 	       		#{sort.property} #{sort.direction} 
 	    	</foreach>
 		</if>
-	</select>
-	<select id="selectAll" resultMap="BaseResultMap">
-		select id, name, model_key, description, model_comment, created, created_by,
-		last_updated,
-		last_updated_by, version, model_type, model_editor_json, thumbnail
-		from act_de_model
 	</select>
 </mapper>
