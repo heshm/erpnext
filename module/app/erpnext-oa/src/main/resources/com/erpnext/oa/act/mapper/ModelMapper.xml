@@ -64,11 +64,14 @@
 		from act_de_model
 		where model_key = #{modelKey,jdbcType=VARCHAR}
 	</select>
-	<select id="selectByModelCreate" parameterType="map" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List" />
+	<select id="selectModelList" parameterType="map" resultMap="BaseResultMap">
+		select id, name, model_key, description, model_comment, created, created_by, last_updated,
+		    last_updated_by, version, model_type
 		from act_de_model
-		where created_by = #{userId,jdbcType=VARCHAR}
-		  and model_type = #{modelType,jdbcType=INTEGER}
+		where model_type = #{modelType,jdbcType=INTEGER}
+		<if  test="userId != null">
+		    and created_by = #{userId,jdbcType=VARCHAR}
+		</if>
 		<if test="filterText != null" >
 			and 
 			(

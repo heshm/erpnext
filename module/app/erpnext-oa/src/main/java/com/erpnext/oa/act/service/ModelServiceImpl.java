@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.util.AuthenticationUtils;
+import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.dto.ModelDTO;
 import com.erpnext.oa.act.dto.ResultListDataDTO;
@@ -53,28 +55,9 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request) {
-		//System.out.println(request.getQueryString());
-		//System.out.println(request.getParameter("filterText"));
 		String filterText = request.getParameter("filterText");
 		List<ModelDTO> resultList = new ArrayList<ModelDTO>();
-	    List<Model> models = modelMapper.selectByModelCreate(AuthenticationUtils.getUserId(), modelType, filterText, getSort(sort, false));
-	    
-		/*Sort sorts = getSort(sort, false);
-
-		System.out.println(sorts);
-
-		Order order2 = new Order(Direction.DESC, "age");
-		Order order3 = new Order(Direction.ASC, "pgrade");
-		Order order33 = new Order(Direction.DESC, "dnum");
-		List<Order> list = new ArrayList<>();
-		list.add(order2);
-		list.add(order3);
-		list.add(order33);
-		Sort sorts2 = new Sort(list);
-		sorts2.forEach(order -> {
-			System.out.println(order.getDirection());
-			System.out.println(order.getProperty());
-		});*/
+	    List<Model> models = modelMapper.selectModelList(AuthenticationUtils.getUserId(), modelType, filterText, getSort(sort, false));
 	    if(models != null) {
 	    	models.forEach(model -> {
 	    		resultList.add(new ModelDTO(model));
@@ -82,6 +65,16 @@ public class ModelServiceImpl implements ModelService {
 	    }
 
 		return new ResultListDataDTO(resultList);
+	}
+	
+	@Override
+	public List<ModelDTO> getModel(String appId, String filter) {
+		List<Model> models = modelMapper.selectModelList(null,AbstractModel.MODEL_TYPE_BPMN,filter,null);
+		List<ModelDTO> list = new ArrayList<>();
+		Optional.ofNullable(models).get().forEach(model -> {
+			list.add(new ModelDTO(model));
+		});;
+		return list;
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public interface ModelMapper {
     
     Model selectByModelKey(String modelKey);
     
-    List<Model> selectByModelCreate(@Param("userId")String userId,@Param("modelType")Integer modelType,
+    List<Model> selectModelList(@Param("userId")String userId,@Param("modelType")Integer modelType,
     		@Param("filterText")String filterText,@Param("sort")Sort sort);
 
     List<Model> selectAll();

@@ -1,10 +1,14 @@
 package com.erpnext.oa.act.endpoint;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
@@ -23,8 +27,15 @@ public class ModelsEndpoint extends BaseEndpoint {
 	private ModelService modelService;
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@GetMapping("/list")
+	public List<ModelDTO> getModel(
+			@RequestParam(name="appId",required = false) String appId,
+			@RequestParam(name="name",required = false) String name){
+		return modelService.getModel(appId, name);
+	}
 
-	@PostMapping
+	@PostMapping("/create")
 	public ModelDTO createModel(@RequestBody ModelDTO modelDTO) throws Exception {
 		boolean keyAlreadyExists = modelService.validateModelKey(modelDTO.getKey());
 		if (keyAlreadyExists) {
