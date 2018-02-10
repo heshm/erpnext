@@ -3,6 +3,8 @@ package com.erpnext.common.authority.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public class RoleServiceImpl implements RoleService {
 	private AdminRoleMapper adminRoleMapper;
 	@Autowired
 	private UserRoleXrefMapper userRoleXrefMapper;
+	@Autowired
+	private IdentityService identityService;
 
 	@Override
 	public List<AdminRole> getAllRole() {
@@ -39,17 +43,17 @@ public class RoleServiceImpl implements RoleService {
 		}
 		adminRoleMapper.insert(role);
 		//同步更新Activiti组信息
-		/*Group group = identityService.newGroup(role.getRoleId());
+		Group group = identityService.newGroup(role.getRoleId());
 		group.setName(role.getRoleName());
 		group.setType(role.getRoleType());
-		identityService.saveGroup(group);*/
+		identityService.saveGroup(group);
 	}
 
 	@Override
 	@Transactional
 	public void deleteRole(String roleId) {
 		adminRoleMapper.deleteByPrimaryKey(roleId);
-		//identityService.deleteGroup(roleId);
+		identityService.deleteGroup(roleId);
 	}
 
 	@Override
@@ -81,9 +85,9 @@ public class RoleServiceImpl implements RoleService {
 		List<UserRoleXref> parmList = new ArrayList<>(20);
 		userRoleXrefMapper.deleteByUser(userId);
 
-		/*identityService.createGroupQuery().groupMember(userId).list().forEach(member -> {
+		identityService.createGroupQuery().groupMember(userId).list().forEach(member -> {
 			identityService.deleteMembership(userId,member.getId());
-		});*/
+		});
 
 		userRole.getRoleList().forEach(role -> {
 			parmList.add(new UserRoleXref(userId,role));
@@ -91,9 +95,9 @@ public class RoleServiceImpl implements RoleService {
 
 		if(!parmList.isEmpty()){
 			userRoleXrefMapper.insertList(parmList);
-			/*parmList.forEach(parm ->{
+			parmList.forEach(parm ->{
 				identityService.createMembership(userId,parm.getRoleId());
-			});*/
+			});
 		}
 		return userRole;
 	}
