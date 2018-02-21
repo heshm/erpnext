@@ -1,18 +1,25 @@
 package com.erpnext.common.authority.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.erpnext.common.authority.dto.AdminUserDTO;
 import com.erpnext.common.authority.mapper.AdminUserDTOMapper;
-import com.erpnext.common.setup.domain.Department;
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.mapper.AdminUserMapper;
 
 @Service
 @Transactional(readOnly=true) 
@@ -20,27 +27,21 @@ public class AdminUserServiceImpl implements AdminUserService{
 	
 	@Autowired
 	private AdminUserDTOMapper adminUserDTOMapper;
+	
+	@Autowired
+	private AdminUserMapper adminUserMapper;
+	
+	@Autowired
+	private IdentityService identityService;
+	
+	@Value("${erpnext.defaultPassword}")
+	private String password;
 
 	@Override
 	public AdminUserDTO getOneAdminUser(String id) {
 		AdminUserDTO adminUser = adminUserDTOMapper.selectOne(id);
 		if(adminUser == null) 
 			return new AdminUserDTO();
-		if(adminUser.getDepartments() != null){
-			StringBuilder ids = new StringBuilder();
-			StringBuilder names = new StringBuilder();
-			List<Department> departList = adminUser.getDepartments();
-			for(int i = 0;i < departList.size(); i++){
-				ids.append(departList.get(i).getId());
-				names.append(departList.get(i).getName());
-				if(i != (departList.size() - 1)){
-					ids.append(",");
-					names.append(",");
-				}
-			}
-			adminUser.setDepartmentIds(ids.toString());
-			adminUser.setDepartmentNames(names.toString());
-		}
 		return adminUser;
 	}
 
@@ -52,5 +53,46 @@ public class AdminUserServiceImpl implements AdminUserService{
 		return new PageImpl<>(list,pageable,total);
 	}
 
+	@Override
+	@Transactional
+	public void createAdminUser(AdminUserDTO adminUser) {
+		AdminUser user = new AdminUser();
+		BeanUtils.copyProperties(adminUser, user);
+		user.setUserId(adminUser.getLoginName());
+		user.setCreateDate(new Date());
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		user.setPassword(encoder.encode(password));
+		adminUserMapper.insert(user);
+		saveActUser(user);
+		
+	}
+	
+	@Override
+	@Transactional
+	public void updateAdminUser(AdminUserDTO adminUser) {
+		AdminUser user = adminUserMapper.selectByLoginName(adminUser.getLoginName());
+		user.setActiveStatusFlag(adminUser.getActiveStatusFlag());
+		user.setUserName(adminUser.getUserName());
+		user.setPhoneNumber(adminUser.getPhoneNumber());
+		user.setEmail(adminUser.getEmail());
+		user.setRoleName(adminUser.getRoleName());
+		adminUserMapper.updateByPrimaryKey(user);
+		
+		User actUser = identityService.createUserQuery().userId(user.getLoginName()).singleResult();
+		if(actUser == null){
+			saveActUser(user);
+		}
+		
+	}
+
+	
+	private void saveActUser(AdminUser user) {
+		User actUser = identityService.newUser(user.getUserId());
+		actUser.setPassword(user.getPassword());
+		actUser.setEmail(user.getEmail());
+		identityService.saveUser(actUser);
+	}
+
+	
 
 }

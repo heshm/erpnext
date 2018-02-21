@@ -1,9 +1,7 @@
 package com.erpnext.common.authority.dto;
 
 import java.util.Date;
-import java.util.List;
 
-import com.erpnext.common.setup.domain.Department;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -42,12 +40,8 @@ public class AdminUserDTO {
      * 创建日期
      */
     private Date createDate;
-    /**
-     * 归属机构信息
-     */
-    private List<Department> departments;
     
-    private String departmentIds;
+    private String[] departmentIds;
     
     private String departmentNames;
 
@@ -115,19 +109,11 @@ public class AdminUserDTO {
 		this.createDate = createDate;
 	}
 
-	public List<Department> getDepartments() {
-		return departments;
-	}
-
-	public void setDepartments(List<Department> departments) {
-		this.departments = departments;
-	}
-
-	public String getDepartmentIds() {
+	public String[] getDepartmentIds() {
 		return departmentIds;
 	}
 
-	public void setDepartmentIds(String departmentIds) {
+	public void setDepartmentIds(String[] departmentIds) {
 		this.departmentIds = departmentIds;
 	}
 
