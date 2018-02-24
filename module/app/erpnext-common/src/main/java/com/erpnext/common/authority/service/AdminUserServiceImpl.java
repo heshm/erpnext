@@ -56,6 +56,10 @@ public class AdminUserServiceImpl implements AdminUserService{
 	@Override
 	@Transactional
 	public void createAdminUser(AdminUserDTO adminUser) {
+		AdminUser dbUser = adminUserMapper.selectByLoginName(adminUser.getLoginName());
+		if(dbUser != null) {
+			throw new IllegalArgumentException("用户信息已经存在!");
+		}
 		AdminUser user = new AdminUser();
 		BeanUtils.copyProperties(adminUser, user);
 		user.setUserId(adminUser.getLoginName());
