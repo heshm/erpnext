@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.common.setup.mapper.DepartmentUserXrefMapper">
+	<resultMap id="BaseResultMap"
+		type="com.erpnext.common.setup.domain.DepartmentUserXref">
+		<id column="department_id" jdbcType="CHAR" property="departmentId" />
+		<id column="user_id" jdbcType="CHAR" property="userId" />
+		<result column="create_by" jdbcType="CHAR" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_by" jdbcType="CHAR" property="updateBy" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		department_id, user_id, create_by,
+		create_time, update_by, update_time
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from common_department_user_xref
+		where department_id = #{departmentId,jdbcType=CHAR}
+		and user_id = #{userId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.common.setup.domain.DepartmentUserXref">
+		insert into common_department_user_xref (<include refid="Base_Column_List" />)
+		values (#{departmentId,jdbcType=CHAR}, #{userId,jdbcType=CHAR},
+		#{createBy,jdbcType=CHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.common.setup.domain.DepartmentUserXref">
+		update common_department_user_xref
+		set create_by = #{createBy,jdbcType=CHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_by = #{updateBy,jdbcType=CHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where department_id = #{departmentId,jdbcType=CHAR}
+		and user_id = #{userId,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department_user_xref
+		where department_id = #{departmentId,jdbcType=CHAR}
+		and user_id = #{userId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department_user_xref
+	</select>
+	<select id="selectList" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from common_department_user_xref
+		<where>
+			<if test = "departmentId != null and departmentId != ''">
+			department_id = #{departmentId,jdbcType=CHAR}
+			</if>
+			<if test = "userId != null and userId != ''">
+			user_id = #{userId,jdbcType=CHAR}
+			</if>
+		</where>
+	</select>
+</mapper>

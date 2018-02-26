@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,11 @@ public class AdminUserEndpoint extends BaseEndpoint {
 	public Page<AdminUserDTO> list(@RequestParam Map<String, Object> params,
 			@PageableDefault(size=10, page=0)Pageable pageable){
 		return adminUserService.getPageAdminUser(pageable, params);
+	}
+	
+	@GetMapping("/{userId}")
+	public AdminUserDTO listOne(@PathVariable("userId")String userId) {
+		return adminUserService.getOneAdminUser(userId);
 	}
 	
 	@PostMapping("/create")

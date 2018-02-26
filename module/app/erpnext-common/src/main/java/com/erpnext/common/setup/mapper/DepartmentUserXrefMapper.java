@@ -14,4 +14,6 @@ public interface DepartmentUserXrefMapper {
     List<DepartmentUserXref> selectAll();
 
     int updateByPrimaryKey(DepartmentUserXref record);
+    
+    List<DepartmentUserXref> selectList(@Param("departmentId") String departmentId, @Param("userId") String userId);
 }
