@@ -75,7 +75,6 @@ public class AdminUserServiceImpl implements AdminUserService{
 		if(dbUser != null) {
 			throw new IllegalArgumentException("用户信息已经存在!");
 		}
-		String currentUserId = AuthenticationUtils.getUserId();
 		Date currentDate = new Date();
 		AdminUser user = new AdminUser();
 		BeanUtils.copyProperties(adminUser, user);
@@ -85,16 +84,7 @@ public class AdminUserServiceImpl implements AdminUserService{
 		user.setPassword(encoder.encode(password));
 		adminUserMapper.insert(user);
 		
-		DepartmentUserXref deptUser = new DepartmentUserXref();
-		deptUser.setUserId(user.getUserId());
-		deptUser.setCreateTime(currentDate);
-		deptUser.setUpdateTime(currentDate);
-		deptUser.setCreateBy(currentUserId);
-		deptUser.setUpdateBy(currentUserId);
-		Arrays.stream(adminUser.getDepartmentIds()).forEach(deptId -> {
-			deptUser.setDepartmentId(deptId);
-			departmentUserXrefMapper.insert(deptUser);
-		});
+		saveDeptUserXref(adminUser);
 		
 		saveActUser(user);
 		
@@ -110,11 +100,28 @@ public class AdminUserServiceImpl implements AdminUserService{
 		user.setEmail(adminUser.getEmail());
 		user.setRoleName(adminUser.getRoleName());
 		adminUserMapper.updateByPrimaryKey(user);
-		
+		saveDeptUserXref(adminUser);
 		User actUser = identityService.createUserQuery().userId(user.getLoginName()).singleResult();
 		if(actUser == null){
 			saveActUser(user);
 		}
+		
+	}
+	
+	private void saveDeptUserXref(AdminUserDTO adminUser) {
+		departmentUserXrefMapper.deleteByUserId(adminUser.getLoginName());
+		String currentUserId = AuthenticationUtils.getUserId();
+		Date currentDate = new Date();
+		DepartmentUserXref deptUser = new DepartmentUserXref();
+		deptUser.setUserId(adminUser.getLoginName());
+		deptUser.setCreateTime(currentDate);
+		deptUser.setUpdateTime(currentDate);
+		deptUser.setCreateBy(currentUserId);
+		deptUser.setUpdateBy(currentUserId);
+		Arrays.stream(adminUser.getDepartmentIds()).forEach(deptId -> {
+			deptUser.setDepartmentId(deptId);
+			departmentUserXrefMapper.insert(deptUser);
+		});
 		
 	}
 

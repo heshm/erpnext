@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 public interface DepartmentUserXrefMapper {
     int deleteByPrimaryKey(@Param("departmentId") String departmentId, @Param("userId") String userId);
+    
+    int deleteByUserId(@Param("userId") String userId);
 
     int insert(DepartmentUserXref record);
 

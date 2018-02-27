@@ -19,6 +19,10 @@
 		where department_id = #{departmentId,jdbcType=CHAR}
 		and user_id = #{userId,jdbcType=CHAR}
 	</delete>
+	<delete id="deleteByUserId" parameterType="map">
+		delete from common_department_user_xref
+		where user_id = #{userId,jdbcType=CHAR}
+	</delete>
 	<insert id="insert" parameterType="com.erpnext.common.setup.domain.DepartmentUserXref">
 		insert into common_department_user_xref (<include refid="Base_Column_List" />)
 		values (#{departmentId,jdbcType=CHAR}, #{userId,jdbcType=CHAR},
