@@ -4,11 +4,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.Process;
+import org.activiti.editor.language.json.converter.BpmnJsonConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.erpnext.framework.util.IDUtils;
+import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
@@ -48,6 +55,10 @@ public class ModelServiceImpl implements ModelService {
 	@Autowired
 	private ModelImageService modelImageService;
 
+	private BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
+
+	private BpmnXMLConverter bpmnXMLConverter = new BpmnXMLConverter();
+
 	@Override
 	public Model getModel(String modelId) {
 		return modelMapper.selectByPrimaryKey(modelId);
@@ -57,23 +68,25 @@ public class ModelServiceImpl implements ModelService {
 	public ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request) {
 		String filterText = request.getParameter("filterText");
 		List<ModelDTO> resultList = new ArrayList<ModelDTO>();
-	    List<Model> models = modelMapper.selectModelList(AuthenticationUtils.getUserId(), modelType, filterText, getSort(sort, false));
-	    if(models != null) {
-	    	models.forEach(model -> {
-	    		resultList.add(new ModelDTO(model));
-	    	});
-	    }
+		List<Model> models = modelMapper.selectModelList(AuthenticationUtils.getUserId(), modelType, filterText,
+				getSort(sort, false));
+		if (models != null) {
+			models.forEach(model -> {
+				resultList.add(new ModelDTO(model));
+			});
+		}
 
 		return new ResultListDataDTO(resultList);
 	}
-	
+
 	@Override
 	public List<ModelDTO> getModel(String appId, String filter) {
-		List<Model> models = modelMapper.selectModelList(null,AbstractModel.MODEL_TYPE_BPMN,filter,null);
+		List<Model> models = modelMapper.selectModelList(null, AbstractModel.MODEL_TYPE_BPMN, filter, null);
 		List<ModelDTO> list = new ArrayList<>();
 		Optional.ofNullable(models).get().forEach(model -> {
 			list.add(new ModelDTO(model));
-		});;
+		});
+		;
 		return list;
 	}
 
@@ -181,6 +194,71 @@ public class ModelServiceImpl implements ModelService {
 		return model;
 	}
 
+	@Override
+	public BpmnModel getBpmnModel(AbstractModel model) {
+		BpmnModel bpmnModel = null;
+		try {
+			/*Map<String, Model> formMap = new HashMap<String, Model>();
+			Map<String, Model> decisionTableMap = new HashMap<String, Model>();
+
+			List<Model> referencedModels = modelRepository.findModelsByParentModelId(model.getId());
+			for (Model childModel : referencedModels) {
+				if (Model.MODEL_TYPE_FORM == childModel.getModelType()) {
+					formMap.put(childModel.getId(), childModel);
+
+				} else if (Model.MODEL_TYPE_DECISION_TABLE == childModel.getModelType()) {
+					decisionTableMap.put(childModel.getId(), childModel);
+				}
+			}*/
+
+			bpmnModel = getBpmnModel(model, null, null);
+
+		} catch (Exception e) {
+			log.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
+			throw new InternalServerErrorException("Could not generate BPMN 2.0 model");
+		}
+
+		return bpmnModel;
+	}
+
+	@Override
+	public BpmnModel getBpmnModel(AbstractModel model, Map<String, Model> formMap,
+			Map<String, Model> decisionTableMap) {
+		try {
+			ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(model.getModelEditorJson());
+			Map<String, String> formKeyMap = new HashMap<String, String>();
+			if (formMap != null) {
+				for (Model formModel : formMap.values()) {
+					formKeyMap.put(formModel.getId(), formModel.getModelKey());
+				}
+			}
+			Map<String, String> decisionTableKeyMap = new HashMap<String, String>();
+			if (decisionTableMap != null) {
+				for (Model decisionTableModel : decisionTableMap.values()) {
+					decisionTableKeyMap.put(decisionTableModel.getId(), decisionTableModel.getModelKey());
+				}
+			}
+			return bpmnJsonConverter.convertToBpmnModel(editorJsonNode, formKeyMap, decisionTableKeyMap);
+		} catch (Exception e) {
+			log.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
+			throw new InternalServerErrorException("Could not generate BPMN 2.0 model");
+		}
+	}
+	
+	@Override
+	public byte[] getBpmnXML(BpmnModel bpmnModel) {
+		for(Process process : bpmnModel.getProcesses()) {
+			if(!StringUtils.isEmpty(process.getId())) {
+				char firstCharacter = process.getId().charAt(0);
+				if (Character.isDigit(firstCharacter)) {
+					process.setId("a" + process.getId());
+				}
+			}
+		}
+		byte[] xmlBytes = bpmnXMLConverter.convertToXML(bpmnModel);
+	    return xmlBytes;
+	}
+
 	private Sort getSort(String sort, boolean prefixWithProcessModel) {
 		String propName;
 		Direction direction;
@@ -216,5 +294,7 @@ public class ModelServiceImpl implements ModelService {
 		}
 		return new Sort(direction, propName);
 	}
+
+	
 
 }

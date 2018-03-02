@@ -2,10 +2,13 @@ package com.erpnext.oa.act.endpoint;
 
 import java.util.List;
 
+import org.activiti.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.dto.ModelDTO;
+import com.erpnext.oa.act.service.DeploymentService;
 import com.erpnext.oa.act.service.ModelService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -25,6 +29,8 @@ public class ModelsEndpoint extends BaseEndpoint {
 
 	@Autowired
 	private ModelService modelService;
+	@Autowired
+	private DeploymentService deploymentService;
 	@Autowired
 	private ObjectMapper objectMapper;
 	
@@ -81,6 +87,11 @@ public class ModelsEndpoint extends BaseEndpoint {
 		json = editorNode.toString();
 		Model newModel = modelService.createModel(modelDTO, json);
 		return new ModelDTO(newModel);
+	}
+	
+	@PutMapping("/deploy/{modelId}")
+	public Deployment deploy(@PathVariable("modelId") String modelId) {
+		return deploymentService.deployModel(modelId);
 	}
 
 }

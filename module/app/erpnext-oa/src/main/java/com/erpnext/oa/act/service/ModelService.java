@@ -1,11 +1,14 @@
 package com.erpnext.oa.act.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.activiti.bpmn.model.BpmnModel;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.dto.ModelDTO;
 import com.erpnext.oa.act.dto.ResultListDataDTO;
@@ -28,6 +31,12 @@ public interface ModelService {
 
 	Model saveModel(String modelId, String name, String key, String description, String editorJson, 
 	      boolean newVersion, String newVersionComment, UserDetails updatedBy);
+	
+	BpmnModel getBpmnModel(AbstractModel model);
+	
+	BpmnModel getBpmnModel(AbstractModel model, Map<String, Model> formMap, Map<String, Model> decisionTableMap);
+	
+	byte[] getBpmnXML(BpmnModel bpmnModel);
 
 
 }
