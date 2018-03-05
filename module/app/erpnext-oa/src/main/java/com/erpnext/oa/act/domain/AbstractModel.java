@@ -1,5 +1,7 @@
 package com.erpnext.oa.act.domain;
 
+import java.util.Date;
+
 public abstract class AbstractModel {
 
 	public static final int MODEL_TYPE_BPMN = 0;
@@ -9,4 +11,10 @@ public abstract class AbstractModel {
 	
 	public abstract String getId();
 	public abstract String getModelEditorJson();
+	public abstract String getName();
+	public abstract String getModelKey();
+	public abstract String getDescription();
+	public abstract Integer getVersion();
+	public abstract Date getLastUpdated();
+	public abstract String getLastUpdatedBy();
 }

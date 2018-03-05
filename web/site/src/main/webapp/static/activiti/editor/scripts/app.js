@@ -254,7 +254,7 @@ activitiModeler
             updateWindowSize();
 
             // Main navigation
-            $rootScope.mainNavigation = [
+            /*$rootScope.mainNavigation = [
                 {
                     'id': 'processes',
                     'title': 'GENERAL.NAVIGATION.PROCESSES',
@@ -274,6 +274,23 @@ activitiModeler
                     'id': 'apps',
                     'title': 'GENERAL.NAVIGATION.APPS',
                     'path': '/apps'
+                }
+            ];*/
+            $rootScope.mainNavigation = [
+                {
+                    'id': 'processes',
+                    'title': 'GENERAL.NAVIGATION.PROCESSES',
+                    'path': '/processes'
+                },
+                {
+                    'id': 'forms',
+                    'title': 'GENERAL.NAVIGATION.FORMS',
+                    'path': '/forms'
+                },
+                {
+                    'id': 'decision-tables',
+                    'title': 'GENERAL.NAVIGATION.DECISION-TABLES',
+                    'path': '/decision-tables'
                 }
             ];
 

@@ -80,13 +80,17 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public List<ModelDTO> getModel(String appId, String filter) {
-		List<Model> models = modelMapper.selectModelList(null, AbstractModel.MODEL_TYPE_BPMN, filter, null);
+	public List<ModelDTO> getModel(String appId, String filter,Integer modelType) {
+		List<Model> models ;
+		if(modelType == null) {
+			models = modelMapper.selectModelList(null, AbstractModel.MODEL_TYPE_BPMN, filter, null);
+		}else {
+			models = modelMapper.selectModelList(null, modelType, filter, null);
+		}
 		List<ModelDTO> list = new ArrayList<>();
 		Optional.ofNullable(models).get().forEach(model -> {
 			list.add(new ModelDTO(model));
 		});
-		;
 		return list;
 	}
 
@@ -182,6 +186,7 @@ public class ModelServiceImpl implements ModelService {
 			} catch (IOException e) {
 				log.warn("Could not deserialize json model");
 			}
+			System.out.println(model.getModelType());
 			if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN)) {
 				modelImageService.generateThumbnailImage(model, jsonNode);
 			} else if (model.getModelType().intValue() == Model.MODEL_TYPE_FORM

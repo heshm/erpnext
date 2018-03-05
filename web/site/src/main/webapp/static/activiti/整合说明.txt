@@ -1,5 +1,6 @@
 1、修改/editor/scripts/app.js中authRouteResolver方法.
 2、修改/editor/scripts/app.js 217行增加中文zh.
 3、修改/editor/scripts/app.js 399行修改默认语言.
-4、修改/editor/views/processes.html
-5、修改/editor/index.html
+4、修改/editor/scripts/app.js 257行导航栏内容.
+5、修改/editor/views/processes.html
+6、修改/editor/index.html

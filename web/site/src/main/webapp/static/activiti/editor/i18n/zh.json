@@ -5,9 +5,9 @@
     "GENERAL" : {
         "MAIN-TITLE": "Activiti - Kickstart",
         "NAVIGATION" : {
-            "PROCESSES": "Processes",
-            "FORMS": "Forms",
-            "DECISION-TABLES": "Decision Tables",
+            "PROCESSES": "流程",
+            "FORMS": "表单",
+            "DECISION-TABLES": "决策表",
             "APPS": "Apps"
         },
         "TITLE": {
@@ -93,8 +93,8 @@
         "ACTION" : {
             "CREATE": "创建流程",
             "IMPORT": "导入流程",
-            "CREATE-INLINE": "Create a new business process model now!",
-            "SHOW-MORE": "Show more..."
+            "CREATE-INLINE": "现在创建一个新的流程模型!",
+            "SHOW-MORE": "显示更多..."
         },
 
         "FILTER" : {
@@ -127,8 +127,8 @@
         "LOADING": "Getting forms...",
 
         "ACTION" : {
-            "CREATE": "Create Form",
-            "CREATE-INLINE": "Create a new form now!",
+            "CREATE": "创建表单",
+            "CREATE-INLINE": "现在创建一个新表单!",
             "SHOW-MORE": "Show more..."
         },
 
@@ -136,16 +136,16 @@
             "MY-REUSABLE-FORMS": "My reusable forms",
             "MY-REUSABLE-FORMS-COUNT": "You have {{total}} reusable forms",
             "MY-REUSABLE-FORMS-ONE": "You have one reusable form",
-            "MY-REUSABLE-FORMS-EMPTY": "You have no reusable forms.  To add one, click Create Form.",
+            "MY-REUSABLE-FORMS-EMPTY": "你暂时没有可用表单，点击按钮创建一个.",
             "FILTER-TEXT": ", matching \"{{filterText}}\"",
             "FILTER-TEXT-EMPTY": "You have no form, matching \"{{filterText}}\""
         },
 
         "SORT": {
-            "MODIFIED-ASC": "Oldest",
-            "MODIFIED-DESC": "Last modified",
-            "NAME-ASC": "Name, A-Z",
-            "NAME-DESC": "Name, Z-A"
+            "MODIFIED-ASC": "更改时间升序",
+            "MODIFIED-DESC": "更改时间降序",
+            "NAME-ASC": "名称升序",
+            "NAME-DESC": "名称降序"
         }
     },
 

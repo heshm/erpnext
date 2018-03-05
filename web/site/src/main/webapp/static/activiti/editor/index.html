@@ -49,12 +49,12 @@
 
                     <img ng-if="!account.tenantPictureId" ng-src="{{appResourceRoot}}../images/activiti-logo.png">
                 </a> -->
-                <!-- <ul class="nav navbar-nav" id="main-nav" ng-show="authenticated">
+                <ul class="nav navbar-nav" id="main-nav" ng-show="authenticated">
                     <li ng-class="{'active' : item.id == mainPage.id}" ng-repeat="item in mainNavigation"
                         ng-show="(authenticated && !item.unauthenticated) || (item.unauthenticated && !authenticated)">
                         <a ng-click="setMainPage(item)">{{item.title | translate}}</a>
                     </li>
-                </ul> -->
+                </ul>
             </div>
         </div>
     </div>

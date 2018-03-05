@@ -19,8 +19,13 @@ public interface ModelService {
 	
 	ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request);
 	
-	List<ModelDTO> getModel(String appId,String filter);
+	List<ModelDTO> getModel(String appId,String filter,Integer modelType);
 	
+	/**
+	 * 模型存在返回true
+	 * @param 模型键值
+	 * @return 模型是否存在
+	 */
 	boolean validateModelKey(String modelKey); 
 	
 	Model createModel(ModelDTO modelDTO,String editorJson);
