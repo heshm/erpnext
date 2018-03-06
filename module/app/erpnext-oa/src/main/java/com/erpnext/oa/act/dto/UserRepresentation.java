@@ -1,5 +1,9 @@
 package com.erpnext.oa.act.dto;
 
+import com.erpnext.framework.domain.AdminUser;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 public class UserRepresentation {
 
 	protected String login;
@@ -13,13 +17,17 @@ public class UserRepresentation {
     public UserRepresentation() {
     }
 
-    public UserRepresentation(User user) {
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+    public UserRepresentation(AdminUser user) {
+        this.login = user.getLoginName();
+        this.firstName = user.getUserName();
+        //this.lastName = user.getLastName();
         this.email = user.getEmail();
+        
+        if(user.getUserId().equals("admin")) {
+        	this.adminUser = true;
+        }
 
-        if (user.getAuthorities() != null) {
+        /*if (user.getAuthorities() != null) {
             for (Authority authority : user.getAuthorities()) {
                 if (Authority.ROLE_ADMIN.equals(authority.getName())) {
                     this.adminUser = true;
@@ -27,7 +35,7 @@ public class UserRepresentation {
                     this.clusterUser = true;
                 }
             }
-        }
+        }*/
     }
 
     public String getLogin() {

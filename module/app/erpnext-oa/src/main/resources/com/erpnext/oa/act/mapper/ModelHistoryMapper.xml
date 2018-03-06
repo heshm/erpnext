@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.oa.act.mapper.ModelHistoryMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.oa.act.domain.ModelHistory">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="model_key" jdbcType="VARCHAR" property="modelKey" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="model_comment" jdbcType="VARCHAR" property="modelComment" />
+		<result column="created" jdbcType="TIMESTAMP" property="created" />
+		<result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+		<result column="last_updated" jdbcType="TIMESTAMP" property="lastUpdated" />
+		<result column="last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+		<result column="removal_date" jdbcType="TIMESTAMP" property="removalDate" />
+		<result column="version" jdbcType="INTEGER" property="version" />
+		<result column="model_id" jdbcType="VARCHAR" property="modelId" />
+		<result column="model_type" jdbcType="INTEGER" property="modelType" />
+		<result column="model_editor_json" jdbcType="LONGVARCHAR"
+			property="modelEditorJson" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name, model_key, description, model_comment, created, created_by,
+		last_updated,
+		last_updated_by, removal_date, version, model_id, model_type, model_editor_json
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from act_de_model_history
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.oa.act.domain.ModelHistory">
+		insert into act_de_model_history (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+		#{modelKey,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{modelComment,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP},
+		#{createdBy,jdbcType=VARCHAR}, #{lastUpdated,jdbcType=TIMESTAMP},
+		#{lastUpdatedBy,jdbcType=VARCHAR},
+		#{removalDate,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, #{modelId,jdbcType=VARCHAR},
+		#{modelType,jdbcType=INTEGER},
+		#{modelEditorJson,jdbcType=LONGVARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.oa.act.domain.ModelHistory">
+		update act_de_model_history
+		set name = #{name,jdbcType=VARCHAR},
+		model_key = #{modelKey,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		model_comment = #{modelComment,jdbcType=VARCHAR},
+		created = #{created,jdbcType=TIMESTAMP},
+		created_by = #{createdBy,jdbcType=VARCHAR},
+		last_updated = #{lastUpdated,jdbcType=TIMESTAMP},
+		last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+		removal_date = #{removalDate,jdbcType=TIMESTAMP},
+		version = #{version,jdbcType=INTEGER},
+		model_id = #{modelId,jdbcType=VARCHAR},
+		model_type = #{modelType,jdbcType=INTEGER},
+		model_editor_json = #{modelEditorJson,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_history
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_history
+	</select>
+	<select id="selectByModelId" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_history
+		where model_id = #{modelId,jdbcType=VARCHAR}
+		order by version desc
+	</select>
+</mapper>

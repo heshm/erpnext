@@ -2,10 +2,13 @@
 package com.erpnext.oa.act.controller;
 
 
+import com.erpnext.framework.domain.AdminUser;
+import com.erpnext.framework.mapper.AdminUserMapper;
+import com.erpnext.framework.web.util.AuthenticationUtils;
+import com.erpnext.oa.act.dto.UserRepresentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,13 +24,14 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/oa/act/app")
 public class AccountResource {
 
-    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
    /* @Autowired
     protected UserService userService;*/
+    @Autowired
+    private AdminUserMapper adminUserMapper;
 
     @Autowired
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
     
     @RequestMapping(value = "/rest/authenticate", method = RequestMethod.GET, produces = {"application/json"})
     public ObjectNode isAuthenticated(HttpServletRequest request) {
@@ -40,6 +44,18 @@ public class AccountResource {
         ObjectNode result = objectMapper.createObjectNode();
         result.put("login", user);
         return result;
+    }
+    
+    @RequestMapping(value = "/rest/account",method = RequestMethod.GET,produces = "application/json")
+    public UserRepresentation getAccount(HttpServletResponse response) {
+    	String userId = AuthenticationUtils.getUserId();
+    	AdminUser user = adminUserMapper.selectByPrimaryKey(userId);
+    	if(user == null) {
+    		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    		return null;
+    	}else {
+    		return new UserRepresentation(user);
+    	}
     }
 
     /**

@@ -2,16 +2,16 @@ package com.erpnext.oa.act.dto;
 
 import java.util.List;
 
-public class ResultListDataDTO {
+public class ResultListDataRepresentation {
 	
 	private Integer size;
 	private Long total;
 	private Integer start;
 	private List<? extends Object> data;
 	
-	public ResultListDataDTO() {}
+	public ResultListDataRepresentation() {}
 	
-	public ResultListDataDTO(List<? extends Object> data) {
+	public ResultListDataRepresentation(List<? extends Object> data) {
 		this.data = data;
 		if (data != null) {
 			size = data.size();

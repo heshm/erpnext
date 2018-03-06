@@ -17,4 +17,7 @@ public abstract class AbstractModel {
 	public abstract Integer getVersion();
 	public abstract Date getLastUpdated();
 	public abstract String getLastUpdatedBy();
+	public abstract String getCreatedBy();
+	public abstract String getModelComment();
+	public abstract Integer getModelType();
 }

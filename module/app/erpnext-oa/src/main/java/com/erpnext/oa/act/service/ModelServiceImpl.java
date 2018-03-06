@@ -30,8 +30,10 @@ import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
-import com.erpnext.oa.act.dto.ModelDTO;
-import com.erpnext.oa.act.dto.ResultListDataDTO;
+import com.erpnext.oa.act.domain.ModelHistory;
+import com.erpnext.oa.act.dto.ModelRepresentation;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
+import com.erpnext.oa.act.mapper.ModelHistoryMapper;
 import com.erpnext.oa.act.mapper.ModelMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -48,6 +50,8 @@ public class ModelServiceImpl implements ModelService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+	private ModelHistoryMapper modelHistoryMapper;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -65,31 +69,58 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request) {
+	public ResultListDataRepresentation getModel(String filter, String sort, Integer modelType,
+			HttpServletRequest request) {
 		String filterText = request.getParameter("filterText");
-		List<ModelDTO> resultList = new ArrayList<ModelDTO>();
+		List<ModelRepresentation> resultList = new ArrayList<ModelRepresentation>();
 		List<Model> models = modelMapper.selectModelList(AuthenticationUtils.getUserId(), modelType, filterText,
 				getSort(sort, false));
 		if (models != null) {
 			models.forEach(model -> {
-				resultList.add(new ModelDTO(model));
+				resultList.add(new ModelRepresentation(model));
 			});
 		}
 
-		return new ResultListDataDTO(resultList);
+		return new ResultListDataRepresentation(resultList);
 	}
 
 	@Override
-	public List<ModelDTO> getModel(String appId, String filter,Integer modelType) {
-		List<Model> models ;
-		if(modelType == null) {
+	public ResultListDataRepresentation getModelHistory(String modelId, boolean includeLatestVersion) {
+		Model model = getModel(modelId);
+		List<ModelHistory> history = modelHistoryMapper.selectByModelId(modelId);
+		ResultListDataRepresentation result = new ResultListDataRepresentation();
+
+		List<ModelRepresentation> representations = new ArrayList<ModelRepresentation>();
+
+		// Also include the latest version of the model
+		if (includeLatestVersion) {
+			representations.add(new ModelRepresentation(model));
+		}
+		if (history.size() > 0) {
+			for (ModelHistory modelHistory : history) {
+				representations.add(new ModelRepresentation(modelHistory));
+			}
+			result.setData(representations);
+		}
+
+		// Set size and total
+		result.setSize(representations.size());
+		result.setTotal(Long.valueOf(representations.size()));
+		result.setStart(0);
+		return result;
+	}
+
+	@Override
+	public List<ModelRepresentation> getModel(String appId, String filter, Integer modelType) {
+		List<Model> models;
+		if (modelType == null) {
 			models = modelMapper.selectModelList(null, AbstractModel.MODEL_TYPE_BPMN, filter, null);
-		}else {
+		} else {
 			models = modelMapper.selectModelList(null, modelType, filter, null);
 		}
-		List<ModelDTO> list = new ArrayList<>();
+		List<ModelRepresentation> list = new ArrayList<>();
 		Optional.ofNullable(models).get().forEach(model -> {
-			list.add(new ModelDTO(model));
+			list.add(new ModelRepresentation(model));
 		});
 		return list;
 	}
@@ -101,7 +132,7 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	@Transactional
-	public Model createModel(ModelDTO model, String editorJson) {
+	public Model createModel(ModelRepresentation model, String editorJson) {
 		Model newModel = new Model();
 		newModel.setVersion(1);
 		newModel.setName(model.getName());
@@ -143,7 +174,7 @@ public class ModelServiceImpl implements ModelService {
 
 	private Model internalSave(String name, String key, String description, String editorJson, boolean newVersion,
 			String newVersionComment, byte[] imageBytes, UserDetails updatedBy, Model modelObject) {
-		if (newVersion == false) {
+		if (!newVersion) {
 			modelObject.setLastUpdated(new Date());
 			modelObject.setLastUpdatedBy(updatedBy.getUsername());
 			modelObject.setName(name);
@@ -156,9 +187,9 @@ public class ModelServiceImpl implements ModelService {
 			}
 
 		} else {
-			// ModelHistory historyModel = createNewModelhistory(modelObject);
-			// persistModelHistory(historyModel);
-			// 记录历史
+			ModelHistory historyModel = createNewModelhistory(modelObject);
+			persistModelHistory(historyModel);
+
 			modelObject.setVersion(modelObject.getVersion() + 1);
 			modelObject.setLastUpdated(new Date());
 			modelObject.setLastUpdatedBy(updatedBy.getUsername());
@@ -186,7 +217,7 @@ public class ModelServiceImpl implements ModelService {
 			} catch (IOException e) {
 				log.warn("Could not deserialize json model");
 			}
-			System.out.println(model.getModelType());
+
 			if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN)) {
 				modelImageService.generateThumbnailImage(model, jsonNode);
 			} else if (model.getModelType().intValue() == Model.MODEL_TYPE_FORM
@@ -198,23 +229,30 @@ public class ModelServiceImpl implements ModelService {
 		modelMapper.updateByPrimaryKey(model);
 		return model;
 	}
+	
+	private ModelHistory persistModelHistory(ModelHistory modelHistory) {
+		String id = IDUtils.uuid();
+		modelHistory.setId(id);
+		modelHistoryMapper.insert(modelHistory);
+	    return modelHistory;
+	}
 
 	@Override
 	public BpmnModel getBpmnModel(AbstractModel model) {
 		BpmnModel bpmnModel = null;
 		try {
-			/*Map<String, Model> formMap = new HashMap<String, Model>();
-			Map<String, Model> decisionTableMap = new HashMap<String, Model>();
-
-			List<Model> referencedModels = modelRepository.findModelsByParentModelId(model.getId());
-			for (Model childModel : referencedModels) {
-				if (Model.MODEL_TYPE_FORM == childModel.getModelType()) {
-					formMap.put(childModel.getId(), childModel);
-
-				} else if (Model.MODEL_TYPE_DECISION_TABLE == childModel.getModelType()) {
-					decisionTableMap.put(childModel.getId(), childModel);
-				}
-			}*/
+			/*
+			 * Map<String, Model> formMap = new HashMap<String, Model>(); Map<String, Model>
+			 * decisionTableMap = new HashMap<String, Model>();
+			 * 
+			 * List<Model> referencedModels =
+			 * modelRepository.findModelsByParentModelId(model.getId()); for (Model
+			 * childModel : referencedModels) { if (Model.MODEL_TYPE_FORM ==
+			 * childModel.getModelType()) { formMap.put(childModel.getId(), childModel);
+			 * 
+			 * } else if (Model.MODEL_TYPE_DECISION_TABLE == childModel.getModelType()) {
+			 * decisionTableMap.put(childModel.getId(), childModel); } }
+			 */
 
 			bpmnModel = getBpmnModel(model, null, null);
 
@@ -249,11 +287,11 @@ public class ModelServiceImpl implements ModelService {
 			throw new InternalServerErrorException("Could not generate BPMN 2.0 model");
 		}
 	}
-	
+
 	@Override
 	public byte[] getBpmnXML(BpmnModel bpmnModel) {
-		for(Process process : bpmnModel.getProcesses()) {
-			if(!StringUtils.isEmpty(process.getId())) {
+		for (Process process : bpmnModel.getProcesses()) {
+			if (!StringUtils.isEmpty(process.getId())) {
 				char firstCharacter = process.getId().charAt(0);
 				if (Character.isDigit(firstCharacter)) {
 					process.setId("a" + process.getId());
@@ -261,8 +299,26 @@ public class ModelServiceImpl implements ModelService {
 			}
 		}
 		byte[] xmlBytes = bpmnXMLConverter.convertToXML(bpmnModel);
-	    return xmlBytes;
+		return xmlBytes;
 	}
+	
+	private ModelHistory createNewModelhistory(Model model) {
+	    ModelHistory historyModel = new ModelHistory();
+	    historyModel.setName(model.getName());
+	    historyModel.setModelKey(model.getModelKey());
+	    historyModel.setDescription(model.getDescription());
+	    historyModel.setCreated(model.getCreated());
+	    historyModel.setLastUpdated(model.getLastUpdated());
+	    historyModel.setCreatedBy(model.getCreatedBy());
+	    historyModel.setLastUpdatedBy(model.getLastUpdatedBy());
+	    historyModel.setModelEditorJson(model.getModelEditorJson());
+	    historyModel.setModelType(model.getModelType());
+	    historyModel.setVersion(model.getVersion());
+	    historyModel.setModelId(model.getId());
+	    historyModel.setModelComment(model.getModelComment());
+
+	    return historyModel;
+	  }
 
 	private Sort getSort(String sort, boolean prefixWithProcessModel) {
 		String propName;
@@ -299,7 +355,5 @@ public class ModelServiceImpl implements ModelService {
 		}
 		return new Sort(direction, propName);
 	}
-
-	
 
 }

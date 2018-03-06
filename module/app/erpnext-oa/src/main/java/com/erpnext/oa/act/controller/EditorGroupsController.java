@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.framework.web.controller.BaseController;
-import com.erpnext.oa.act.dto.ResultListDataDTO;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class EditorGroupsController extends BaseController {
 	private IdentityService identityService;
 
 	@GetMapping("/rest/editor-groups")
-	public ResultListDataDTO getGroups(@RequestParam(required = false, value = "filter") String filter) {
+	public ResultListDataRepresentation getGroups(@RequestParam(required = false, value = "filter") String filter) {
 		String groupNameFilter = filter;
 		if (StringUtils.isEmpty(groupNameFilter)) {
 			groupNameFilter = "%";
@@ -35,7 +35,7 @@ public class EditorGroupsController extends BaseController {
 		List<Group> matchingGroups = identityService.createGroupQuery().groupNameLike(groupNameFilter)
 				.groupType(TYPE_ASSIGNMENT).list();
 
-		ResultListDataDTO result = new ResultListDataDTO(matchingGroups);
+		ResultListDataRepresentation result = new ResultListDataRepresentation(matchingGroups);
 		return result;
 	}
 

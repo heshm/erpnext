@@ -212,9 +212,11 @@ activitiModeler
             suffix: '.json'
         });
 
-        $translateProvider.registerAvailableLanguageKeys(['en'], {
+        $translateProvider.registerAvailableLanguageKeys(['en','zh'], {
             'en_*': 'en',
-            'en-*': 'en'
+            'en-*': 'en',
+            'zh_*': 'zh',
+            'zh-*': 'zh'
         });
         
   }])
@@ -250,7 +252,7 @@ activitiModeler
             updateWindowSize();
 
             // Main navigation
-            $rootScope.mainNavigation = [
+            /*$rootScope.mainNavigation = [
                 {
                     'id': 'processes',
                     'title': 'GENERAL.NAVIGATION.PROCESSES',
@@ -270,6 +272,23 @@ activitiModeler
                     'id': 'apps',
                     'title': 'GENERAL.NAVIGATION.APPS',
                     'path': '/apps'
+                }
+            ];*/
+            $rootScope.mainNavigation = [
+                {
+                    'id': 'processes',
+                    'title': 'GENERAL.NAVIGATION.PROCESSES',
+                    'path': '/processes'
+                },
+                {
+                    'id': 'forms',
+                    'title': 'GENERAL.NAVIGATION.FORMS',
+                    'path': '/forms'
+                },
+                {
+                    'id': 'decision-tables',
+                    'title': 'GENERAL.NAVIGATION.DECISION-TABLES',
+                    'path': '/decision-tables'
                 }
             ];
 
@@ -387,12 +406,12 @@ activitiModeler
   ])
   .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account', '$translate', '$window', '$modal',
         function($rootScope, $location, AuthenticationSharedService, Account, $translate, $window , $modal) {
-      
+	  
             var proposedLanguage = $translate.proposedLanguage();
             if (proposedLanguage !== 'de' && proposedLanguage !== 'en' && proposedLanguage !== 'es' && proposedLanguage !== 'fr'
                 && proposedLanguage !== 'it' && proposedLanguage !== 'ja') {
               
-                $translate.use('en');
+                $translate.use('zh');
             }
 
             var fixedUrlPart = '/editor/';

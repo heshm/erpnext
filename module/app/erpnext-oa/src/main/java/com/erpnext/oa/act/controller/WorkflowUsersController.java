@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erpnext.framework.web.controller.BaseController;
-import com.erpnext.oa.act.dto.ResultListDataDTO;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
 import com.erpnext.oa.act.dto.UserDTO;
 
 @RestController
@@ -39,7 +39,7 @@ public class WorkflowUsersController extends BaseController {
 	private TaskService taskService;
 
 	@GetMapping("/rest/workflow-users")
-	public ResultListDataDTO getUsers(@RequestParam(value = "filter", required = false) String filter,
+	public ResultListDataRepresentation getUsers(@RequestParam(value = "filter", required = false) String filter,
 			@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "externalId", required = false) String externalId,
 			@RequestParam(value = "excludeTaskId", required = false) String excludeTaskId,
@@ -67,7 +67,7 @@ public class WorkflowUsersController extends BaseController {
 		for (User user : matchingUsers) {
 			userRepresentations.add(new UserDTO(user));
 		}
-		ResultListDataDTO result = new ResultListDataDTO(userRepresentations);
+		ResultListDataRepresentation result = new ResultListDataRepresentation(userRepresentations);
 
 		if (page != 0 || (page == 0 && matchingUsers.size() == pageSize)) {
 			// Total differs from actual result size, need to fetch it

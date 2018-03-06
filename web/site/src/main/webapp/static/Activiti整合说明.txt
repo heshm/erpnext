@@ -1,0 +1,2 @@
+1、修改scripts/app-cfg.js下的相对路径.
+2、修改editor/scripts/app.js中的默认语言.

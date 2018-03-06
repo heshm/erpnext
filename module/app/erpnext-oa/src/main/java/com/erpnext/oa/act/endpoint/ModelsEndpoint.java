@@ -20,7 +20,7 @@ import com.erpnext.framework.web.service.exception.BadRequestException;
 import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
-import com.erpnext.oa.act.dto.ModelDTO;
+import com.erpnext.oa.act.dto.ModelRepresentation;
 import com.erpnext.oa.act.service.DeploymentService;
 import com.erpnext.oa.act.service.ModelService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,7 +40,7 @@ public class ModelsEndpoint extends BaseEndpoint {
 	private ObjectMapper objectMapper;
 	
 	@GetMapping("/list")
-	public List<ModelDTO> getModel(
+	public List<ModelRepresentation> getModel(
 			@RequestParam(name="appId",required = false) String appId,
 			@RequestParam(name="name",required = false) String name,
 			@RequestParam(name="modelType",required = false) Integer modelType){
@@ -48,7 +48,7 @@ public class ModelsEndpoint extends BaseEndpoint {
 	}
 
 	@PostMapping("/create")
-	public ModelDTO createModel(@RequestBody ModelDTO modelDTO) {
+	public ModelRepresentation createModel(@RequestBody ModelRepresentation modelDTO) {
 		boolean keyAlreadyExists = modelService.validateModelKey(modelDTO.getKey());
 		if (keyAlreadyExists) {
 			throw new BadRequestException("Provided model key already exists: " + modelDTO.getKey());
@@ -104,7 +104,7 @@ public class ModelsEndpoint extends BaseEndpoint {
 		}
 		
 		Model newModel = modelService.createModel(modelDTO, json);
-		return new ModelDTO(newModel);
+		return new ModelRepresentation(newModel);
 	}
 	
 	@PutMapping("/deploy/{modelId}")

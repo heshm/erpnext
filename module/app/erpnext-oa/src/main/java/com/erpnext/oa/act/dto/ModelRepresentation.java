@@ -3,14 +3,16 @@ package com.erpnext.oa.act.dto;
 
 import java.util.Date;
 
+import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
+import com.erpnext.oa.act.domain.ModelHistory;
 
 /**
  * Representation of process-models, both current and historic models.
  * 
  * @author Tijs Rademakers
  */
-public class ModelDTO {
+public class ModelRepresentation {
 
 	private String id;
 	private String name;
@@ -23,26 +25,32 @@ public class ModelDTO {
 	private int version;
 	private String comment;
 	private Integer modelType;
-	
-	public ModelDTO() {
-		
+
+	public ModelRepresentation() {
+
 	}
-	
-	public ModelDTO(Model model) {
+
+	public ModelRepresentation(AbstractModel model) {
 		initialize(model);
 	}
-	
-	public void initialize(Model model) {
+
+	public void initialize(AbstractModel model) {
 		this.id = model.getId();
 		this.name = model.getName();
-	    this.key = model.getModelKey();
-	    this.description = model.getDescription();
-	    this.createdBy = model.getCreatedBy();
-	    this.lastUpdated = model.getLastUpdated();
-	    this.version = model.getVersion();
-	    this.lastUpdatedBy = model.getLastUpdatedBy();
-	    this.comment = model.getModelComment();
-	    this.modelType = model.getModelType();
+		this.key = model.getModelKey();
+		this.description = model.getDescription();
+		this.createdBy = model.getCreatedBy();
+		this.lastUpdated = model.getLastUpdated();
+		this.version = model.getVersion();
+		this.lastUpdatedBy = model.getLastUpdatedBy();
+		this.comment = model.getModelComment();
+		this.modelType = model.getModelType();
+
+		if (model instanceof Model) {
+			this.setLatestVersion(true);
+		} else if (model instanceof ModelHistory) {
+			this.setLatestVersion(false);
+		}
 	}
 
 	public String getId() {

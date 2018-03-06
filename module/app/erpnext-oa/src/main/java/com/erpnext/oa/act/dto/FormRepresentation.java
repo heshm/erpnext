@@ -6,7 +6,7 @@ import org.activiti.form.model.FormDefinition;
 
 import com.erpnext.oa.act.domain.AbstractModel;
 
-public class FormDTO {
+public class FormRepresentation {
 
 	private String id;
 	private String name;
@@ -17,9 +17,9 @@ public class FormDTO {
 	private Date lastUpdated;
 	private FormDefinition formDefinition;
 	
-	public FormDTO() {}
+	public FormRepresentation() {}
 	
-	public FormDTO(AbstractModel model) {
+	public FormRepresentation(AbstractModel model) {
 		this.id = model.getId();
 	    this.name = model.getName();
 	    this.key = model.getModelKey();

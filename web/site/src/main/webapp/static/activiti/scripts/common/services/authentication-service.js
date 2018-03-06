@@ -154,7 +154,6 @@ activitiApp.factory('AuthenticationSharedService', ['$rootScope', '$http', 'auth
       return {
         authenticate: function() {
           var deferred = $q.defer();
-        	alert(ACTIVITI.CONFIG.contextRoot + '/app/rest/authenticate')
           $http.get(ACTIVITI.CONFIG.contextRoot + '/app/rest/authenticate', {ignoreErrors: true, ignoreAuthModule: 'ignoreAuthModule'})
               .success(function (data, status, headers, config) {
               

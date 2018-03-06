@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erpnext.framework.web.controller.BaseController;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.Model;
-import com.erpnext.oa.act.dto.ModelDTO;
-import com.erpnext.oa.act.dto.ResultListDataDTO;
+import com.erpnext.oa.act.dto.ModelRepresentation;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
 import com.erpnext.oa.act.service.ModelService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -39,18 +39,18 @@ public class ModelController extends BaseController {
 	private ObjectMapper objectMapper;
 	
 	@GetMapping("/rest/models")
-	public ResultListDataDTO getModels(@RequestParam(required = false) String filter, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer modelType,
+	public ResultListDataRepresentation getModels(@RequestParam(required = false) String filter, @RequestParam(required = false) String sort, @RequestParam(required = false) Integer modelType,
 		      HttpServletRequest request) {
 		return modelService.getModel(filter, sort, modelType, request);
 	}
 	
 	@GetMapping("/rest/models/{modelId}")
-	public ModelDTO getModel(@PathVariable String modelId) {
-		return new ModelDTO(modelService.getModel(modelId));
+	public ModelRepresentation getModel(@PathVariable String modelId) {
+		return new ModelRepresentation(modelService.getModel(modelId));
 	}
 
     @PostMapping("/rest/models/{modelId}/editor/json")
-	public ModelDTO saveModel(@PathVariable String modelId, @RequestBody MultiValueMap<String, String> values)
+	public ModelRepresentation saveModel(@PathVariable String modelId, @RequestBody MultiValueMap<String, String> values)
 			throws Exception {
 		long lastUpdated = -1L;
 		String lastUpdatedString = values.getFirst("lastUpdated");
@@ -118,7 +118,7 @@ public class ModelController extends BaseController {
     	return modelService.getModel(modelId).getThumbnail();
     }
 
-	private ModelDTO updateModel(Model model, MultiValueMap<String, String> values,
+	private ModelRepresentation updateModel(Model model, MultiValueMap<String, String> values,
 			boolean forceNewVersion) {
 
 		String name = values.getFirst("name");
@@ -140,13 +140,13 @@ public class ModelController extends BaseController {
 		String json = values.getFirst("json_xml");
 		model = modelService.saveModel(model.getId(), name, key, description, json, newVersion, newVersionComment,
 				AuthenticationUtils.getPrincipal());
-		return new ModelDTO(model);
+		return new ModelRepresentation(model);
 
 		
 	}
 
-	private ModelDTO createNewModel(String name, String description, Integer modelType, String editorJson) {
-		ModelDTO model = new ModelDTO();
+	private ModelRepresentation createNewModel(String name, String description, Integer modelType, String editorJson) {
+		ModelRepresentation model = new ModelRepresentation();
 		model.setName(name);
 		model.setDescription(description);
 		model.setModelType(modelType);

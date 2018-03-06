@@ -10,16 +10,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
-import com.erpnext.oa.act.dto.ModelDTO;
-import com.erpnext.oa.act.dto.ResultListDataDTO;
+import com.erpnext.oa.act.dto.ModelRepresentation;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
 
 public interface ModelService {
 	
 	Model getModel(String modelId);
 	
-	ResultListDataDTO getModel(String filter, String sort, Integer modelType, HttpServletRequest request);
+	ResultListDataRepresentation getModel(String filter, String sort, Integer modelType, HttpServletRequest request);
 	
-	List<ModelDTO> getModel(String appId,String filter,Integer modelType);
+	ResultListDataRepresentation getModelHistory(String modelId, boolean includeLatestVersion);
+	
+	List<ModelRepresentation> getModel(String appId,String filter,Integer modelType);
 	
 	/**
 	 * 模型存在返回true
@@ -28,7 +30,7 @@ public interface ModelService {
 	 */
 	boolean validateModelKey(String modelKey); 
 	
-	Model createModel(ModelDTO modelDTO,String editorJson);
+	Model createModel(ModelRepresentation modelDTO,String editorJson);
 	
 	Model saveModel(Model modelObject);
 	
