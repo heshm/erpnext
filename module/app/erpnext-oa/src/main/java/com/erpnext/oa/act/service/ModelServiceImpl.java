@@ -31,11 +31,13 @@ import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.AbstractModel;
+import com.erpnext.oa.act.domain.ActModelXref;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.domain.ModelHistory;
 import com.erpnext.oa.act.domain.ModelRelation;
 import com.erpnext.oa.act.dto.ModelRepresentation;
 import com.erpnext.oa.act.dto.ResultListDataRepresentation;
+import com.erpnext.oa.act.mapper.ActModelXrefMapper;
 import com.erpnext.oa.act.mapper.ModelHistoryMapper;
 import com.erpnext.oa.act.mapper.ModelMapper;
 import com.erpnext.oa.act.mapper.ModelRelationMapper;
@@ -61,6 +63,8 @@ public class ModelServiceImpl implements ModelService {
 	@Autowired
 	private ModelRelationMapper modelRelationMapper;
 	@Autowired
+	private ActModelXrefMapper actModelXrefMapper;
+	@Autowired
 	private ObjectMapper objectMapper;
 
 	@Autowired
@@ -84,7 +88,7 @@ public class ModelServiceImpl implements ModelService {
 				getSort(sort, false));
 		if (models != null) {
 			models.forEach(model -> {
-				resultList.add(new ModelRepresentation(model));
+				resultList.add(new ModelRepresentation(model));		
 			});
 		}
 
@@ -127,7 +131,12 @@ public class ModelServiceImpl implements ModelService {
 		}
 		List<ModelRepresentation> list = new ArrayList<>();
 		Optional.ofNullable(models).get().forEach(model -> {
-			list.add(new ModelRepresentation(model));
+			ActModelXref xref = actModelXrefMapper.selectByModelId(model.getId());
+			if(null == xref) {
+				list.add(new ModelRepresentation(model));
+			}else {
+				list.add(new ModelRepresentation(model,xref.getAppId()));
+			}
 		});
 		return list;
 	}

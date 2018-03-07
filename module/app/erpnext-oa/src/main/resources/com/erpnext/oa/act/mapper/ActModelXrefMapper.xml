@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.oa.act.mapper.ActModelXrefMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.oa.act.domain.ActModelXref">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="app_id" jdbcType="CHAR" property="appId" />
+		<result column="model_id" jdbcType="CHAR" property="modelId" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from oa_act_model_xref
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.oa.act.domain.ActModelXref">
+		insert into oa_act_model_xref (id, app_id, model_id)
+		values (#{id,jdbcType=CHAR}, #{appId,jdbcType=CHAR},
+		#{modelId,jdbcType=CHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.oa.act.domain.ActModelXref">
+		update oa_act_model_xref
+		set app_id = #{appId,jdbcType=CHAR},
+		model_id = #{modelId,jdbcType=CHAR}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select id, app_id, model_id
+		from oa_act_model_xref
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<select id="selectByModelId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select id, app_id, model_id
+		from oa_act_model_xref
+		where model_id = #{modelId,jdbcType=CHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select id, app_id, model_id
+		from oa_act_model_xref
+	</select>
+</mapper>

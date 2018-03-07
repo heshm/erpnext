@@ -25,6 +25,7 @@ public class ModelRepresentation {
 	private int version;
 	private String comment;
 	private Integer modelType;
+	private String category;
 
 	public ModelRepresentation() {
 
@@ -32,6 +33,11 @@ public class ModelRepresentation {
 
 	public ModelRepresentation(AbstractModel model) {
 		initialize(model);
+	}
+	
+	public ModelRepresentation(AbstractModel model,String category) {
+		initialize(model);
+		this.category = category;
 	}
 
 	public void initialize(AbstractModel model) {
@@ -139,6 +145,14 @@ public class ModelRepresentation {
 
 	public void setModelType(Integer modelType) {
 		this.modelType = modelType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 }
