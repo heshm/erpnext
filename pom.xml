@@ -436,6 +436,11 @@
 				<version>${activiti.version}</version>
 			</dependency>
 			<dependency>
+    			<groupId>org.activiti</groupId>
+    			<artifactId>activiti-dmn-json-converter</artifactId>
+    			<version>${activiti.version}</version>
+			</dependency>
+			<dependency>
       			<groupId>org.activiti</groupId>
       			<artifactId>editor-image-generator</artifactId>
       			<version>${activiti.version}</version>

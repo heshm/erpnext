@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,7 @@ import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.Process;
 import org.activiti.editor.language.json.converter.BpmnJsonConverter;
+import org.activiti.editor.language.json.converter.util.JsonConverterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,14 @@ import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.domain.ModelHistory;
+import com.erpnext.oa.act.domain.ModelRelation;
 import com.erpnext.oa.act.dto.ModelRepresentation;
 import com.erpnext.oa.act.dto.ResultListDataRepresentation;
 import com.erpnext.oa.act.mapper.ModelHistoryMapper;
 import com.erpnext.oa.act.mapper.ModelMapper;
+import com.erpnext.oa.act.mapper.ModelRelationMapper;
+import com.erpnext.oa.util.OAConst;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -52,7 +58,8 @@ public class ModelServiceImpl implements ModelService {
 	private ModelMapper modelMapper;
 	@Autowired
 	private ModelHistoryMapper modelHistoryMapper;
-
+	@Autowired
+	private ModelRelationMapper modelRelationMapper;
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -220,6 +227,9 @@ public class ModelServiceImpl implements ModelService {
 
 			if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN)) {
 				modelImageService.generateThumbnailImage(model, jsonNode);
+				handleBpmnProcessFormModelRelations(model, jsonNode);
+			    handleBpmnProcessDecisionTaskModelRelations(model, jsonNode);
+
 			} else if (model.getModelType().intValue() == Model.MODEL_TYPE_FORM
 					|| model.getModelType().intValue() == Model.MODEL_TYPE_DECISION_TABLE) {
 				jsonNode.put("name", model.getName());
@@ -229,12 +239,12 @@ public class ModelServiceImpl implements ModelService {
 		modelMapper.updateByPrimaryKey(model);
 		return model;
 	}
-	
+
 	private ModelHistory persistModelHistory(ModelHistory modelHistory) {
 		String id = IDUtils.uuid();
 		modelHistory.setId(id);
 		modelHistoryMapper.insert(modelHistory);
-	    return modelHistory;
+		return modelHistory;
 	}
 
 	@Override
@@ -301,24 +311,54 @@ public class ModelServiceImpl implements ModelService {
 		byte[] xmlBytes = bpmnXMLConverter.convertToXML(bpmnModel);
 		return xmlBytes;
 	}
-	
-	private ModelHistory createNewModelhistory(Model model) {
-	    ModelHistory historyModel = new ModelHistory();
-	    historyModel.setName(model.getName());
-	    historyModel.setModelKey(model.getModelKey());
-	    historyModel.setDescription(model.getDescription());
-	    historyModel.setCreated(model.getCreated());
-	    historyModel.setLastUpdated(model.getLastUpdated());
-	    historyModel.setCreatedBy(model.getCreatedBy());
-	    historyModel.setLastUpdatedBy(model.getLastUpdatedBy());
-	    historyModel.setModelEditorJson(model.getModelEditorJson());
-	    historyModel.setModelType(model.getModelType());
-	    historyModel.setVersion(model.getVersion());
-	    historyModel.setModelId(model.getId());
-	    historyModel.setModelComment(model.getModelComment());
 
-	    return historyModel;
-	  }
+	private void handleBpmnProcessFormModelRelations(AbstractModel bpmnProcessModel, ObjectNode editorJsonNode) {
+		List<JsonNode> formReferenceNodes = JsonConverterUtil
+				.filterOutJsonNodes(JsonConverterUtil.getBpmnProcessModelFormReferences(editorJsonNode));
+		Set<String> formIds = JsonConverterUtil.gatherStringPropertyFromJsonNodes(formReferenceNodes, "id");
+
+		handleModelRelations(bpmnProcessModel, formIds, OAConst.TYPE_FORM_MODEL_CHILD);
+	}
+
+	private void handleBpmnProcessDecisionTaskModelRelations(AbstractModel bpmnProcessModel,
+			ObjectNode editorJsonNode) {
+		List<JsonNode> decisionTableNodes = JsonConverterUtil
+				.filterOutJsonNodes(JsonConverterUtil.getBpmnProcessModelDecisionTableReferences(editorJsonNode));
+		Set<String> decisionTableIds = JsonConverterUtil.gatherStringPropertyFromJsonNodes(decisionTableNodes, "id");
+
+		handleModelRelations(bpmnProcessModel, decisionTableIds, OAConst.TYPE_DECISION_TABLE_MODEL_CHILD);
+	}
+
+	private void handleModelRelations(AbstractModel bpmnProcessModel, Set<String> idsReferencedInJson,
+			String relationshipType) {
+		modelRelationMapper.deleteByParentModelIdAndType(bpmnProcessModel.getId(), relationshipType);
+		idsReferencedInJson.forEach(id -> {
+			ModelRelation relation = new ModelRelation();
+			relation.setId(IDUtils.uuid());
+			relation.setParentModelId(bpmnProcessModel.getId());
+			relation.setModelId(id);
+			relation.setRelationType(relationshipType);
+			modelRelationMapper.insert(relation);
+		});
+	}
+
+	private ModelHistory createNewModelhistory(Model model) {
+		ModelHistory historyModel = new ModelHistory();
+		historyModel.setName(model.getName());
+		historyModel.setModelKey(model.getModelKey());
+		historyModel.setDescription(model.getDescription());
+		historyModel.setCreated(model.getCreated());
+		historyModel.setLastUpdated(model.getLastUpdated());
+		historyModel.setCreatedBy(model.getCreatedBy());
+		historyModel.setLastUpdatedBy(model.getLastUpdatedBy());
+		historyModel.setModelEditorJson(model.getModelEditorJson());
+		historyModel.setModelType(model.getModelType());
+		historyModel.setVersion(model.getVersion());
+		historyModel.setModelId(model.getId());
+		historyModel.setModelComment(model.getModelComment());
+
+		return historyModel;
+	}
 
 	private Sort getSort(String sort, boolean prefixWithProcessModel) {
 		String propName;

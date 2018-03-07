@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erpnext.oa.act.mapper.ModelRelationMapper">
+	<resultMap id="BaseResultMap" type="com.erpnext.oa.act.domain.ModelRelation">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="parent_model_id" jdbcType="VARCHAR" property="parentModelId" />
+		<result column="model_id" jdbcType="VARCHAR" property="modelId" />
+		<result column="relation_type" jdbcType="VARCHAR" property="relationType" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, parent_model_id, model_id, relation_type
+	</sql>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from act_de_model_relation
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByParentModelIdAndType">
+		delete from act_de_model_relation
+		where parent_model_id = #{parentModelId,jdbcType=VARCHAR}
+		and relation_type = #{relationType,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.erpnext.oa.act.domain.ModelRelation">
+		insert into act_de_model_relation (<include refid="Base_Column_List" />)
+		values (#{id,jdbcType=VARCHAR}, #{parentModelId,jdbcType=VARCHAR},
+		#{modelId,jdbcType=VARCHAR},
+		#{relationType,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.erpnext.oa.act.domain.ModelRelation">
+		update act_de_model_relation
+		set parent_model_id = #{parentModelId,jdbcType=VARCHAR},
+		model_id = #{modelId,jdbcType=VARCHAR},
+		relation_type = #{relationType,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_relation
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_relation
+	</select>
+	<select id="selectByParentModelIdAndType" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from act_de_model_relation
+		where parent_model_id = #{parentModelId,jdbcType=VARCHAR}
+		<if test="relationType != null">
+			and relation_type = #{relationType,jdbcType=VARCHAR}
+		</if>
+	</select>
+</mapper>

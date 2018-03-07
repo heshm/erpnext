@@ -1,5 +1,8 @@
 package com.erpnext.oa.act.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.activiti.form.model.FormDefinition;
@@ -17,6 +20,8 @@ import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.dto.FormRepresentation;
 import com.erpnext.oa.act.dto.FormSaveRepresentation;
+import com.erpnext.oa.act.dto.ResultListDataRepresentation;
+import com.erpnext.oa.act.mapper.ModelMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -27,6 +32,8 @@ public class ActFormServiceImpl implements ActFormService {
 
 	@Resource
 	private ModelService modelService;
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -66,6 +73,18 @@ public class ActFormServiceImpl implements ActFormService {
 	    return result;
 		
 	}
+	
+	@Override
+	public ResultListDataRepresentation getForms(String filter) {
+		List<Model> modelList = modelMapper.selectModelList(null, AbstractModel.MODEL_TYPE_FORM, filter, null);
+		List<FormRepresentation> formList = new ArrayList<FormRepresentation>();
+		modelList.forEach(model -> {
+			formList.add(new FormRepresentation(model));
+		});
+		ResultListDataRepresentation result = new ResultListDataRepresentation(formList);
+	    result.setTotal(Long.valueOf(formList.size()));
+		return result;
+	}
 
 	private FormRepresentation createFormRepresentation(AbstractModel model) {
 		FormDefinition formDefinition = null;
@@ -80,5 +99,7 @@ public class ActFormServiceImpl implements ActFormService {
 		result.setFormDefinition(formDefinition);
 		return result;
 	}
+
+	
 
 }
