@@ -44,6 +44,8 @@ public interface ModelService {
 	BpmnModel getBpmnModel(AbstractModel model, Map<String, Model> formMap, Map<String, Model> decisionTableMap);
 	
 	byte[] getBpmnXML(BpmnModel bpmnModel);
+	
+	void updateCategory(String modelId,String appId);
 
 
 }

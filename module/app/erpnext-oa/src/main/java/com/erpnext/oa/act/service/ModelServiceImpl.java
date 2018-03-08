@@ -320,6 +320,21 @@ public class ModelServiceImpl implements ModelService {
 		byte[] xmlBytes = bpmnXMLConverter.convertToXML(bpmnModel);
 		return xmlBytes;
 	}
+	
+	@Override
+	@Transactional
+	public void updateCategory(String modelId, String appId) {
+		ActModelXref actModelXref = actModelXrefMapper.selectByModelId(modelId);
+		if(null != actModelXref) {
+			if(actModelXref.getAppId().equals(appId))
+				return;
+			actModelXref.setAppId(appId);
+			actModelXrefMapper.updateByPrimaryKey(actModelXref);
+		}else {
+			actModelXrefMapper.insert(new ActModelXref(appId,modelId));
+		}
+	}
+
 
 	private void handleBpmnProcessFormModelRelations(AbstractModel bpmnProcessModel, ObjectNode editorJsonNode) {
 		List<JsonNode> formReferenceNodes = JsonConverterUtil
@@ -405,4 +420,5 @@ public class ModelServiceImpl implements ModelService {
 		return new Sort(direction, propName);
 	}
 
+	
 }

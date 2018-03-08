@@ -27,8 +27,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.erpnext.framework.web.service.exception.InternalServerErrorException;
+import com.erpnext.oa.act.domain.ActModelXref;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.domain.ModelRelation;
+import com.erpnext.oa.act.mapper.ActModelXrefMapper;
 import com.erpnext.oa.act.mapper.ModelRelationMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +43,8 @@ public class DeploymentServiceImpl implements DeploymentService {
 	private ModelService modelService;
 	@Autowired
 	private ModelRelationMapper modelRelationMapper;
+	@Autowired
+	private ActModelXrefMapper actModelXrefMapper;
 	@Autowired
 	private RepositoryService repositoryService;
 	@Autowired
@@ -104,7 +108,14 @@ public class DeploymentServiceImpl implements DeploymentService {
 		}
 
 		deployment = deploymentBuilder.deploy();
-
+		
+		//设置流程分类
+		ActModelXref actModelXref = actModelXrefMapper.selectByModelId(model.getId());
+		if(null != actModelXref) {
+			repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).list().forEach(processDefinition -> {
+				repositoryService.setProcessDefinitionCategory(processDefinition.getId(), actModelXref.getAppId());
+			});
+		}
 		return deployment;
 	}
 

@@ -111,5 +111,11 @@ public class ModelsEndpoint extends BaseEndpoint {
 	public Deployment deploy(@PathVariable("modelId") String modelId) {
 		return deploymentService.deployModel(modelId);
 	}
+	
+	@PutMapping("/category/{modelId}/{appId}")
+	public String category(@PathVariable("modelId") String modelId,@PathVariable("appId") String appId) {
+		modelService.updateCategory(modelId, appId);
+		return UPDATED;
+	}
 
 }

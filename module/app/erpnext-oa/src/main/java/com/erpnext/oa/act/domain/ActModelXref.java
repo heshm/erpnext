@@ -1,11 +1,21 @@
 package com.erpnext.oa.act.domain;
 
+import com.erpnext.framework.util.IDUtils;
+
 public class ActModelXref {
     private String id;
 
     private String appId;
 
     private String modelId;
+    
+    public ActModelXref() {};
+    
+    public ActModelXref(String appId,String modelId) {
+    	this.appId = appId;
+    	this.modelId = modelId;
+    	this.id = IDUtils.uuid();
+    }
 
     public String getId() {
         return id;
