@@ -42,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -67,6 +68,13 @@ public class ActivitiEngineConfiguration {
 
 	@Autowired
 	private Environment environment;
+	
+	@Value("${activiti.activityFontName}")
+	private String activityFontName;
+	@Value("${activiti.labelFontName}")
+	private String labelFontName;
+	@Value("${activiti.annotationFontName}")
+	private String annotationFontName;
 
 	@Bean(name = "processEngine")
 	public ProcessEngineFactoryBean processEngineFactoryBean() {
@@ -90,6 +98,11 @@ public class ActivitiEngineConfiguration {
 	@Bean(name = "processEngineConfiguration")
 	public ProcessEngineConfigurationImpl processEngineConfiguration() {
 		SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
+		
+		processEngineConfiguration.setActivityFontName(activityFontName);
+		processEngineConfiguration.setLabelFontName(labelFontName);
+		processEngineConfiguration.setAnnotationFontName(annotationFontName);
+		
 		processEngineConfiguration.setDataSource(dataSource);
 		processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
 		processEngineConfiguration.setTransactionManager(transactionManager);

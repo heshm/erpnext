@@ -1,12 +1,17 @@
 package com.erpnext.oa.act.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +32,8 @@ public class ProcessServiceImpl implements ProcessService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
+	private static final String XML = "xml";
+	private static final String PNG = "png";
 	
 	@Autowired
 	private RepositoryService repositoryService;
@@ -50,6 +57,36 @@ public class ProcessServiceImpl implements ProcessService {
 		    result.add(processDTO);
 		}
 		return new PageImpl<>(result, pageable, total);
+	}
+
+	@Override
+	public void getResource(String processDefinitionId, String resourceType, HttpServletResponse response) {
+		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().
+				processDefinitionId(processDefinitionId).singleResult();
+		String resourceName = new String();
+		if(XML.equals(resourceType)){
+			resourceName = processDefinition.getResourceName();
+			response.setHeader("Content-Type", "text/xml");
+		}
+		if(PNG.equals(resourceType)){
+			resourceName = processDefinition.getDiagramResourceName();
+			response.setHeader("Content-Type", "image/png");
+		}
+		response.setCharacterEncoding("utf-8");
+		InputStream in = repositoryService.getResourceAsStream(processDefinition.getDeploymentId(), resourceName);
+		try {
+			IOUtils.copy(in, response.getOutputStream());
+			response.flushBuffer();
+		} catch (IOException e) {
+			logger.error("导出流程的资源文件失败:processDefinitionId={}", processDefinitionId, e);
+		}
+		
+	}
+
+	@Override
+	@Transactional
+	public void deleteDeployment(String deploymentId) {
+		repositoryService.deleteDeployment(deploymentId);
 	}
 
 	
