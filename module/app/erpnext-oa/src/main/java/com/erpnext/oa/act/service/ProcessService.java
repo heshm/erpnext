@@ -2,6 +2,7 @@ package com.erpnext.oa.act.service;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,5 +15,7 @@ public interface ProcessService {
 	public void getResource(String processDefinitionId,String resourceType, HttpServletResponse response);
 	
 	public void deleteDeployment(String deploymentId);
+	
+	Page<ProcessInstance> getRunningInstance(Pageable pageable);
 
 }

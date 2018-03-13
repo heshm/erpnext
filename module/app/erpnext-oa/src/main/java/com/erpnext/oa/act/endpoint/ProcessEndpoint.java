@@ -1,5 +1,6 @@
 package com.erpnext.oa.act.endpoint;
 
+import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,12 @@ public class ProcessEndpoint extends BaseEndpoint {
 	public String delete(@PathVariable String deploymentId) {
 		processService.deleteDeployment(deploymentId);
 		return DELETED;
+	}
+	
+	@GetMapping("/running/page")
+	public Page<ProcessInstance> pageRunning(
+			@PageableDefault(size=10, page=0)Pageable pageable){
+		return processService.getRunningInstance(pageable);
 	}
 
 }
