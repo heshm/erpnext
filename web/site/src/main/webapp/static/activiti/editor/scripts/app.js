@@ -95,7 +95,7 @@ activitiModeler
                     verify: authRouteResolver
                 }
             })
-            .when('/processes/diagram/:processInstanceId', {
+            .when('/processes/diagram/:processInstanceId/:processStarted', {
                 templateUrl: appResourceRoot + 'views/diagram.html',
                 controller: 'DiagramCtrl',
                 resolve: {

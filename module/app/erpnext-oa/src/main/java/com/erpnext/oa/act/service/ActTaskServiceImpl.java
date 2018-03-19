@@ -1,6 +1,8 @@
 package com.erpnext.oa.act.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -8,12 +10,17 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.StartEvent;
+import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskInfo;
+import org.activiti.engine.task.TaskInfoQueryWrapper;
 import org.activiti.form.api.FormRepositoryService;
 import org.activiti.form.api.FormService;
 import org.activiti.form.model.FormDefinition;
@@ -23,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.erpnext.framework.web.service.exception.BadRequestException;
+import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
 
@@ -43,7 +51,13 @@ public class ActTaskServiceImpl implements ActTaskService {
 	private RuntimeService runtimeService;
 	
 	@Autowired
+	private HistoryService historyService;
+	
+	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private IdentityService identityService;
 
 	@Override
 	@Transactional
@@ -73,7 +87,15 @@ public class ActTaskServiceImpl implements ActTaskService {
 			}
 		}
 		
+		identityService.setAuthenticatedUserId(AuthenticationUtils.getUserId());
+		
 		ProcessInstance processInstance = runtimeService.startProcessInstanceById(startRequest.getProcessDefinitionId(), variables);
+		
+		HistoricProcessInstance historicProcess = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstance.getId()).singleResult();
+
+	    if (formDefinition != null) {
+	    	formService.storeSubmittedForm(variables, formDefinition, null, historicProcess.getId());
+	    }
 		
 	}
 
@@ -94,6 +116,17 @@ public class ActTaskServiceImpl implements ActTaskService {
 		task.forEach(t -> {
 			list.add(new TaskDTO(t));
 		});
+		return list;
+	}
+
+	@Override
+	public List<TaskDTO> getTasks(String userId) {
+		List<TaskDTO> todoTask = getToDoTask(userId);
+		List<TaskDTO> doingTask = getDoingTask(userId);
+		List<TaskDTO> list = new ArrayList<>(todoTask.size() + doingTask.size());
+		list.addAll(todoTask);
+		list.addAll(doingTask);
+		Collections.sort(list,new TaskDTO.IdOrder());
 		return list;
 	}
 	

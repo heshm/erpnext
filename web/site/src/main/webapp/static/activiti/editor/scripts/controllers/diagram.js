@@ -17,8 +17,13 @@ angular.module('activitiModeler')
 	
     $scope.showDiagram = function() {
     	$timeout(function() {
-            jQuery("#bpmnModel").attr('data-model-id', $routeParams.processInstanceId);
-            jQuery("#bpmnModel").attr('data-model-type', 'runtime');
+            if($routeParams.processStarted === 'true') {
+            	jQuery("#bpmnModel").attr('data-model-type', 'runtime');
+            	jQuery("#bpmnModel").attr('data-model-id', $routeParams.processInstanceId);
+            }else {
+            	jQuery("#bpmnModel").attr('data-model-type', 'process-definition');
+            	jQuery("#bpmnModel").attr('data-process-definition-id', $routeParams.processInstanceId);
+            }
 
             // in case we want to show a historic model, include additional attribute on the div
             /*

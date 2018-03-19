@@ -1,5 +1,6 @@
 package com.erpnext.oa.act.dto;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import org.activiti.engine.task.Task;
@@ -256,6 +257,16 @@ public class TaskDTO {
 
 	public void setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
+	}
+	
+	
+	public static final class IdOrder implements Comparator<TaskDTO> {
+
+		@Override
+		public int compare(TaskDTO arg0, TaskDTO arg1) {
+			return arg0.id.compareTo(arg1.id);
+		}
+		
 	}
 
 }

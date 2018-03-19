@@ -101,6 +101,5 @@ public class ProcessServiceImpl implements ProcessService {
 		List<ProcessInstance> instanceList = processInstanceQuery.listPage(pageable.getOffset(), pageable.getPageSize());
 		return new PageImpl<>(instanceList, pageable, total);
 	}
-
 	
 }

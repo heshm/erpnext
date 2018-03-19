@@ -93,7 +93,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 
 	@RequestMapping(value = "/rest/process-instances/{processInstanceId}/model-json", method = RequestMethod.GET, produces = "application/json")
 	public JsonNode getModelJSON(@PathVariable String processInstanceId) {
-		
+
 		ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
 		if (processInstance == null) {
@@ -169,6 +169,19 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		}
 
 		return displayNode;
+	}
+
+	@RequestMapping(value = "/rest/process-definitions/{processDefinitionId}/model-json", method = RequestMethod.GET, produces = "application/json")
+	public JsonNode getModelJSONForProcessDefinition(@PathVariable String processDefinitionId) {
+
+		BpmnModel pojoModel = repositoryService.getBpmnModel(processDefinitionId);
+
+		if (pojoModel == null || pojoModel.getLocationMap().isEmpty()) {
+			throw new InternalServerErrorException(
+					"Process definition could not be found with id " + processDefinitionId);
+		}
+
+		return processProcessElements(pojoModel, null, null);
 	}
 
 	private List<String> gatherCompletedFlows(Set<String> completedActivityInstances,

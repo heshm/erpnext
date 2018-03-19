@@ -13,4 +13,6 @@ public interface ActTaskService {
 	List<TaskDTO> getToDoTask(String userId);
 
 	List<TaskDTO> getDoingTask(String userId);
+	
+	List<TaskDTO> getTasks(String userId);
 }

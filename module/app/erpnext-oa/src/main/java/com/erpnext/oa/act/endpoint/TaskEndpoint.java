@@ -33,5 +33,11 @@ public class TaskEndpoint extends BaseEndpoint{
 		String userId = AuthenticationUtils.getUserId();
 		return actTaskService.getDoingTask(userId);
 	}
+	
+	@GetMapping("/list-tasks")
+	public List<TaskDTO> getTasks() {
+		String userId = AuthenticationUtils.getUserId();
+		return actTaskService.getTasks(userId);
+	}
 
 }
