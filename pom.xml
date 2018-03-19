@@ -409,6 +409,12 @@
 				<groupId>org.activiti</groupId>
 				<artifactId>activiti-form-engine</artifactId>
 				<version>${activiti.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.activiti</groupId>
@@ -419,6 +425,12 @@
 				<groupId>org.activiti</groupId>
 				<artifactId>activiti-form-json-converter</artifactId>
 				<version>${activiti.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.activiti</groupId>
@@ -429,6 +441,12 @@
 				<groupId>org.activiti</groupId>
 				<artifactId>activiti-dmn-engine</artifactId>
 				<version>${activiti.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.activiti</groupId>
@@ -439,6 +457,12 @@
     			<groupId>org.activiti</groupId>
     			<artifactId>activiti-dmn-json-converter</artifactId>
     			<version>${activiti.version}</version>
+    			<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
       			<groupId>org.activiti</groupId>

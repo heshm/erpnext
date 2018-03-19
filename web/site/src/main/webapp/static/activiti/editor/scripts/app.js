@@ -95,6 +95,13 @@ activitiModeler
                     verify: authRouteResolver
                 }
             })
+            .when('/processes/diagram/:processInstanceId', {
+                templateUrl: appResourceRoot + 'views/diagram.html',
+                controller: 'DiagramCtrl',
+                resolve: {
+                    verify: authRouteResolver
+                }
+            })
             .when('/forms', {
                 templateUrl: appResourceRoot + 'views/forms.html',
                 controller: 'FormsCtrl',
