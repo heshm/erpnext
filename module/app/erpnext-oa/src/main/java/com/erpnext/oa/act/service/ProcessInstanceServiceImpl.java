@@ -4,8 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import com.erpnext.framework.web.util.AuthenticationUtils;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -26,6 +28,9 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 	
 	@Autowired
 	private RepositoryService repositoryService;
+
+	@Autowired
+	protected RuntimeService runtimeService;
 
 
 	@Override
@@ -58,6 +63,23 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 		});
 		
 		return result;
+	}
+
+	@Override
+	@Transactional
+	public void deleteProcessInstance(String processInstanceId){
+		String userId = AuthenticationUtils.getUserId();
+		HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.startedBy(userId) // Permission
+				.singleResult();
+
+		if (processInstance.getEndTime() != null){
+			historyService.deleteHistoricProcessInstance(processInstanceId);
+		}else {
+			runtimeService.deleteProcessInstance(processInstanceId, "Cancelled by " + userId);
+		}
+
 	}
 
 }

@@ -3,8 +3,7 @@ package com.erpnext.oa.act.endpoint;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
 import com.erpnext.framework.web.util.AuthenticationUtils;
@@ -17,10 +16,17 @@ public class ProcessInstanceEndpoint extends BaseEndpoint {
 	
 	@Autowired
 	private ProcessInstanceService processInstanceService;
-	
-	public List<ProcessInstanceDTO> list(String state){
+
+	@GetMapping("/list/{state}")
+	public List<ProcessInstanceDTO> list(@PathVariable String state){
 		String userId = AuthenticationUtils.getUserId();
 		return processInstanceService.listProcessInstanceDTO(userId, state);
+	}
+
+	@DeleteMapping("/delete/{processInstanceId}")
+	public String deleteProcessInstance(@PathVariable String processInstanceId){
+		processInstanceService.deleteProcessInstance(processInstanceId);
+		return DELETED;
 	}
 
 }
