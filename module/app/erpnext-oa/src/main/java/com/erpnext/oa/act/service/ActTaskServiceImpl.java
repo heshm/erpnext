@@ -1,7 +1,6 @@
 package com.erpnext.oa.act.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -129,7 +129,51 @@ public class ActTaskServiceImpl implements ActTaskService {
 		Collections.sort(list,new TaskDTO.IdOrder());
 		return list;
 	}
-	
-	
+
+	@Override
+	public TaskDTO getOneTask(String taskId){
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		ProcessDefinition processDefinition = null;
+		if(!StringUtils.isEmpty(task.getProcessDefinitionId())) {
+			processDefinition = repositoryService.getProcessDefinition(task.getProcessDefinitionId());
+		}
+		return new TaskDTO(task,processDefinition);
+	}
+
+	@Override
+	public List<TaskDTO> listTasks(String processInstanceId, String state) {
+		TaskInfoQueryWrapper taskInfoQueryWrapper = null;
+		
+		if (null != state && "completed".equals(state)) {
+			HistoricTaskInstanceQuery historicTaskInstanceQuery = historyService.createHistoricTaskInstanceQuery();
+		    historicTaskInstanceQuery.finished();
+		    taskInfoQueryWrapper = new TaskInfoQueryWrapper(historicTaskInstanceQuery);
+		}else {
+			taskInfoQueryWrapper = new TaskInfoQueryWrapper(taskService.createTaskQuery());
+		}
+		taskInfoQueryWrapper.getTaskInfoQuery().processInstanceId(processInstanceId);
+		
+		List<? extends TaskInfo> tasks = taskInfoQueryWrapper.getTaskInfoQuery().list();
+		List<TaskDTO> result = null;
+		if(tasks != null) {
+			result = new ArrayList<>(tasks.size());
+			for(TaskInfo task: tasks) {
+				result.add(new TaskDTO(task));
+			}
+		}
+		
+		return result;
+	}
+
+	@Override
+	@Transactional
+	public void completeTask(String taskId) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+
+	    if (task == null) {
+	      throw new BadRequestException("Task with id: " + taskId + " does not exist");
+	    }
+	    taskService.complete(task.getId());
+	}
 
 }

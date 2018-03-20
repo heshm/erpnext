@@ -1,11 +1,7 @@
 package com.erpnext.oa.act.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +34,23 @@ public class TaskEndpoint extends BaseEndpoint{
 	public List<TaskDTO> getTasks() {
 		String userId = AuthenticationUtils.getUserId();
 		return actTaskService.getTasks(userId);
+	}
+
+	@GetMapping("/{taskId}")
+	public TaskDTO getOne(@PathVariable String taskId) {
+		return actTaskService.getOneTask(taskId);
+	}
+	
+	@GetMapping("/list-tasks/{processInstanceId}/{state}")
+	public List<TaskDTO> listTasks(@PathVariable("processInstanceId") String processInstanceId,
+			@PathVariable(name="state",required=false) String state){
+		return actTaskService.listTasks(processInstanceId, state);
+	}
+	
+	@PutMapping("/{taskId}/action/complete")
+	public String completeTask(@PathVariable String taskId) {
+		actTaskService.completeTask(taskId);
+		return UPDATED;
 	}
 
 }

@@ -285,12 +285,12 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		return displayNode;
 	}
 
-	protected void fillGraphicInfo(ObjectNode elementNode, GraphicInfo graphicInfo, boolean includeWidthAndHeight) {
+	private void fillGraphicInfo(ObjectNode elementNode, GraphicInfo graphicInfo, boolean includeWidthAndHeight) {
 		commonFillGraphicInfo(elementNode, graphicInfo.getX(), graphicInfo.getY(), graphicInfo.getWidth(),
 				graphicInfo.getHeight(), includeWidthAndHeight);
 	}
 
-	protected void commonFillGraphicInfo(ObjectNode elementNode, double x, double y, double width, double height,
+	private void commonFillGraphicInfo(ObjectNode elementNode, double x, double y, double width, double height,
 			boolean includeWidthAndHeight) {
 
 		elementNode.put("x", x);
@@ -301,7 +301,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		}
 	}
 
-	protected void processElements(Collection<FlowElement> elementList, BpmnModel model, ArrayNode elementArray,
+	private void processElements(Collection<FlowElement> elementList, BpmnModel model, ArrayNode elementArray,
 			ArrayNode flowArray, GraphicInfo diagramInfo, Set<String> completedElements, Set<String> currentElements) {
 
 		for (FlowElement element : elementList) {
@@ -384,7 +384,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		}
 	}
 
-	protected void processArtifacts(Collection<Artifact> artifactList, BpmnModel model, ArrayNode elementArray,
+	private void processArtifacts(Collection<Artifact> artifactList, BpmnModel model, ArrayNode elementArray,
 			ArrayNode flowArray, GraphicInfo diagramInfo) {
 
 		for (Artifact artifact : artifactList) {
@@ -423,7 +423,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		}
 	}
 
-	protected void fillDiagramInfo(GraphicInfo graphicInfo, GraphicInfo diagramInfo) {
+	private void fillDiagramInfo(GraphicInfo graphicInfo, GraphicInfo diagramInfo) {
 		double rightX = graphicInfo.getX() + graphicInfo.getWidth();
 		double bottomY = graphicInfo.getY() + graphicInfo.getHeight();
 		double middleX = graphicInfo.getX() + (graphicInfo.getWidth() / 2);
@@ -441,7 +441,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		}
 	}
 
-	protected void fillWaypoints(String id, BpmnModel model, ObjectNode elementNode, GraphicInfo diagramInfo) {
+	private void fillWaypoints(String id, BpmnModel model, ObjectNode elementNode, GraphicInfo diagramInfo) {
 		List<GraphicInfo> flowInfo = model.getFlowLocationGraphicInfo(id);
 		ArrayNode waypointArray = objectMapper.createArrayNode();
 		for (GraphicInfo graphicInfo : flowInfo) {
@@ -453,7 +453,7 @@ public class RuntimeDisplayJsonClientController extends BaseController {
 		elementNode.set("waypoints", waypointArray);
 	}
 
-	protected void fillEventTypes(String className, FlowElement element, ObjectNode elementNode) {
+	private void fillEventTypes(String className, FlowElement element, ObjectNode elementNode) {
 		if (eventElementTypes.contains(className)) {
 			Event event = (Event) element;
 			if (CollectionUtils.isNotEmpty(event.getEventDefinitions())) {

@@ -32,7 +32,6 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 	@Autowired
 	protected RuntimeService runtimeService;
 
-
 	@Override
 	public List<ProcessInstanceDTO> listProcessInstanceDTO(String userId, String state) {
 		HistoricProcessInstanceQuery instanceQuery = historyService.createHistoricProcessInstanceQuery();

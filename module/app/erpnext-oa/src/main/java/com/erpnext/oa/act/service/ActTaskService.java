@@ -15,4 +15,10 @@ public interface ActTaskService {
 	List<TaskDTO> getDoingTask(String userId);
 	
 	List<TaskDTO> getTasks(String userId);
+
+	TaskDTO getOneTask(String taskId);
+	
+	List<TaskDTO> listTasks(String processInstanceId,String state);
+	
+	void completeTask(String taskId);
 }
