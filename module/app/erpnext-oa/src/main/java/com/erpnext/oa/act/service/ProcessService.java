@@ -20,5 +20,7 @@ public interface ProcessService {
 	public void deleteDeployment(String deploymentId);
 	
 	Page<ProcessInstance> getRunningInstance(Pageable pageable);
+	
+	boolean processDefinitionHasStartForm(String processDefinitionId);
 
 }

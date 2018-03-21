@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.StartEvent;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.repository.Deployment;
@@ -14,6 +16,8 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.runtime.ProcessInstanceQuery;
+import org.activiti.form.api.FormRepositoryService;
+import org.activiti.form.model.FormDefinition;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +46,8 @@ public class ProcessServiceImpl implements ProcessService {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
+	@Autowired
+	private FormRepositoryService formRepositoryService;
 
 	@Override
 	public Page<ProcessQueryDTO> getPageProcessDefinitionList(Pageable pageable,String category) {
@@ -100,6 +106,21 @@ public class ProcessServiceImpl implements ProcessService {
 		int total = (int)processInstanceQuery.count();
 		List<ProcessInstance> instanceList = processInstanceQuery.listPage(pageable.getOffset(), pageable.getPageSize());
 		return new PageImpl<>(instanceList, pageable, total);
+	}
+
+	@Override
+	public boolean processDefinitionHasStartForm(String processDefinitionId) {
+		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
+		List<StartEvent> startEvents = bpmnModel.getMainProcess().findFlowElementsOfType(StartEvent.class, false);
+		for (StartEvent startEvent : startEvents) {
+			if (!StringUtils.isEmpty(startEvent.getFormKey())) {
+				FormDefinition formDefinition = formRepositoryService.getFormDefinitionByKey(startEvent.getFormKey());
+				if(null != formDefinition) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 }

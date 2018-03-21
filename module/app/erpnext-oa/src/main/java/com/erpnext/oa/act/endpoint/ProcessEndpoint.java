@@ -42,5 +42,10 @@ public class ProcessEndpoint extends BaseEndpoint {
 			@PageableDefault(size=10, page=0)Pageable pageable){
 		return processService.getRunningInstance(pageable);
 	}
+	
+	@GetMapping("/hasStartForm/{processDefinitionId}")
+	public boolean hasStartForm(@PathVariable String processDefinitionId) {
+		return processService.processDefinitionHasStartForm(processDefinitionId);
+	}
 
 }

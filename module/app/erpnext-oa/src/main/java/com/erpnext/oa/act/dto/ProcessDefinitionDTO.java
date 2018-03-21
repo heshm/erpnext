@@ -33,8 +33,6 @@ public class ProcessDefinitionDTO implements ProcessDefinition {
 
 	private String engineVersion;
 	
-	private boolean hasStartForm;
-	
 	public ProcessDefinitionDTO() {}
 	
 	public ProcessDefinitionDTO(ProcessDefinition processDefinition) {
@@ -173,14 +171,6 @@ public class ProcessDefinitionDTO implements ProcessDefinition {
 
 	public void setEngineVersion(String engineVersion) {
 		this.engineVersion = engineVersion;
-	}
-
-	public boolean isHasStartForm() {
-		return hasStartForm;
-	}
-
-	public void setHasStartForm(boolean hasStartForm) {
-		this.hasStartForm = hasStartForm;
 	}
 
 }
