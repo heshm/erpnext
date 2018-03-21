@@ -47,6 +47,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -56,6 +57,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 																										// classes
 		"org.activiti.app.extension.bean" // For custom beans (delegates etc.)
 })
+@PropertySource("classpath:runtime-properties/application.properties")
 public class ActivitiEngineConfiguration {
 
 	private final Logger logger = LoggerFactory.getLogger(ActivitiEngineConfiguration.class);
@@ -68,13 +70,6 @@ public class ActivitiEngineConfiguration {
 
 	@Autowired
 	private Environment environment;
-	
-	@Value("${activiti.activityFontName}")
-	private String activityFontName;
-	@Value("${activiti.labelFontName}")
-	private String labelFontName;
-	@Value("${activiti.annotationFontName}")
-	private String annotationFontName;
 
 	@Bean(name = "processEngine")
 	public ProcessEngineFactoryBean processEngineFactoryBean() {
@@ -99,9 +94,15 @@ public class ActivitiEngineConfiguration {
 	public ProcessEngineConfigurationImpl processEngineConfiguration() {
 		SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
 		
-		processEngineConfiguration.setActivityFontName(activityFontName);
-		processEngineConfiguration.setLabelFontName(labelFontName);
-		processEngineConfiguration.setAnnotationFontName(annotationFontName);
+		String activityFontName = environment.getProperty("activiti.activityFontName");
+		String labelFontName = environment.getProperty("activiti.labelFontName");
+		String annotationFontName = environment.getProperty("activiti.annotationFontName");
+		if(StringUtils.isNotEmpty(activityFontName)) 
+			processEngineConfiguration.setActivityFontName(activityFontName);
+		if(StringUtils.isNotEmpty(labelFontName)) 
+			processEngineConfiguration.setLabelFontName(labelFontName);
+		if(StringUtils.isNotEmpty(annotationFontName)) 
+			processEngineConfiguration.setAnnotationFontName(annotationFontName);
 		
 		processEngineConfiguration.setDataSource(dataSource);
 		processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
