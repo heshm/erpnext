@@ -96,6 +96,7 @@ public class ActTaskServiceImpl implements ActTaskService {
 	    if (formDefinition != null) {
 	    	formService.storeSubmittedForm(variables, formDefinition, null, historicProcess.getId());
 	    }
+	    
 		
 	}
 
