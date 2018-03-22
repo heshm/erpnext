@@ -20,5 +20,7 @@ public interface ProcessService {
 	Page<ProcessInstance> getRunningInstance(Pageable pageable);
 	
 	boolean processDefinitionHasStartForm(String processDefinitionId);
+	
+	ProcessQueryDTO getOneProcessDefinition(String processDefinitionId);
 
 }

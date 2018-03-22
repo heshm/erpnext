@@ -124,5 +124,17 @@ public class ProcessServiceImpl implements ProcessService {
 		}
 		return false;
 	}
+
+	@Override
+	public ProcessQueryDTO getOneProcessDefinition(String processDefinitionId) {
+		ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+				.processDefinitionId(processDefinitionId).singleResult();
+		String deploymentId = processDefinition.getDeploymentId();
+	    Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+		return new ProcessQueryDTO(
+	    			new ProcessDefinitionDTO(processDefinition),
+	    			new DeploymentDTO(deployment)
+	    	);
+	}
 	
 }

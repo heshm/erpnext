@@ -47,5 +47,10 @@ public class ProcessEndpoint extends BaseEndpoint {
 	public boolean hasStartForm(@PathVariable String processDefinitionId) {
 		return processService.processDefinitionHasStartForm(processDefinitionId);
 	}
+	
+	@GetMapping("/{processDefinitionId}")
+	public ProcessQueryDTO listOne(@PathVariable String processDefinitionId) {
+		return processService.getOneProcessDefinition(processDefinitionId);
+	}
 
 }
