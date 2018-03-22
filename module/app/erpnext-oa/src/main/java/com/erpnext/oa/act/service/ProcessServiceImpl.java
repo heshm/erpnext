@@ -112,7 +112,9 @@ public class ProcessServiceImpl implements ProcessService {
 	public boolean processDefinitionHasStartForm(String processDefinitionId) {
 		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
 		List<StartEvent> startEvents = bpmnModel.getMainProcess().findFlowElementsOfType(StartEvent.class, false);
+
 		for (StartEvent startEvent : startEvents) {
+	
 			if (!StringUtils.isEmpty(startEvent.getFormKey())) {
 				FormDefinition formDefinition = formRepositoryService.getFormDefinitionByKey(startEvent.getFormKey());
 				if(null != formDefinition) {

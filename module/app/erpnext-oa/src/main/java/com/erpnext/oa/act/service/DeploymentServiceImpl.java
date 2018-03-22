@@ -74,7 +74,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 			}
 		});
 
-		BpmnModel bpmnModel = modelService.getBpmnModel(model);
+		BpmnModel bpmnModel = modelService.getBpmnModel(model,formMap,decisionTableMap);
 		Map<String, StartEvent> startEventMap = processNoneStartEvents(bpmnModel);
 		for (Process process : bpmnModel.getProcesses()) {
 			processUserTasks(process.getFlowElements(), process, startEventMap);
