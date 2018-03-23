@@ -15,6 +15,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -175,6 +176,17 @@ public class ActTaskServiceImpl implements ActTaskService {
 	      throw new BadRequestException("Task with id: " + taskId + " does not exist");
 	    }
 	    taskService.complete(task.getId());
+	}
+
+	@Override
+	public FormDefinition getTaskForm(String taskId) {
+		
+		return null;
+	}
+	
+	private HistoricTaskInstance getHistoricTaskInstance(String taskId) {
+		HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+		return task;
 	}
 
 }

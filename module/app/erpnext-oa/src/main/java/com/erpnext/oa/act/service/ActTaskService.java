@@ -2,6 +2,7 @@ package com.erpnext.oa.act.service;
 
 import java.util.List;
 
+import org.activiti.form.model.FormDefinition;
 
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
@@ -21,4 +22,6 @@ public interface ActTaskService {
 	List<TaskDTO> listTasks(String processInstanceId,String state);
 	
 	void completeTask(String taskId);
+	
+	FormDefinition getTaskForm(String taskId);
 }
