@@ -1,5 +1,8 @@
 package com.erpnext.oa.act.endpoint;
 
+import org.activiti.engine.FormService;
+import org.activiti.engine.form.TaskFormData;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +12,7 @@ import com.erpnext.framework.web.endpoint.BaseEndpoint;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
+import com.erpnext.oa.act.dto.TaskFormDTO;
 import com.erpnext.oa.act.service.ActTaskService;
 
 @RestController
@@ -17,6 +21,8 @@ public class TaskEndpoint extends BaseEndpoint{
 	
 	@Autowired
 	private ActTaskService actTaskService;
+	@Autowired
+	private FormService formService;
 	
 	@PostMapping("/process-instances")
 	public String startNewProcessInstance(@RequestBody CreateProcessInstanceRepresentation startRequest) {
@@ -51,6 +57,14 @@ public class TaskEndpoint extends BaseEndpoint{
 	public String completeTask(@PathVariable String taskId) {
 		actTaskService.completeTask(taskId);
 		return UPDATED;
+	}
+	
+	@GetMapping("/form-data/{taskId}")
+	public TaskFormDTO getFormData(@PathVariable String taskId) {
+		TaskFormData formData = formService.getTaskFormData(taskId);
+		TaskFormDTO result = new TaskFormDTO();
+		BeanUtils.copyProperties(formData, result);
+		return result;
 	}
 
 }
