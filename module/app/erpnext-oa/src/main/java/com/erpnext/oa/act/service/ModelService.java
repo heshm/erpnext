@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.activiti.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.BpmnModel;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.erpnext.oa.act.domain.AbstractModel;
@@ -46,6 +46,8 @@ public interface ModelService {
 	byte[] getBpmnXML(BpmnModel bpmnModel);
 	
 	void updateCategory(String modelId,String appId);
+	
+	String createModelJson(ModelRepresentation model);
 
 
 }

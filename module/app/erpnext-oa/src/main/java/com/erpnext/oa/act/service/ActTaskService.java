@@ -2,7 +2,7 @@ package com.erpnext.oa.act.service;
 
 import java.util.List;
 
-import org.activiti.form.model.FormDefinition;
+import org.flowable.form.api.FormDefinition;
 
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;

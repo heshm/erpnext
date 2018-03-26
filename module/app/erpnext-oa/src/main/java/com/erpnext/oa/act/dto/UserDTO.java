@@ -3,7 +3,7 @@ package com.erpnext.oa.act.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.activiti.engine.identity.User;
+import org.flowable.idm.api.User;
 
 public class UserDTO {
 

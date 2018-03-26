@@ -1,6 +1,6 @@
 package com.erpnext.oa.act.dto;
 
-import org.activiti.engine.repository.ProcessDefinition;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.springframework.beans.BeanUtils;
 
 public class ProcessDefinitionDTO implements ProcessDefinition {

@@ -2,9 +2,9 @@ package com.erpnext.oa.act.dto;
 
 import java.util.Date;
 
-import org.activiti.form.model.FormDefinition;
-
 import com.erpnext.oa.act.domain.AbstractModel;
+//import com.erpnext.oa.act.domain.SimpleFormModel;
+import com.erpnext.oa.act.domain.SimpleFormModel;
 
 public class FormRepresentation {
 
@@ -15,7 +15,7 @@ public class FormRepresentation {
 	private Integer version;
 	private String lastUpdatedBy;
 	private Date lastUpdated;
-	private FormDefinition formDefinition;
+	private SimpleFormModel formDefinition;
 	
 	public FormRepresentation() {}
 	
@@ -71,10 +71,12 @@ public class FormRepresentation {
 	public void setLastUpdated(Date lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-	public FormDefinition getFormDefinition() {
+
+	public SimpleFormModel getFormDefinition() {
 		return formDefinition;
 	}
-	public void setFormDefinition(FormDefinition formDefinition) {
+
+	public void setFormDefinition(SimpleFormModel formDefinition) {
 		this.formDefinition = formDefinition;
 	}
 	

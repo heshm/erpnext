@@ -42,7 +42,8 @@
 
 		<hibernate-validator.version>6.0.2.Final</hibernate-validator.version>
 
-		<activiti.version>6.0.0</activiti.version>
+		<!-- <activiti.version>6.0.0</activiti.version> -->
+		<flowable.version>6.2.1</flowable.version>
 
 		<jackson.version>2.9.1</jackson.version>
 
@@ -363,9 +364,95 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
-			<!-- Activiti API -->
+			
+			<!-- Flowable API -->
 			<dependency>
+    			<groupId>org.flowable</groupId>
+    			<artifactId>flowable-engine</artifactId>
+    			<version>${flowable.version}</version>
+			</dependency>
+			<dependency>
+    			<groupId>org.flowable</groupId>
+    			<artifactId>flowable-spring</artifactId>
+    			<version>${flowable.version}</version>
+			</dependency>
+			<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-form-spring-configurator</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+			<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-form-engine</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-form-model</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-dmn-spring-configurator</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-dmn-engine</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+    			<groupId>org.flowable</groupId>
+    			<artifactId>flowable-dmn-json-converter</artifactId>
+    			<version>${flowable.version}</version>
+			</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-cmmn-spring-configurator</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-cmmn-engine</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+			<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-content-spring-configurator</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-content-engine</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+        	<dependency>
+				<groupId>org.flowable</groupId>
+				<artifactId>flowable-json-converter</artifactId>
+				<version>${flowable.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.flowable</groupId>
+				<artifactId>flowable-cmmn-json-converter</artifactId>
+				<version>${flowable.version}</version>
+			</dependency>
+			<dependency>
+    			<groupId>org.flowable</groupId>
+    			<artifactId>flowable-image-generator</artifactId>
+    			<version>${flowable.version}</version>
+			</dependency>
+			<dependency>
+            	<groupId>org.flowable</groupId>
+            	<artifactId>flowable-idm-engine</artifactId>
+            	<version>${flowable.version}</version>
+        	</dependency>
+			<dependency>
+    			<groupId>org.flowable</groupId>
+    			<artifactId>flowable-idm-spring</artifactId>
+    			<version>${flowable.version}</version>
+			</dependency>
+			<!-- Activiti API -->
+			<!-- <dependency>
 				<groupId>org.activiti</groupId>
 				<artifactId>activiti-engine</artifactId>
 				<version>${activiti.version}</version>
@@ -468,7 +555,7 @@
       			<groupId>org.activiti</groupId>
       			<artifactId>editor-image-generator</artifactId>
       			<version>${activiti.version}</version>
-    		</dependency>
+    		</dependency> -->
 
 			<!-- Database API -->
 			<dependency>

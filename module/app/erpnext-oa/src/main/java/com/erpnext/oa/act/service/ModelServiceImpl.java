@@ -12,11 +12,11 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.Process;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.editor.language.json.converter.util.JsonConverterUtil;
+import org.flowable.bpmn.converter.BpmnXMLConverter;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.editor.language.json.converter.BpmnJsonConverter;
+import org.flowable.editor.language.json.converter.util.JsonConverterUtil;
+import org.flowable.form.model.FormModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
 
 import com.erpnext.framework.util.IDUtils;
 import com.erpnext.framework.web.service.exception.InternalServerErrorException;
@@ -37,20 +38,24 @@ import com.erpnext.oa.act.domain.ModelHistory;
 import com.erpnext.oa.act.domain.ModelRelation;
 import com.erpnext.oa.act.dto.ModelRepresentation;
 import com.erpnext.oa.act.dto.ResultListDataRepresentation;
+import com.erpnext.oa.act.editor.service.ModelImageService;
 import com.erpnext.oa.act.mapper.ActModelXrefMapper;
 import com.erpnext.oa.act.mapper.ModelHistoryMapper;
 import com.erpnext.oa.act.mapper.ModelMapper;
 import com.erpnext.oa.act.mapper.ModelRelationMapper;
+import com.erpnext.oa.flowable.editor.dto.AppDefinition;
+import com.erpnext.oa.flowable.editor.dto.DecisionTableDefinitionRepresentation;
 import com.erpnext.oa.util.OAConst;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 @Transactional(readOnly = true)
 public class ModelServiceImpl implements ModelService {
 
-	private final Logger log = LoggerFactory.getLogger(ModelServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(ModelServiceImpl.class);
 
 	private static final String SORT_NAME_ASC = "nameAsc";
 	private static final String SORT_NAME_DESC = "nameDesc";
@@ -231,14 +236,24 @@ public class ModelServiceImpl implements ModelService {
 			try {
 				jsonNode = (ObjectNode) objectMapper.readTree(model.getModelEditorJson());
 			} catch (IOException e) {
-				log.warn("Could not deserialize json model");
+				logger.warn("Could not deserialize json model");
 			}
 
 			if ((model.getModelType() == null || model.getModelType().intValue() == Model.MODEL_TYPE_BPMN)) {
-				modelImageService.generateThumbnailImage(model, jsonNode);
+				byte[] thumbnail = modelImageService.generateThumbnailImage(model, jsonNode);
+                if (thumbnail != null) {
+                    model.setThumbnail(thumbnail);
+                }
 				handleBpmnProcessFormModelRelations(model, jsonNode);
 			    handleBpmnProcessDecisionTaskModelRelations(model, jsonNode);
 
+			} else if (model.getModelType().intValue() == Model.MODEL_TYPE_CMMN) {
+				byte[] thumbnail = modelImageService.generateCmmnThumbnailImage(model, jsonNode);
+                if (thumbnail != null) {
+                    model.setThumbnail(thumbnail);
+                }
+                // The cmmn need to be updated.
+                
 			} else if (model.getModelType().intValue() == Model.MODEL_TYPE_FORM
 					|| model.getModelType().intValue() == Model.MODEL_TYPE_DECISION_TABLE) {
 				jsonNode.put("name", model.getName());
@@ -276,7 +291,7 @@ public class ModelServiceImpl implements ModelService {
 			bpmnModel = getBpmnModel(model, null, null);
 
 		} catch (Exception e) {
-			log.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
+			logger.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
 			throw new InternalServerErrorException("Could not generate BPMN 2.0 model");
 		}
 
@@ -302,14 +317,14 @@ public class ModelServiceImpl implements ModelService {
 			}
 			return bpmnJsonConverter.convertToBpmnModel(editorJsonNode, formKeyMap, decisionTableKeyMap);
 		} catch (Exception e) {
-			log.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
+			logger.error("Could not generate BPMN 2.0 model for " + model.getId(), e);
 			throw new InternalServerErrorException("Could not generate BPMN 2.0 model");
 		}
 	}
 
 	@Override
 	public byte[] getBpmnXML(BpmnModel bpmnModel) {
-		for (Process process : bpmnModel.getProcesses()) {
+		for (org.flowable.bpmn.model.Process process : bpmnModel.getProcesses()) {
 			if (!StringUtils.isEmpty(process.getId())) {
 				char firstCharacter = process.getId().charAt(0);
 				if (Character.isDigit(firstCharacter)) {
@@ -418,6 +433,118 @@ public class ModelServiceImpl implements ModelService {
 			direction = Direction.DESC;
 		}
 		return new Sort(direction, propName);
+	}
+
+	@Override
+	public String createModelJson(ModelRepresentation model) {
+		String json = null;
+        if (Integer.valueOf(AbstractModel.MODEL_TYPE_FORM).equals(model.getModelType())) {
+            try {
+                json = objectMapper.writeValueAsString(new FormModel());
+            } catch (Exception e) {
+                logger.error("Error creating form model", e);
+                throw new InternalServerErrorException("Error creating form");
+            }
+
+        } else if (Integer.valueOf(AbstractModel.MODEL_TYPE_DECISION_TABLE).equals(model.getModelType())) {
+            try {
+                DecisionTableDefinitionRepresentation decisionTableDefinition = new DecisionTableDefinitionRepresentation();
+
+                String decisionTableDefinitionKey = model.getName().replaceAll(" ", "");
+                decisionTableDefinition.setKey(decisionTableDefinitionKey);
+
+                json = objectMapper.writeValueAsString(decisionTableDefinition);
+            } catch (Exception e) {
+                logger.error("Error creating decision table model", e);
+                throw new InternalServerErrorException("Error creating decision table");
+            }
+
+        } else if (Integer.valueOf(AbstractModel.MODEL_TYPE_APP).equals(model.getModelType())) {
+            try {
+                json = objectMapper.writeValueAsString(new AppDefinition());
+            } catch (Exception e) {
+            	logger.error("Error creating app definition", e);
+                throw new InternalServerErrorException("Error creating app definition");
+            }
+
+        } else if (Integer.valueOf(AbstractModel.MODEL_TYPE_CMMN).equals(model.getModelType())) {
+            ObjectNode editorNode = objectMapper.createObjectNode();
+            editorNode.put("id", "canvas");
+            editorNode.put("resourceId", "canvas");
+            ObjectNode stencilSetNode = objectMapper.createObjectNode();
+            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/cmmn1.1#");
+            editorNode.set("stencilset", stencilSetNode);
+            ObjectNode propertiesNode = objectMapper.createObjectNode();
+            propertiesNode.put("case_id", model.getKey());
+            propertiesNode.put("name", model.getName());
+            if (!StringUtils.isEmpty(model.getDescription())) {
+                propertiesNode.put("documentation", model.getDescription());
+            }
+            editorNode.set("properties", propertiesNode);
+
+            ArrayNode childShapeArray = objectMapper.createArrayNode();
+            editorNode.set("childShapes", childShapeArray);
+            ObjectNode childNode = objectMapper.createObjectNode();
+            childShapeArray.add(childNode);
+            ObjectNode boundsNode = objectMapper.createObjectNode();
+            childNode.set("bounds", boundsNode);
+            ObjectNode lowerRightNode = objectMapper.createObjectNode();
+            boundsNode.set("lowerRight", lowerRightNode);
+            lowerRightNode.put("x", 758);
+            lowerRightNode.put("y", 754);
+            ObjectNode upperLeftNode = objectMapper.createObjectNode();
+            boundsNode.set("upperLeft", upperLeftNode);
+            upperLeftNode.put("x", 40);
+            upperLeftNode.put("y", 40);
+            childNode.set("childShapes", objectMapper.createArrayNode());
+            childNode.set("dockers", objectMapper.createArrayNode());
+            childNode.set("outgoing", objectMapper.createArrayNode());
+            childNode.put("resourceId", "casePlanModel");
+            ObjectNode stencilNode = objectMapper.createObjectNode();
+            childNode.set("stencil", stencilNode);
+            stencilNode.put("id", "CasePlanModel");
+            json = editorNode.toString();
+
+        } else {
+            ObjectNode editorNode = objectMapper.createObjectNode();
+            editorNode.put("id", "canvas");
+            editorNode.put("resourceId", "canvas");
+            ObjectNode stencilSetNode = objectMapper.createObjectNode();
+            stencilSetNode.put("namespace", "http://b3mn.org/stencilset/bpmn2.0#");
+            editorNode.set("stencilset", stencilSetNode);
+            ObjectNode propertiesNode = objectMapper.createObjectNode();
+            propertiesNode.put("process_id", model.getKey());
+            propertiesNode.put("name", model.getName());
+            if (!StringUtils.isEmpty(model.getDescription())) {
+                propertiesNode.put("documentation", model.getDescription());
+            }
+            editorNode.set("properties", propertiesNode);
+
+            ArrayNode childShapeArray = objectMapper.createArrayNode();
+            editorNode.set("childShapes", childShapeArray);
+            ObjectNode childNode = objectMapper.createObjectNode();
+            childShapeArray.add(childNode);
+            ObjectNode boundsNode = objectMapper.createObjectNode();
+            childNode.set("bounds", boundsNode);
+            ObjectNode lowerRightNode = objectMapper.createObjectNode();
+            boundsNode.set("lowerRight", lowerRightNode);
+            lowerRightNode.put("x", 130);
+            lowerRightNode.put("y", 193);
+            ObjectNode upperLeftNode = objectMapper.createObjectNode();
+            boundsNode.set("upperLeft", upperLeftNode);
+            upperLeftNode.put("x", 100);
+            upperLeftNode.put("y", 163);
+            childNode.set("childShapes", objectMapper.createArrayNode());
+            childNode.set("dockers", objectMapper.createArrayNode());
+            childNode.set("outgoing", objectMapper.createArrayNode());
+            childNode.put("resourceId", "startEvent1");
+            ObjectNode stencilNode = objectMapper.createObjectNode();
+            childNode.set("stencil", stencilNode);
+            stencilNode.put("id", "StartNoneEvent");
+            json = editorNode.toString();
+        }
+
+        return json;
 	}
 
 	

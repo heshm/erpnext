@@ -1,6 +1,6 @@
 package com.erpnext.oa.act.endpoint;
 
-import org.activiti.form.model.FormDefinition;
+import org.flowable.form.model.FormModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ public class FormEndpoint extends BaseEndpoint {
 	private ActFormService actFormService;
 	
 	@GetMapping("/start-form/{processDefinitionId}")
-	public FormDefinition startForm(@PathVariable String processDefinitionId) {
+	public FormModel startForm(@PathVariable String processDefinitionId) {
 		return actFormService.getProcessDefinitionStartForm(processDefinitionId);
 	}
 

@@ -1,9 +1,10 @@
 package com.erpnext.oa.act.dto;
 
 import java.util.Date;
+import java.util.Map;
 
-import org.activiti.engine.repository.Deployment;
-import org.springframework.beans.BeanUtils;
+import org.flowable.engine.common.api.repository.EngineResource;
+import org.flowable.engine.repository.Deployment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,7 +13,12 @@ public class DeploymentDTO implements Deployment{
 	public DeploymentDTO() {}
 	
 	public DeploymentDTO(Deployment deployment) {
-		BeanUtils.copyProperties(deployment, this);
+		this.id = deployment.getId();
+		this.name = deployment.getName();
+		this.deploymentTime = deployment.getDeploymentTime();
+		this.category = deployment.getCategory();
+		this.key = deployment.getKey();
+		
 	}
 	
 	private String id;
@@ -27,6 +33,12 @@ public class DeploymentDTO implements Deployment{
 	private String key;
 	
 	private String tenantId;
+	
+	private String engineVersion;
+	
+	private boolean isNew;
+	
+	private Map<String, EngineResource> resources;
 
 	public String getId() {
 		return id;
@@ -75,6 +87,31 @@ public class DeploymentDTO implements Deployment{
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
 	}
+
+	public String getEngineVersion() {
+		return engineVersion;
+	}
+
+	public void setEngineVersion(String engineVersion) {
+		this.engineVersion = engineVersion;
+	}
+
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+
+	public Map<String, EngineResource> getResources() {
+		return resources;
+	}
+
+	public void setResources(Map<String, EngineResource> resources) {
+		this.resources = resources;
+	}
+
 	
 
 }

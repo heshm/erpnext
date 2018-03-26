@@ -1,6 +1,6 @@
 package com.erpnext.oa.act.service;
 
-import org.activiti.form.model.FormDefinition;
+import org.flowable.form.model.FormModel;
 
 import com.erpnext.oa.act.dto.FormRepresentation;
 import com.erpnext.oa.act.dto.FormSaveRepresentation;
@@ -14,6 +14,6 @@ public interface ActFormService {
 	
 	ResultListDataRepresentation getForms(String filter);
 	
-	FormDefinition getProcessDefinitionStartForm(String processDefinitionId);
+	FormModel getProcessDefinitionStartForm(String processDefinitionId);
 
 }

@@ -7,18 +7,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.runtime.ProcessInstanceQuery;
-import org.activiti.form.api.FormRepositoryService;
-import org.activiti.form.model.FormDefinition;
 import org.apache.commons.io.IOUtils;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.StartEvent;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.repository.ProcessDefinitionQuery;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.engine.runtime.ProcessInstanceQuery;
+import org.flowable.form.api.FormDefinition;
+import org.flowable.form.api.FormRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,7 @@ public class ProcessServiceImpl implements ProcessService {
 		for(ProcessDefinition processDefinition : processList){
 			String deploymentId = processDefinition.getDeploymentId();
 		    Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
+		    System.out.println(deployment);
 		    ProcessQueryDTO processDTO = new ProcessQueryDTO(
 		    		new ProcessDefinitionDTO(processDefinition),
 		    		new DeploymentDTO(deployment)
@@ -110,19 +111,10 @@ public class ProcessServiceImpl implements ProcessService {
 
 	@Override
 	public boolean processDefinitionHasStartForm(String processDefinitionId) {
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
-		List<StartEvent> startEvents = bpmnModel.getMainProcess().findFlowElementsOfType(StartEvent.class, false);
-
-		for (StartEvent startEvent : startEvents) {
-	
-			if (!StringUtils.isEmpty(startEvent.getFormKey())) {
-				FormDefinition formDefinition = formRepositoryService.getFormDefinitionByKey(startEvent.getFormKey());
-				if(null != formDefinition) {
-					return true;
-				}
-			}
-		}
-		return false;
+		ProcessDefinitionQuery definitionQuery = repositoryService.createProcessDefinitionQuery();
+		definitionQuery.processDefinitionId(processDefinitionId);
+		ProcessDefinition definition = definitionQuery.singleResult();
+		return definition.hasStartFormKey();
 	}
 
 	@Override

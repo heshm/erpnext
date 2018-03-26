@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.IdentityService;
-import org.activiti.engine.identity.User;
+import org.flowable.engine.IdentityService;
+import org.flowable.idm.api.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,6 +101,7 @@ public class AdminUserServiceImpl implements AdminUserService{
 		user.setRoleName(adminUser.getRoleName());
 		adminUserMapper.updateByPrimaryKey(user);
 		saveDeptUserXref(adminUser);
+		System.out.println(identityService.createUserQuery());
 		User actUser = identityService.createUserQuery().userId(user.getLoginName()).singleResult();
 		if(actUser == null){
 			saveActUser(user);
@@ -127,9 +128,11 @@ public class AdminUserServiceImpl implements AdminUserService{
 
 	
 	private void saveActUser(AdminUser user) {
+		//identityService.
 		User actUser = identityService.newUser(user.getUserId());
 		actUser.setPassword(user.getPassword());
 		actUser.setEmail(user.getEmail());
+		actUser.setFirstName("Flowable");
 		identityService.saveUser(actUser);
 	}
 

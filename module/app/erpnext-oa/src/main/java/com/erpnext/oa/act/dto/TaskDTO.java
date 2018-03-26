@@ -3,9 +3,9 @@ package com.erpnext.oa.act.dto;
 import java.util.Comparator;
 import java.util.Date;
 
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.TaskInfo;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.task.api.TaskInfo;
+import org.flowable.task.api.history.HistoricTaskInstance;
 import org.springframework.beans.BeanUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;

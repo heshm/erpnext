@@ -1,7 +1,7 @@
 package com.erpnext.oa.act.endpoint;
 
-import org.activiti.engine.FormService;
-import org.activiti.form.model.FormDefinition;
+
+import org.flowable.form.api.FormDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +19,6 @@ public class TaskEndpoint extends BaseEndpoint{
 	
 	@Autowired
 	private ActTaskService actTaskService;
-	@Autowired
-	private FormService formService;
 	
 	@PostMapping("/process-instances")
 	public String startNewProcessInstance(@RequestBody CreateProcessInstanceRepresentation startRequest) {
@@ -59,7 +57,7 @@ public class TaskEndpoint extends BaseEndpoint{
 	
 	@GetMapping("/task-form/{taskId}")
 	public FormDefinition getFormData(@PathVariable String taskId) {
-		return null;
+		return actTaskService.getTaskForm(taskId);
 	}
 
 }

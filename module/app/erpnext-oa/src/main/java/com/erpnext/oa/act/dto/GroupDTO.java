@@ -1,6 +1,6 @@
 package com.erpnext.oa.act.dto;
 
-import org.activiti.engine.identity.Group;
+import org.flowable.idm.api.Group;
 
 public class GroupDTO {
 

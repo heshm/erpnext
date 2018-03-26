@@ -1,7 +1,7 @@
 package com.erpnext.oa.act.dto;
 
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
 
 public class ProcessQueryDTO {
 	

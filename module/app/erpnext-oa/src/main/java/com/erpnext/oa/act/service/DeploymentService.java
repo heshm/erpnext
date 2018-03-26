@@ -1,6 +1,6 @@
 package com.erpnext.oa.act.service;
 
-import org.activiti.engine.repository.Deployment;
+import org.flowable.engine.repository.Deployment;
 
 public interface DeploymentService {
 	

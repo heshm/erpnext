@@ -11,16 +11,17 @@
  * limitations under the License.
  */
 package com.erpnext.oa.act.controller;
-
-import org.activiti.bpmn.model.GraphicInfo;
+import org.flowable.bpmn.model.GraphicInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
 import com.erpnext.oa.act.editor.service.BpmnDisplayJsonConverter;
+import com.erpnext.oa.act.editor.service.CmmnDisplayJsonConverter;
 import com.erpnext.oa.act.service.ModelService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,15 +36,22 @@ public class EditorDisplayJsonClientController {
 
 	@Autowired
 	protected BpmnDisplayJsonConverter bpmnDisplayJsonConverter;
+	
+	@Autowired
+    protected CmmnDisplayJsonConverter cmmnDisplayJsonConverter;
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
 
-	@RequestMapping(value = "/rest/models/{processModelId}/model-json", method = RequestMethod.GET, produces = "application/json")
-	public JsonNode getModelJSON(@PathVariable String processModelId) {
+	@RequestMapping(value = "/rest/models/{modelId}/model-json", method = RequestMethod.GET, produces = "application/json")
+	public JsonNode getModelJSON(@PathVariable String modelId) {
 		ObjectNode displayNode = objectMapper.createObjectNode();
-		Model model = modelService.getModel(processModelId);
-		bpmnDisplayJsonConverter.processProcessElements(model, displayNode, new GraphicInfo());
-		return displayNode;
+		Model model = modelService.getModel(modelId);
+		if (model.getModelType() != null && AbstractModel.MODEL_TYPE_CMMN == model.getModelType()) {
+            cmmnDisplayJsonConverter.processCaseElements(model, displayNode, new org.flowable.cmmn.model.GraphicInfo());
+        } else {
+            bpmnDisplayJsonConverter.processProcessElements(model, displayNode, new GraphicInfo());
+        }
+        return displayNode;
 	}
 
 	/*@RequestMapping(value = "/rest/models/{processModelId}/history/{processModelHistoryId}/model-json", method = RequestMethod.GET, produces = "application/json")

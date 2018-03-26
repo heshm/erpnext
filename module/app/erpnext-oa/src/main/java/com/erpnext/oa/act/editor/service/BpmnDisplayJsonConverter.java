@@ -18,26 +18,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.bpmn.model.Artifact;
-import org.activiti.bpmn.model.Association;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.ErrorEventDefinition;
-import org.activiti.bpmn.model.Event;
-import org.activiti.bpmn.model.EventDefinition;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.GraphicInfo;
-import org.activiti.bpmn.model.Lane;
-import org.activiti.bpmn.model.MessageEventDefinition;
-import org.activiti.bpmn.model.Pool;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.ServiceTask;
-import org.activiti.bpmn.model.SignalEventDefinition;
-import org.activiti.bpmn.model.SubProcess;
-import org.activiti.bpmn.model.TextAnnotation;
-import org.activiti.bpmn.model.TimerEventDefinition;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.editor.language.json.converter.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.bpmn.model.Artifact;
+import org.flowable.bpmn.model.Association;
+import org.flowable.bpmn.model.BoundaryEvent;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.DataObject;
+import org.flowable.bpmn.model.ErrorEventDefinition;
+import org.flowable.bpmn.model.Event;
+import org.flowable.bpmn.model.EventDefinition;
+import org.flowable.bpmn.model.EventSubProcess;
+import org.flowable.bpmn.model.FlowElement;
+import org.flowable.bpmn.model.GraphicInfo;
+import org.flowable.bpmn.model.Lane;
+import org.flowable.bpmn.model.MessageEventDefinition;
+import org.flowable.bpmn.model.Pool;
+import org.flowable.bpmn.model.SequenceFlow;
+import org.flowable.bpmn.model.ServiceTask;
+import org.flowable.bpmn.model.SignalEventDefinition;
+import org.flowable.bpmn.model.StartEvent;
+import org.flowable.bpmn.model.SubProcess;
+import org.flowable.bpmn.model.TextAnnotation;
+import org.flowable.bpmn.model.TimerEventDefinition;
+import org.flowable.editor.language.json.converter.BpmnJsonConverter;
+import org.flowable.editor.language.json.converter.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -56,14 +60,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Component
 public class BpmnDisplayJsonConverter {
-    
-    private final Logger log = LoggerFactory.getLogger(BpmnDisplayJsonConverter.class);
-    
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BpmnDisplayJsonConverter.class);
+
     protected BpmnJsonConverter bpmnJsonConverter = new BpmnJsonConverter();
-    
+
     protected ObjectMapper objectMapper = new ObjectMapper();
-    protected List<String> eventElementTypes = new ArrayList<String>();
-    protected Map<String, InfoMapper> propertyMappers = new HashMap<String, InfoMapper>();
+    protected List<String> eventElementTypes = new ArrayList<>();
+    protected Map<String, InfoMapper> propertyMappers = new HashMap<>();
 
     public BpmnDisplayJsonConverter() {
         eventElementTypes.add("StartEvent");
@@ -90,11 +94,12 @@ public class BpmnDisplayJsonConverter {
                 JsonNode modelNode = objectMapper.readTree(processModel.getModelEditorJson());
                 pojoModel = bpmnJsonConverter.convertToBpmnModel(modelNode);
             } catch (Exception e) {
-                log.error("Error transforming json to pojo " + processModel.getId(), e);
+                LOGGER.error("Error transforming json to pojo {}", processModel.getId(), e);
             }
         }
-        
-        if (pojoModel == null || pojoModel.getLocationMap().isEmpty()) return;
+
+        if (pojoModel == null || pojoModel.getLocationMap().isEmpty())
+            return;
 
         ArrayNode elementArray = objectMapper.createArrayNode();
         ArrayNode flowArray = objectMapper.createArrayNode();
@@ -108,7 +113,7 @@ public class BpmnDisplayJsonConverter {
                 poolNode.put("name", pool.getName());
                 GraphicInfo poolInfo = pojoModel.getGraphicInfo(pool.getId());
                 fillGraphicInfo(poolNode, poolInfo, true);
-                org.activiti.bpmn.model.Process process = pojoModel.getProcess(pool.getId());
+                org.flowable.bpmn.model.Process process = pojoModel.getProcess(pool.getId());
                 if (process != null && CollectionUtils.isNotEmpty(process.getLanes())) {
                     ArrayNode laneArray = objectMapper.createArrayNode();
                     for (Lane lane : process.getLanes()) {
@@ -118,7 +123,7 @@ public class BpmnDisplayJsonConverter {
                         fillGraphicInfo(laneNode, pojoModel.getGraphicInfo(lane.getId()), true);
                         laneArray.add(laneNode);
                     }
-                    poolNode.put("lanes", laneArray);
+                    poolNode.set("lanes", laneArray);
                 }
                 poolArray.add(poolNode);
 
@@ -139,42 +144,42 @@ public class BpmnDisplayJsonConverter {
                 }
                 firstElement = false;
             }
-            displayNode.put("pools", poolArray);
-            
+            displayNode.set("pools", poolArray);
+
         } else {
-            // in initialize with fake x and y to make sure the minimal
-            // values are set
+            // in initialize with fake x and y to make sure the minimal values are set
             diagramInfo.setX(9999);
             diagramInfo.setY(1000);
         }
 
-        for (org.activiti.bpmn.model.Process process : pojoModel.getProcesses()) {
+        for (org.flowable.bpmn.model.Process process : pojoModel.getProcesses()) {
             processElements(process.getFlowElements(), pojoModel, elementArray, flowArray, diagramInfo);
             processArtifacts(process.getArtifacts(), pojoModel, elementArray, flowArray, diagramInfo);
         }
 
-        displayNode.put("elements", elementArray);
-        displayNode.put("flows", flowArray);
-        
+        displayNode.set("elements", elementArray);
+        displayNode.set("flows", flowArray);
+
         displayNode.put("diagramBeginX", diagramInfo.getX());
         displayNode.put("diagramBeginY", diagramInfo.getY());
         displayNode.put("diagramWidth", diagramInfo.getWidth());
         displayNode.put("diagramHeight", diagramInfo.getHeight());
     }
 
-    protected void processElements(Collection<FlowElement> elementList, BpmnModel model, ArrayNode elementArray, 
-            ArrayNode flowArray, GraphicInfo diagramInfo) {
+    protected void processElements(Collection<FlowElement> elementList, BpmnModel model, ArrayNode elementArray, ArrayNode flowArray, GraphicInfo diagramInfo) {
 
         for (FlowElement element : elementList) {
-            if (element instanceof SequenceFlow) {
+            // ignore data objects in visual representation
+            if (DataObject.class.isInstance(element)) {
+                continue;
+
+            } else if (element instanceof SequenceFlow) {
                 ObjectNode elementNode = objectMapper.createObjectNode();
                 SequenceFlow flow = (SequenceFlow) element;
                 elementNode.put("id", flow.getId());
                 elementNode.put("type", "sequenceFlow");
                 elementNode.put("sourceRef", flow.getSourceRef());
                 elementNode.put("targetRef", flow.getTargetRef());
-                if(StringUtils.isNotEmpty(flow.getName()))
-					elementNode.put("name", flow.getName());
                 List<GraphicInfo> flowInfo = model.getFlowLocationGraphicInfo(flow.getId());
                 if (CollectionUtils.isNotEmpty(flowInfo)) {
                     ArrayNode waypointArray = objectMapper.createArrayNode();
@@ -184,13 +189,13 @@ public class BpmnDisplayJsonConverter {
                         waypointArray.add(pointNode);
                         fillDiagramInfo(graphicInfo, diagramInfo);
                     }
-                    elementNode.put("waypoints", waypointArray);
-                    
+                    elementNode.set("waypoints", waypointArray);
+
                     String className = element.getClass().getSimpleName();
                     if (propertyMappers.containsKey(className)) {
-                        elementNode.put("properties", propertyMappers.get(className).map(element));
+                        elementNode.set("properties", propertyMappers.get(className).map(element));
                     }
-                    
+
                     flowArray.add(elementNode);
                 }
 
@@ -214,33 +219,54 @@ public class BpmnDisplayJsonConverter {
                     ServiceTask serviceTask = (ServiceTask) element;
                     if (ServiceTask.MAIL_TASK.equals(serviceTask.getType())) {
                         elementNode.put("taskType", "mail");
-                        
+
                     } else if ("camel".equals(serviceTask.getType())) {
                         elementNode.put("taskType", "camel");
-                    
+
                     } else if ("mule".equals(serviceTask.getType())) {
                         elementNode.put("taskType", "mule");
+
+                    } else if (ServiceTask.HTTP_TASK.equals(serviceTask.getType())) {
+                        elementNode.put("taskType", "http");
+                    } else if (ServiceTask.SHELL_TASK.equals(serviceTask.getType())) {
+                        elementNode.put("taskType", "shell");
+                    }
+
+                } else if (element instanceof BoundaryEvent) {
+                    BoundaryEvent boundaryEvent = (BoundaryEvent) element;
+                    elementNode.put("cancelActivity", boundaryEvent.isCancelActivity());
+
+                } else if (element instanceof StartEvent) {
+                    StartEvent startEvent = (StartEvent) element;
+                    if (startEvent.getSubProcess() instanceof EventSubProcess && !startEvent.isInterrupting()) {
+                        elementNode.put("interrupting", false);
+                    } else {
+                        elementNode.put("interrupting", true);
                     }
                 }
 
                 if (propertyMappers.containsKey(className)) {
-                    elementNode.put("properties", propertyMappers.get(className).map(element));
+                    elementNode.set("properties", propertyMappers.get(className).map(element));
                 }
 
                 elementArray.add(elementNode);
 
                 if (element instanceof SubProcess) {
                     SubProcess subProcess = (SubProcess) element;
+
+                    // skip collapsed sub processes
+                    if (graphicInfo != null && graphicInfo.getExpanded() != null && !graphicInfo.getExpanded()) {
+                        continue;
+                    }
+
                     processElements(subProcess.getFlowElements(), model, elementArray, flowArray, diagramInfo);
                     processArtifacts(subProcess.getArtifacts(), model, elementArray, flowArray, diagramInfo);
                 }
             }
         }
     }
-    
-    protected void processArtifacts(Collection<Artifact> artifactList,
-            BpmnModel model, ArrayNode elementArray, ArrayNode flowArray,
-            GraphicInfo diagramInfo) {
+
+    protected void processArtifacts(Collection<Artifact> artifactList, BpmnModel model, ArrayNode elementArray, ArrayNode flowArray, GraphicInfo diagramInfo) {
 
         for (Artifact artifact : artifactList) {
 
@@ -277,7 +303,7 @@ public class BpmnDisplayJsonConverter {
             }
         }
     }
-    
+
     protected void fillWaypoints(String id, BpmnModel model, ObjectNode elementNode, GraphicInfo diagramInfo) {
         List<GraphicInfo> flowInfo = model.getFlowLocationGraphicInfo(id);
         ArrayNode waypointArray = objectMapper.createArrayNode();
@@ -287,7 +313,7 @@ public class BpmnDisplayJsonConverter {
             waypointArray.add(pointNode);
             fillDiagramInfo(graphicInfo, diagramInfo);
         }
-        elementNode.put("waypoints", waypointArray);
+        elementNode.set("waypoints", waypointArray);
     }
 
     protected void fillEventTypes(String className, FlowElement element, ObjectNode elementNode) {
@@ -330,20 +356,17 @@ public class BpmnDisplayJsonConverter {
                         eventNode.put("messageRef", messageDef.getMessageRef());
                     }
                 }
-                elementNode.put("eventDefinition", eventNode);
+                elementNode.set("eventDefinition", eventNode);
             }
         }
     }
 
     protected void fillGraphicInfo(ObjectNode elementNode, GraphicInfo graphicInfo, boolean includeWidthAndHeight) {
-        commonFillGraphicInfo(elementNode, graphicInfo.getX(),
-                graphicInfo.getY(), graphicInfo.getWidth(),
-                graphicInfo.getHeight(), includeWidthAndHeight);
+        commonFillGraphicInfo(elementNode, graphicInfo.getX(), graphicInfo.getY(), graphicInfo.getWidth(), graphicInfo.getHeight(), includeWidthAndHeight);
     }
 
-    protected void commonFillGraphicInfo(ObjectNode elementNode, double x,
-            double y, double width, double height, boolean includeWidthAndHeight) {
-        
+    protected void commonFillGraphicInfo(ObjectNode elementNode, double x, double y, double width, double height, boolean includeWidthAndHeight) {
+
         elementNode.put("x", x);
         elementNode.put("y", y);
         if (includeWidthAndHeight) {
@@ -351,7 +374,7 @@ public class BpmnDisplayJsonConverter {
             elementNode.put("height", height);
         }
     }
-    
+
     protected void fillDiagramInfo(GraphicInfo graphicInfo, GraphicInfo diagramInfo) {
         double rightX = graphicInfo.getX() + graphicInfo.getWidth();
         double bottomY = graphicInfo.getY() + graphicInfo.getHeight();

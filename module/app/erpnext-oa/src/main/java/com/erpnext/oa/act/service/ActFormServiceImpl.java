@@ -5,15 +5,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.activiti.bpmn.model.Process;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.form.api.FormRepositoryService;
-import org.activiti.form.model.FormDefinition;
 import org.apache.commons.codec.binary.Base64;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
+import org.flowable.bpmn.model.StartEvent;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.form.api.FormDefinition;
+import org.flowable.form.api.FormRepositoryService;
+import org.flowable.form.model.FormModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,7 @@ import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.domain.AbstractModel;
 import com.erpnext.oa.act.domain.Model;
+import com.erpnext.oa.act.domain.SimpleFormModel;
 import com.erpnext.oa.act.dto.FormRepresentation;
 import com.erpnext.oa.act.dto.FormSaveRepresentation;
 import com.erpnext.oa.act.dto.ResultListDataRepresentation;
@@ -45,9 +46,10 @@ public class ActFormServiceImpl implements ActFormService {
 	@Autowired
 	private RepositoryService repositoryService;
 	@Autowired
-	private FormRepositoryService formRepositoryService;
-	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private FormRepositoryService formRepositoryService;
+
 
 	@Override
 	public FormRepresentation getForm(String formId) {
@@ -100,9 +102,9 @@ public class ActFormServiceImpl implements ActFormService {
 	}
 
 	private FormRepresentation createFormRepresentation(AbstractModel model) {
-		FormDefinition formDefinition = null;
+		SimpleFormModel formDefinition = null;
 		try {
-			formDefinition = objectMapper.readValue(model.getModelEditorJson(), FormDefinition.class);
+			formDefinition = objectMapper.readValue(model.getModelEditorJson(), SimpleFormModel.class);
 		} catch (Exception e) {
 			logger.error("Error deserializing form", e);
 			throw new InternalServerErrorException("Could not deserialize form definition");
@@ -114,20 +116,20 @@ public class ActFormServiceImpl implements ActFormService {
 	}
 
 	@Override
-	public FormDefinition getProcessDefinitionStartForm(String processDefinitionId) {
-		FormDefinition formDefinition = null;
+	public FormModel getProcessDefinitionStartForm(String processDefinitionId) {
 		ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinitionId);
-		Process process = bpmnModel.getProcessById(processDefinition.getKey());
-		FlowElement startElement = process.getInitialFlowElement();
-		if (startElement instanceof StartEvent) {
-			StartEvent startEvent = (StartEvent) startElement;
-			if (!StringUtils.isEmpty(startEvent.getFormKey())) {
-				formDefinition = formRepositoryService.getFormDefinitionByKeyAndParentDeploymentId(
-						startEvent.getFormKey(), processDefinition.getDeploymentId(), processDefinition.getTenantId());
-			}
-		}
-		return formDefinition;
+		FormModel formInfo = null;
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(processDefinition.getId());
+        org.flowable.bpmn.model.Process process = bpmnModel.getProcessById(processDefinition.getKey());
+        FlowElement startElement = process.getInitialFlowElement();
+        if (startElement instanceof StartEvent) {
+            StartEvent startEvent = (StartEvent) startElement;
+            if (!StringUtils.isEmpty(startEvent.getFormKey())) {
+                formInfo = formRepositoryService.getFormModelByKeyAndParentDeploymentId(startEvent.getFormKey(),
+                        processDefinition.getDeploymentId(), processDefinition.getTenantId());
+            }
+        }
+		return formInfo;
 	}
 
 }

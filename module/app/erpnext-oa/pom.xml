@@ -24,12 +24,20 @@
 			<artifactId>erpnext-common</artifactId>
 		</dependency>
 		<dependency>
-      		<groupId>org.activiti</groupId>
-      		<artifactId>editor-image-generator</artifactId>
-    	</dependency>
-    	<dependency>
-    		<groupId>org.activiti</groupId>
-    		<artifactId>activiti-dmn-json-converter</artifactId>
+			<groupId>org.flowable</groupId>
+			<artifactId>flowable-cmmn-json-converter</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-form-model</artifactId>
+        </dependency>
+        <dependency>
+    		<groupId>org.flowable</groupId>
+    		<artifactId>flowable-image-generator</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.flowable</groupId>
+    		<artifactId>flowable-dmn-json-converter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -3,8 +3,8 @@ package com.erpnext.common.authority.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.activiti.engine.IdentityService;
-import org.activiti.engine.identity.Group;
+import org.flowable.engine.IdentityService;
+import org.flowable.idm.api.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
