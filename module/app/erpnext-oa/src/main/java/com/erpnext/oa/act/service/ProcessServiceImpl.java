@@ -8,8 +8,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.StartEvent;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.repository.Deployment;
@@ -17,8 +15,6 @@ import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.repository.ProcessDefinitionQuery;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.engine.runtime.ProcessInstanceQuery;
-import org.flowable.form.api.FormDefinition;
-import org.flowable.form.api.FormRepositoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +42,6 @@ public class ProcessServiceImpl implements ProcessService {
 	private RepositoryService repositoryService;
 	@Autowired
 	private RuntimeService runtimeService;
-	@Autowired
-	private FormRepositoryService formRepositoryService;
 
 	@Override
 	public Page<ProcessQueryDTO> getPageProcessDefinitionList(Pageable pageable,String category) {
@@ -61,7 +55,6 @@ public class ProcessServiceImpl implements ProcessService {
 		for(ProcessDefinition processDefinition : processList){
 			String deploymentId = processDefinition.getDeploymentId();
 		    Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult();
-		    System.out.println(deployment);
 		    ProcessQueryDTO processDTO = new ProcessQueryDTO(
 		    		new ProcessDefinitionDTO(processDefinition),
 		    		new DeploymentDTO(deployment)

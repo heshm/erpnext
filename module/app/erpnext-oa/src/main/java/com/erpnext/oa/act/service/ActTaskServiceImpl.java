@@ -2,36 +2,23 @@ package com.erpnext.oa.act.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.flowable.bpmn.model.BpmnModel;
-import org.flowable.bpmn.model.FlowElement;
-import org.flowable.bpmn.model.Process;
-import org.flowable.bpmn.model.StartEvent;
 import org.flowable.cmmn.api.CmmnTaskService;
+import org.flowable.engine.FormService;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.IdentityService;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
-import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.form.TaskFormData;
 import org.flowable.engine.repository.ProcessDefinition;
-import org.flowable.engine.runtime.ProcessInstance;
-import org.flowable.form.api.FormDefinition;
-import org.flowable.form.api.FormRepositoryService;
-import org.flowable.form.api.FormService;
-import org.flowable.form.model.FormField;
-import org.flowable.form.model.FormFieldTypes;
 import org.flowable.form.model.FormModel;
 import org.flowable.task.api.Task;
 import org.flowable.task.api.TaskInfo;
 import org.flowable.task.api.TaskInfoQueryWrapper;
 import org.flowable.task.api.history.HistoricTaskInstanceQuery;
-import org.apache.commons.lang3.time.DateUtils;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +30,7 @@ import com.erpnext.framework.web.service.exception.BadRequestException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
+import com.erpnext.oa.act.dto.TaskFormDTO;
 
 @Service
 @Transactional(readOnly = true)
@@ -59,6 +47,9 @@ public class ActTaskServiceImpl implements ActTaskService {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private FormService formService;
 	
 	@Autowired
     private CmmnTaskService cmmnTaskService;
@@ -169,9 +160,11 @@ public class ActTaskServiceImpl implements ActTaskService {
 	}
 
 	@Override
-	public FormModel getTaskForm(String taskId) {
+	public TaskFormDTO getTaskForm(String taskId) {
+		TaskFormData formData = formService.getTaskFormData(taskId);
 		FormModel formModel = taskService.getTaskFormModel(taskId);
-		return formModel;
+		TaskFormDTO taskForm = new TaskFormDTO(formModel,formData);
+		return taskForm;
 	}
 
 }
