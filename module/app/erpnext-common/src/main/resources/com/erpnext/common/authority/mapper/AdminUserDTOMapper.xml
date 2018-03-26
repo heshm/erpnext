@@ -38,7 +38,7 @@
 					and b.department_id = #{departmentId,jdbcType=VARCHAR})
 			</if>
 		    <if test="userName != null and userName != ''">
-				and a.user_name = #{userName,jdbcType=VARCHAR}
+				and a.user_name like concat('%', #{userName,jdbcType=VARCHAR}, '%')
 			</if>
 		</where>
 	</sql>

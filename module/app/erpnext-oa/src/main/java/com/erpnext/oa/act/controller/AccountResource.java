@@ -5,7 +5,7 @@ package com.erpnext.oa.act.controller;
 import com.erpnext.framework.domain.AdminUser;
 import com.erpnext.framework.mapper.AdminUserMapper;
 import com.erpnext.framework.web.util.AuthenticationUtils;
-import com.erpnext.oa.act.dto.UserRepresentation;
+import com.erpnext.oa.flowable.editor.dto.UserRepresentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

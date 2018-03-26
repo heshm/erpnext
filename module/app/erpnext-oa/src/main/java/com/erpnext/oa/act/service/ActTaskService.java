@@ -2,7 +2,7 @@ package com.erpnext.oa.act.service;
 
 import java.util.List;
 
-import org.flowable.form.api.FormDefinition;
+import org.flowable.form.model.FormModel;
 
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
@@ -23,5 +23,5 @@ public interface ActTaskService {
 	
 	void completeTask(String taskId);
 	
-	FormDefinition getTaskForm(String taskId);
+	FormModel getTaskForm(String taskId);
 }

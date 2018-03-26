@@ -1,5 +1,6 @@
 package com.erpnext.common.authority.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -16,5 +17,7 @@ public interface AdminUserService {
 	void createAdminUser(AdminUserDTO adminUser);
 	
 	void updateAdminUser(AdminUserDTO adminUser);
+	
+	List<AdminUserDTO> getUsers(String filter);
 
 }

@@ -1,7 +1,6 @@
 package com.erpnext.oa.act.endpoint;
 
-
-import org.flowable.form.api.FormDefinition;
+import org.flowable.form.model.FormModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +55,7 @@ public class TaskEndpoint extends BaseEndpoint{
 	}
 	
 	@GetMapping("/task-form/{taskId}")
-	public FormDefinition getFormData(@PathVariable String taskId) {
+	public FormModel getFormData(@PathVariable String taskId) {
 		return actTaskService.getTaskForm(taskId);
 	}
 

@@ -2,11 +2,12 @@ package com.erpnext.common.authority.service;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.flowable.engine.IdentityService;
-import org.flowable.idm.api.User;
+/*import org.flowable.engine.IdentityService;
+import org.flowable.idm.api.User;*/
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,8 +39,8 @@ public class AdminUserServiceImpl implements AdminUserService{
 	@Autowired
 	private DepartmentUserXrefMapper departmentUserXrefMapper;
 	
-	@Autowired
-	private IdentityService identityService;
+	/*@Autowired
+	private IdentityService identityService;*/
 	
 	@Value("${erpnext.defaultPassword}")
 	private String password;
@@ -86,7 +87,7 @@ public class AdminUserServiceImpl implements AdminUserService{
 		
 		saveDeptUserXref(adminUser);
 		
-		saveActUser(user);
+		//saveActUser(user);
 		
 	}
 	
@@ -101,11 +102,11 @@ public class AdminUserServiceImpl implements AdminUserService{
 		user.setRoleName(adminUser.getRoleName());
 		adminUserMapper.updateByPrimaryKey(user);
 		saveDeptUserXref(adminUser);
-		System.out.println(identityService.createUserQuery());
-		User actUser = identityService.createUserQuery().userId(user.getLoginName()).singleResult();
-		if(actUser == null){
-			saveActUser(user);
-		}
+		//System.out.println(identityService.createUserQuery());
+		//User actUser = identityService.createUserQuery().userId(user.getLoginName()).singleResult();
+		//if(actUser == null){
+		//	saveActUser(user);
+		//}
 		
 	}
 	
@@ -126,15 +127,23 @@ public class AdminUserServiceImpl implements AdminUserService{
 		
 	}
 
+	@Override
+	public List<AdminUserDTO> getUsers(String filter) {
+		Map<String,Object> filterMap = new HashMap<>();
+		filterMap.put("userName", filter);
+		List<AdminUserDTO> list = adminUserDTOMapper.selectList(filterMap);
+		return list;
+	}
+
 	
-	private void saveActUser(AdminUser user) {
+	/*private void saveActUser(AdminUser user) {
 		//identityService.
 		User actUser = identityService.newUser(user.getUserId());
 		actUser.setPassword(user.getPassword());
 		actUser.setEmail(user.getEmail());
 		actUser.setFirstName("Flowable");
 		identityService.saveUser(actUser);
-	}
+	}*/
 
 	
 

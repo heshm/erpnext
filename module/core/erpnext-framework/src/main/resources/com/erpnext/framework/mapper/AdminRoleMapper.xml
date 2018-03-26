@@ -40,4 +40,14 @@
         <include refid="Base_Column_List"/>
         from sys_admin_role
     </select>
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_admin_role
+        <where>
+        	<if test = "roleName != null">
+        		role_name like concat('%', #{roleName,jdbcType=VARCHAR}, '%')
+        	</if>
+        </where>
+    </select>
 </mapper>

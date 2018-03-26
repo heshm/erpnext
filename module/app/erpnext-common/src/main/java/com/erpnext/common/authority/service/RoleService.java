@@ -27,5 +27,7 @@ public interface RoleService {
 	 * @return
 	 */
 	UserRoleDTO updateUserRole(UserRoleDTO userRole);
+	
+	List<AdminRole> getRoleByName(String nameFilter);
 
 }

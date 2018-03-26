@@ -131,6 +131,8 @@ public class FlowableEngineConfiguration {
         processEngineConfiguration.setAsyncExecutorActivate(false);
         processEngineConfiguration.setAsyncExecutor(asyncExecutor());
         
+        processEngineConfiguration.setDisableIdmEngine(true);
+        
         String activityFontName = environment.getProperty("flowable.activityFontName");
 		String labelFontName = environment.getProperty("flowable.labelFontName");
 		String annotationFontName = environment.getProperty("flowable.annotationFontName");
