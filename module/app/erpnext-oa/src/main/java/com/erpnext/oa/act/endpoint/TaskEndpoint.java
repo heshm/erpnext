@@ -60,6 +60,12 @@ public class TaskEndpoint extends BaseEndpoint{
 		return UPDATED;
 	}
 	
+	@PutMapping("/{taskId}/action/claim")
+	public String claimTask(@PathVariable String taskId) {
+		actTaskService.claimTask(taskId);
+		return UPDATED;
+    }
+	
 	@GetMapping("/task-form/{taskId}")
 	public TaskFormDTO getFormData(@PathVariable String taskId) {
 		return actTaskService.getTaskForm(taskId);

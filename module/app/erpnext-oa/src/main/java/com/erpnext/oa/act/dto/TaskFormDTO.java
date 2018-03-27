@@ -23,7 +23,7 @@ public class TaskFormDTO {
 	
 	private List<FormProperty> formProperties;
 	
-	private boolean isStartForm;
+	private boolean fieldsReadOnly;
 	
 	public TaskFormDTO() {
 		
@@ -35,7 +35,7 @@ public class TaskFormDTO {
 		this.name = formModel.getName();
 		this.fields = formModel.getFields();
 		this.outcomes = formModel.getOutcomes();
-		this.isStartForm = true;
+		this.fieldsReadOnly = true;
 	}
 	
 	public TaskFormDTO(TaskFormData formData) {
@@ -46,13 +46,13 @@ public class TaskFormDTO {
 			this.key = formData.getFormKey();
 		}
 		this.formProperties = formData.getFormProperties();
-		this.isStartForm = false;
+		this.fieldsReadOnly = false;
 	}
 	
 	public TaskFormDTO(FormModel formModel,TaskFormData formData) {
 		this(formModel);
 		this.formProperties = formData.getFormProperties();
-		this.isStartForm = false;
+		this.fieldsReadOnly = false;
 	}
 
 	public String getId() {
@@ -103,12 +103,12 @@ public class TaskFormDTO {
 		this.formProperties = formProperties;
 	}
 
-	public boolean isStartForm() {
-		return isStartForm;
+	public boolean isFieldsReadOnly() {
+		return fieldsReadOnly;
 	}
 
-	public void setStartForm(boolean isStartForm) {
-		this.isStartForm = isStartForm;
+	public void setFieldsReadOnly(boolean fieldsReadOnly) {
+		this.fieldsReadOnly = fieldsReadOnly;
 	}
 	
 	

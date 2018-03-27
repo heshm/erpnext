@@ -7,6 +7,7 @@ import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.TaskInfo;
 import org.flowable.task.api.history.HistoricTaskInstance;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -53,7 +54,7 @@ public class TaskDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
 	private Date claimTime;
 	
-	
+	private boolean taskHasForm = false;
 	
 	public TaskDTO() {
 		
@@ -64,6 +65,9 @@ public class TaskDTO {
 		if(taskInfo instanceof HistoricTaskInstance) {
 			this.endDate = ((HistoricTaskInstance) taskInfo).getEndTime();
 			this.duration = ((HistoricTaskInstance) taskInfo).getDurationInMillis();
+		}
+		if(!StringUtils.isEmpty(taskInfo.getFormKey())) {
+			this.taskHasForm = true;
 		}
 	}
 	
@@ -232,6 +236,14 @@ public class TaskDTO {
 
 	public void setClaimTime(Date claimTime) {
 		this.claimTime = claimTime;
+	}
+
+	public boolean isTaskHasForm() {
+		return taskHasForm;
+	}
+
+	public void setTaskHasForm(boolean taskHasForm) {
+		this.taskHasForm = taskHasForm;
 	}
 
 	public static final class IdOrder implements Comparator<TaskDTO> {

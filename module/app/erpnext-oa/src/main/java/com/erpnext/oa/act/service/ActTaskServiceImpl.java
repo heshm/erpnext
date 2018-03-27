@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 import com.erpnext.framework.domain.UserRoleXref;
 import com.erpnext.framework.mapper.UserRoleXrefMapper;
 import com.erpnext.framework.web.service.exception.BadRequestException;
+import com.erpnext.framework.web.service.exception.InternalServerErrorException;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import com.erpnext.oa.act.dto.CreateProcessInstanceRepresentation;
 import com.erpnext.oa.act.dto.TaskDTO;
@@ -120,7 +121,14 @@ public class ActTaskServiceImpl implements ActTaskService {
 		if (!StringUtils.isEmpty(task.getProcessDefinitionId())) {
 			processDefinition = repositoryService.getProcessDefinition(task.getProcessDefinitionId());
 		}
-		return new TaskDTO(task, processDefinition);
+		TaskDTO taskDTO = new TaskDTO(task,processDefinition);
+		if(!taskDTO.isTaskHasForm()) {
+			TaskFormData formData = formService.getTaskFormData(taskId);
+			if(formData != null && formData.getFormProperties().size() > 0) {
+				taskDTO.setTaskHasForm(true);
+			}
+		}
+		return taskDTO;
 	}
 
 	@Override
@@ -158,6 +166,17 @@ public class ActTaskServiceImpl implements ActTaskService {
 			cmmnTaskService.complete(task.getId());
 		}
 	}
+	
+	@Override
+	@Transactional
+	public void claimTask(String taskId) {
+		String userId = AuthenticationUtils.getUserId();
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new InternalServerErrorException("Task with id: " + taskId + " does not exist");
+        }
+        taskService.claim(task.getId(), userId);
+	}
 
 	@Override
 	public TaskFormDTO getTaskForm(String taskId) {
@@ -166,5 +185,7 @@ public class ActTaskServiceImpl implements ActTaskService {
 		TaskFormDTO taskForm = new TaskFormDTO(formModel,formData);
 		return taskForm;
 	}
+
+	
 
 }

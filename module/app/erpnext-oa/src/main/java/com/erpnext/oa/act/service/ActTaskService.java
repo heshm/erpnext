@@ -22,5 +22,7 @@ public interface ActTaskService {
 	
 	void completeTask(String taskId);
 	
+	void claimTask(String taskId);
+	
 	TaskFormDTO getTaskForm(String taskId);
 }
