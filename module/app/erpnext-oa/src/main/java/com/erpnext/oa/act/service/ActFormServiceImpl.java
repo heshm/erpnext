@@ -11,11 +11,14 @@ import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.StartEvent;
 import org.flowable.engine.RepositoryService;
 import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.form.api.FormDeployment;
+import org.flowable.form.api.FormDeploymentQuery;
 import org.flowable.form.api.FormRepositoryService;
 import org.flowable.form.model.FormModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,6 +132,15 @@ public class ActFormServiceImpl implements ActFormService {
             }
         }
 		return formInfo;
+	}
+	
+	public List<FormDeployment> listFormDeployment(Pageable pageable,String name) {
+		FormDeploymentQuery deploymentQuery = formRepositoryService.createDeploymentQuery();
+		if(!StringUtils.isEmpty(name)) {
+			deploymentQuery.deploymentNameLike(name);
+		}
+		List<FormDeployment> list = deploymentQuery.list();
+		return list;
 	}
 
 }

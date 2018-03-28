@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.flowable.cmmn.api.CmmnTaskService;
 import org.flowable.engine.FormService;
@@ -169,6 +170,12 @@ public class ActTaskServiceImpl implements ActTaskService {
 	
 	@Override
 	@Transactional
+	public void completeTask(String taskId, Map<String, Object> variables) {
+		taskService.complete(taskId, variables);
+	}
+	
+	@Override
+	@Transactional
 	public void claimTask(String taskId) {
 		String userId = AuthenticationUtils.getUserId();
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -185,6 +192,8 @@ public class ActTaskServiceImpl implements ActTaskService {
 		TaskFormDTO taskForm = new TaskFormDTO(formModel,formData);
 		return taskForm;
 	}
+
+	
 
 	
 

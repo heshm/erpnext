@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 import com.erpnext.framework.web.endpoint.BaseEndpoint;
 import com.erpnext.framework.web.util.AuthenticationUtils;
@@ -55,8 +56,14 @@ public class TaskEndpoint extends BaseEndpoint{
 	}
 	
 	@PutMapping("/{taskId}/action/complete")
-	public String completeTask(@PathVariable String taskId) {
+	public String completeTask(@PathVariable("taskId") String taskId) {
 		actTaskService.completeTask(taskId);
+		return UPDATED;
+	}
+
+	@PostMapping("/{taskId}/action/complete")
+	public String completeTask(@PathVariable("taskId") String taskId,@RequestBody Map<String, Object> variables) {
+		actTaskService.completeTask(taskId,variables);
 		return UPDATED;
 	}
 	
