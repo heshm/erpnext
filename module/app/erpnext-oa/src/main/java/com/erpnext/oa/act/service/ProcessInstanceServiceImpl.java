@@ -81,4 +81,14 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 
 	}
 
+	@Override
+	public void listHisProcessInstance() {
+		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		query.involvedUser("admin");
+		query.list().forEach(inst -> {
+			System.out.println(inst.getId());
+			System.out.println(inst.getName());
+		});
+	}
+
 }

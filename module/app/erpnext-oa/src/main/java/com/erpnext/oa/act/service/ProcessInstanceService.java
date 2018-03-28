@@ -13,5 +13,7 @@ public interface ProcessInstanceService {
 	List<ProcessInstanceDTO> listProcessInstanceDTO(String userId,String state);
 
 	void deleteProcessInstance(String processInstanceId);
+	
+	void listHisProcessInstance();
 
 }
