@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.erpnext.framework.util.DateUtils;
 import com.erpnext.framework.web.util.AuthenticationUtils;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RepositoryService;
@@ -91,11 +92,18 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
 		query.involvedUser(AuthenticationUtils.getUserId());
 		if(filter.containsKey("startDate")) {
-			query.startedAfter((Date)filter.get("startDate"));
+			String startDate = (String)filter.get("startDate");
+			if(StringUtils.isNotEmpty(startDate)) {
+				query.startedAfter(DateUtils.stringToDate(startDate));
+			}
 		}
 		if(filter.containsKey("endDate")) {
-			query.finishedBefore((Date)filter.get("endDate"));
+			String endDate = (String)filter.get("endDate");
+			if(StringUtils.isNotEmpty(endDate)) {
+				query.finishedBefore(DateUtils.stringToDate(endDate));
+			}
 		}
+		query.finished();
 		int total = (int)query.count();
 		List<HistoricProcessInstance> list = query.listPage(pageable.getOffset(), pageable.getPageSize());
 		return new PageImpl<>(list, pageable, total);
