@@ -1,7 +1,9 @@
 package com.erpnext.oa.act.service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.erpnext.framework.web.util.AuthenticationUtils;
@@ -13,6 +15,9 @@ import org.flowable.engine.history.HistoricProcessInstanceQuery;
 import org.flowable.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,13 +87,18 @@ public class ProcessInstanceServiceImpl implements ProcessInstanceService {
 	}
 
 	@Override
-	public void listHisProcessInstance() {
+	public Page<HistoricProcessInstance> listHisProcessInstance(Pageable pageable,Map<String, Object> filter) {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
-		query.involvedUser("admin");
-		query.list().forEach(inst -> {
-			System.out.println(inst.getId());
-			System.out.println(inst.getName());
-		});
+		query.involvedUser(AuthenticationUtils.getUserId());
+		if(filter.containsKey("startDate")) {
+			query.startedAfter((Date)filter.get("startDate"));
+		}
+		if(filter.containsKey("endDate")) {
+			query.finishedBefore((Date)filter.get("endDate"));
+		}
+		int total = (int)query.count();
+		List<HistoricProcessInstance> list = query.listPage(pageable.getOffset(), pageable.getPageSize());
+		return new PageImpl<>(list, pageable, total);
 	}
 
 }

@@ -1,8 +1,13 @@
 package com.erpnext.oa.act.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.erpnext.oa.act.dto.ProcessInstanceDTO;
+
+import org.flowable.engine.history.HistoricProcessInstance;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProcessInstanceService {
 	
@@ -14,6 +19,6 @@ public interface ProcessInstanceService {
 
 	void deleteProcessInstance(String processInstanceId);
 	
-	void listHisProcessInstance();
+	Page<HistoricProcessInstance> listHisProcessInstance(Pageable pageable,Map<String, Object> filter);
 
 }
