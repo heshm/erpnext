@@ -8,6 +8,12 @@ public class AuthDemoController {
 
 	@GetMapping("/authDemo")
 	public String authDemo() {
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "authDemo";
 	}
 	

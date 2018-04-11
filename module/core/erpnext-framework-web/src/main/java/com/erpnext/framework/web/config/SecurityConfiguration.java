@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()*/
             .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/authDemo").access("hasAuthority('PERM_SYS_IMPORT')")
+                .antMatchers("/authDemo").permitAll()
                 .antMatchers("/**").authenticated()
                 .and()
             /*.exceptionHandling()
