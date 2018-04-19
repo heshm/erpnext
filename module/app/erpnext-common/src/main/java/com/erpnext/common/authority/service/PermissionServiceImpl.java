@@ -45,7 +45,7 @@ public class PermissionServiceImpl implements PermissionService {
 	@Override
 	public List<PermissionDTO> getAllPermission() {
 		List<PermissionDTO> resultList = new ArrayList<>(200);
-		List<Permission> parent = permissionMapper.selectList(WebConst.VALID, true);
+		List<Permission> parent = permissionMapper.selectList(String.valueOf(WebConst.VALID), true);
 		for(Permission perm : parent){
 			resultList.add(new PermissionDTO(
 					perm.getPermissionId(),

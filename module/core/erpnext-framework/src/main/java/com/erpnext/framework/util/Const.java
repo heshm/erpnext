@@ -4,11 +4,11 @@ public class Const {
 	/**
 	 * 有效
 	 */
-	public static final String VALID = "1";
+	public static final byte VALID = 1;
 	/**
 	 * 无效
 	 */
-	public static final String INVALID = "0";
+	public static final byte INVALID = 0;
 	
 	
 	// 以下为序号类型
