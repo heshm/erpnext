@@ -13,8 +13,8 @@
 
 
 -- 导出 erpnext 的数据库结构
-CREATE DATABASE IF NOT EXISTS `erpnext` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `erpnext`;
+CREATE DATABASE IF NOT EXISTS `eap` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `eap`;
 
 -- 导出  表 erpnext.act_de_model 结构
 DROP TABLE IF EXISTS `act_de_model`;
